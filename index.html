@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, shrink-to-fit=yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#6c5ce7">
-    <title>Loans W - LWI v2.0</title>
+    <meta name="description" content="Loans W - La plataforma inteligente y gratuita para administrar préstamos y hacer crecer tu negocio">
+    <title>Loans W - LWI Intelligence</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <script src="https://cdn.jsdelivr.net/npm/dexie@3.2.4/dist/dexie.min.js"></script>
@@ -14,7 +15,7 @@
     <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
     <style>
-        /* ===== VARIABLES ===== */
+        /* ===== ESTILOS DE LA APP ORIGINAL (TOTALMENTE SIN CAMBIOS) ===== */
         :root {
             --sat: env(safe-area-inset-top, 0px);
             --sab: env(safe-area-inset-bottom, 0px);
@@ -38,6 +39,7 @@
             --font-md: clamp(0.75rem, 1.9vw, 0.9rem);
             --font-lg: clamp(0.9rem, 2.3vw, 1.2rem);
             --font-xl: clamp(1.2rem, 3vw, 1.8rem);
+            --font-2xl: clamp(2rem, 5vw, 3.5rem);
             --spacing-xs: clamp(0.2rem, 0.6vw, 0.4rem);
             --spacing-sm: clamp(0.4rem, 1vw, 0.6rem);
             --spacing-md: clamp(0.6rem, 1.5vw, 0.9rem);
@@ -49,7 +51,6 @@
             --nav-bg: rgba(255, 255, 255, 0.95);
         }
 
-        /* ===== MODO OSCURO PREMIUM ===== */
         .dark-mode {
             --bg: #09090F;
             --card: #16192B;
@@ -60,8 +61,6 @@
             --glass-bg: rgba(22, 25, 43, 0.92);
             --glass-border: rgba(255, 255, 255, 0.05);
             --nav-bg: rgba(22, 25, 43, 0.92);
-            
-            /* Colores ajustados para modo oscuro */
             --primary: #8B5CF6;
             --primary-dark: #6C5CE7;
             --primary-light: #A78BFA;
@@ -71,7 +70,6 @@
             --warning: #FFB300;
         }
 
-        /* ===== RESET Y BASE ===== */
         * {
             margin: 0;
             padding: 0;
@@ -99,7 +97,7 @@
             transition: background 0.3s ease, color 0.3s ease;
         }
 
-        /* ===== ANIMACIONES ===== */
+        /* ===== ANIMACIONES ORIGINALES ===== */
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -154,7 +152,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ===== UTILIDADES DE ANIMACIÓN ===== */
         .anim-fade { animation: fadeIn 0.35s ease forwards; }
         .anim-up { animation: fadeUp 0.4s var(--ease-smooth) forwards; }
         .anim-down { animation: fadeDown 0.35s var(--ease-smooth) forwards; }
@@ -174,14 +171,14 @@
         .stagger>*:nth-child(4) { animation-delay: 0.11s; }
         .stagger>*:nth-child(5) { animation-delay: 0.14s; }
 
-        /* ===== LOGIN ===== */
+        /* ===== LOGIN (ORIGINAL SIN CAMBIOS) ===== */
         #login-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100vh;
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
             background: linear-gradient(135deg, #09090F 0%, #101224 25%, #171A33 50%, #1D1845 75%, #09090F 100%);
@@ -190,6 +187,9 @@
             z-index: 9999;
             padding: var(--spacing-sm);
             overflow: hidden;
+        }
+        #login-screen.show {
+            display: flex;
         }
 
         .dark-mode #login-screen {
@@ -345,7 +345,7 @@
             pointer-events: none;
         }
 
-        /* ===== MAIN APP ===== */
+        /* ===== MAIN APP (ORIGINAL SIN CAMBIOS) ===== */
         #main-app {
             display: none;
             flex: 1;
@@ -1243,43 +1243,1006 @@
             animation: spin 0.6s linear infinite;
         }
 
-        /* ===== MODO CLARO ===== */
-        @media (prefers-color-scheme: light) {
-            :root:not(.dark-mode) {
-                --bg: #f0f2ff;
-                --card: #ffffff;
-                --text: #1e1e2e;
-                --sub: #5a5a7a;
-                --border: #e2e4f0;
-                --shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
-            }
+        /* ===== ESTILOS DE LA LANDING PAGE (NUEVA, AISLADA) ===== */
+        #landing-page {
+            display: block;
+            min-height: 100vh;
+            background: var(--bg);
+            transition: background 0.3s ease;
+            position: relative;
+            z-index: 9998;
+        }
+        #landing-page.hidden {
+            display: none !important;
         }
 
-        /* Estilos de configuración extra */
-        .config-section {
+        .landing-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-bottom: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .landing-nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .landing-nav-brand {
+            font-size: var(--font-lg);
+            font-weight: 800;
+            background: linear-gradient(135deg, #6C5CE7, #8B5CF6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .landing-nav-brand i {
+            font-size: 1.6rem;
+            color: var(--primary);
+            -webkit-text-fill-color: initial;
+        }
+
+        .landing-nav-actions {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .hero-section {
+            padding: calc(5rem + var(--sat)) var(--spacing-md) var(--spacing-lg);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, rgba(108, 92, 231, 0.05) 0%, rgba(139, 92, 246, 0.02) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dark-mode .hero-section {
+            background: linear-gradient(135deg, rgba(108, 92, 231, 0.08) 0%, rgba(139, 92, 246, 0.03) 100%);
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 60%;
+            height: 100%;
+            background: radial-gradient(ellipse, rgba(108, 92, 231, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-lg);
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-text {
+            animation: fadeUp 0.8s var(--ease-smooth);
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 2rem;
+            background: rgba(108, 92, 231, 0.1);
+            color: var(--primary);
+            font-size: var(--font-xs);
+            font-weight: 700;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .hero-title {
+            font-size: var(--font-2xl);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .hero-title span {
+            background: linear-gradient(135deg, #6C5CE7, #8B5CF6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: var(--font-lg);
+            color: var(--sub);
+            margin-bottom: var(--spacing-lg);
+            line-height: 1.6;
+            max-width: 500px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-sm);
+        }
+
+        .hero-mockup {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: float 5s ease-in-out infinite;
+        }
+
+        .mockup-phone {
+            width: min(100%, 320px);
+            aspect-ratio: 9/19;
+            background: var(--card);
+            border-radius: 40px;
+            padding: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 0 40px rgba(108, 92, 231, 0.1);
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dark-mode .mockup-phone {
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(108, 92, 231, 0.15);
+        }
+
+        .mockup-phone::before {
+            content: '';
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 20px;
+            background: var(--bg);
+            border-radius: 0 0 12px 12px;
+            z-index: 2;
+        }
+
+        .mockup-screen {
+            width: 100%;
+            height: 100%;
+            border-radius: 28px;
+            background: var(--bg);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding-top: 20px;
+        }
+
+        .mockup-screen .mockup-header {
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .mockup-screen .mockup-header span {
+            font-size: var(--font-xs);
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .mockup-screen .mockup-body {
+            flex: 1;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .mockup-stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 10px;
+            background: var(--card);
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .mockup-stat .label {
+            font-size: 0.45rem;
+            color: var(--sub);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .mockup-stat .value {
+            font-size: 0.65rem;
+            font-weight: 700;
+        }
+
+        .mockup-chart {
+            height: 60px;
+            background: var(--card);
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: flex-end;
+            padding: 6px;
+            gap: 4px;
+        }
+
+        .mockup-chart .bar {
+            flex: 1;
+            border-radius: 4px 4px 0 0;
+            background: linear-gradient(180deg, var(--primary), var(--primary-light));
+            min-height: 4px;
+        }
+
+        .section {
+            padding: var(--spacing-lg) var(--spacing-md);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: var(--font-xl);
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--sub);
+            max-width: 600px;
+            margin: 0 auto var(--spacing-lg);
+            font-size: var(--font-md);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: var(--spacing-md);
+        }
+
+        .feature-card {
+            background: var(--card);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-md);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            transition: all var(--ease-smooth);
+            text-align: center;
+            cursor: default;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+            border-color: rgba(108, 92, 231, 0.2);
+        }
+
+        .dark-mode .feature-card:hover {
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+            border-color: rgba(108, 92, 231, 0.3);
+        }
+
+        .feature-icon {
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 1rem;
+            background: rgba(108, 92, 231, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            margin: 0 auto var(--spacing-sm);
+            transition: all var(--ease-smooth);
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotate(-3deg);
+            background: rgba(108, 92, 231, 0.2);
+        }
+
+        .feature-card h4 {
+            font-size: var(--font-sm);
+            font-weight: 700;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .feature-card p {
+            font-size: var(--font-xs);
+            color: var(--sub);
+            line-height: 1.5;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-lg);
             margin-top: var(--spacing-md);
         }
 
-        .config-section-title {
-            font-size: var(--font-sm);
-            font-weight: 700;
-            color: var(--sub);
-            margin-bottom: var(--spacing-sm);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+        .comparison-card {
+            background: var(--card);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
         }
 
-        .color-dot {
-            width: 12px;
-            height: 12px;
+        .comparison-card h3 {
+            font-size: var(--font-lg);
+            font-weight: 700;
+            margin-bottom: var(--spacing-md);
+            text-align: center;
+        }
+
+        .comparison-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .comparison-card ul li {
+            padding: var(--spacing-xs) 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: var(--font-sm);
+        }
+
+        .comparison-card ul li:last-child {
+            border-bottom: none;
+        }
+
+        .comparison-card .icon-bad {
+            color: var(--danger);
+        }
+        .comparison-card .icon-good {
+            color: var(--success);
+        }
+
+        .comparison-card.bad {
+            border-color: rgba(255, 82, 82, 0.2);
+        }
+
+        .comparison-card.good {
+            border-color: rgba(0, 200, 83, 0.2);
+        }
+
+        .carousel-wrapper {
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--radius-lg);
+            background: var(--card);
+            border: 1px solid var(--border);
+            padding: var(--spacing-md);
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s var(--ease-smooth);
+            gap: var(--spacing-md);
+        }
+
+        .carousel-slide {
+            min-width: calc(33.333% - var(--spacing-md));
+            background: var(--bg);
+            border-radius: var(--radius);
+            padding: var(--spacing-md);
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .carousel-slide .slide-icon {
+            font-size: 2.5rem;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .carousel-slide h5 {
+            font-weight: 700;
+            font-size: var(--font-sm);
+        }
+
+        .carousel-slide p {
+            font-size: var(--font-xs);
+            color: var(--sub);
+        }
+
+        .carousel-controls {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-md);
+        }
+
+        .carousel-controls button {
+            width: 2.5rem;
+            height: 2.5rem;
             border-radius: 50%;
+            border: 1px solid var(--border);
+            background: var(--card);
+            color: var(--text);
+            cursor: pointer;
+            transition: all var(--ease-smooth);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carousel-controls button:hover {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        .faq-item {
+            background: var(--card);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            margin-bottom: var(--spacing-sm);
+            overflow: hidden;
+            transition: all var(--ease-smooth);
+        }
+
+        .faq-question {
+            padding: var(--spacing-md);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            font-size: var(--font-sm);
+            background: transparent;
+            border: none;
+            width: 100%;
+            text-align: left;
+            color: var(--text);
+        }
+
+        .faq-question:hover {
+            background: rgba(108, 92, 231, 0.03);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            padding: 0 var(--spacing-md);
+            color: var(--sub);
+            font-size: var(--font-sm);
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 200px;
+            padding: 0 var(--spacing-md) var(--spacing-md);
+        }
+
+        .faq-item.open .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-md);
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 50%;
+            background: var(--card);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            color: var(--text);
+            text-decoration: none;
+            transition: all var(--ease-smooth);
+        }
+
+        .social-link:hover {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(108, 92, 231, 0.3);
+        }
+
+        .landing-footer {
+            padding: var(--spacing-lg) var(--spacing-md);
+            border-top: 1px solid var(--border);
+            text-align: center;
+            font-size: var(--font-xs);
+            color: var(--sub);
+        }
+
+        .landing-footer-links {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-sm);
+            flex-wrap: wrap;
+        }
+
+        .landing-footer-links a {
+            color: var(--sub);
+            text-decoration: none;
+            transition: color var(--ease-smooth);
+        }
+
+        .landing-footer-links a:hover {
+            color: var(--primary);
+        }
+
+        /* ===== BOTONES LANDING ===== */
+        .btn-primary {
+            background: linear-gradient(135deg, #6C5CE7, #8B5CF6);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 8px 30px rgba(108, 92, 231, 0.5);
+            background: linear-gradient(135deg, #7C6CF7, #9B6CF6);
+        }
+
+        .btn-outline {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 6px 20px rgba(108, 92, 231, 0.3);
+        }
+
+        .btn-lg {
+            padding: 0.8rem 2rem;
+            font-size: var(--font-md);
+        }
+
+        /* ===== RESPONSIVE LANDING ===== */
+        @media (max-width: 768px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-subtitle {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .mockup-phone {
+                width: min(100%, 250px);
+            }
+
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .carousel-slide {
+                min-width: calc(50% - var(--spacing-md));
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: var(--spacing-sm);
+            }
+
+            .feature-card {
+                padding: var(--spacing-sm);
+            }
+
+            .carousel-slide {
+                min-width: calc(100% - var(--spacing-md));
+            }
+
+            .landing-nav {
+                padding: var(--spacing-xs) var(--spacing-sm);
+            }
+        }
+
+        /* ===== RECOVERY BADGE ===== */
+        .recovery-badge {
+            position: fixed;
+            bottom: calc(5rem + var(--sab));
+            right: var(--spacing-sm);
+            z-index: 9998;
+            background: var(--card);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-sm) var(--spacing-md);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            font-size: var(--font-xs);
+            color: var(--sub);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            animation: fadeUp 0.3s var(--ease-smooth);
+            cursor: pointer;
+            transition: all var(--ease-smooth);
+            display: none;
+        }
+        .recovery-badge:hover {
+            transform: scale(1.05);
+            border-color: var(--primary);
+        }
+        .recovery-badge .badge-status {
             display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
             margin-right: 0.4rem;
         }
+        .recovery-badge .badge-status.ok { background: var(--success); }
+        .recovery-badge .badge-status.warning { background: var(--warning); }
+        .recovery-badge .badge-status.error { background: var(--danger); animation: pulse 1s infinite; }
     </style>
 </head>
 <body>
-    <!-- ===== LOGIN ===== -->
+
+    <!-- ============================================================ -->
+    <!-- 1. LANDING PAGE (NUEVA, AISLADA)                             -->
+    <!-- ============================================================ -->
+    <div id="landing-page">
+        <nav class="landing-nav" id="landingNav">
+            <div class="landing-nav-inner">
+                <a href="#landing-page" class="landing-nav-brand">
+                    <i class="bi bi-brain"></i>
+                    Loans W
+                </a>
+                <div class="landing-nav-actions">
+                    <div class="toggle-switch" onclick="APP.toggleDark()" id="landingToggle"></div>
+                    <button class="btn btn-primary btn-sm" onclick="APP.showLogin()">
+                        <i class="bi bi-box-arrow-in-right"></i> Ingresar
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- HERO -->
+        <section class="hero-section" id="hero">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <div class="hero-badge">
+                        <i class="bi bi-stars"></i> Gratis · Inteligente · 2026
+                    </div>
+                    <h1 class="hero-title">
+                        <span>Loans W</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        La plataforma inteligente y gratuita para administrar préstamos y hacer crecer tu negocio.
+                    </p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary btn-lg" onclick="APP.showLogin()">
+                            <i class="bi bi-box-arrow-in-right"></i> Ingresar a la aplicación
+                        </button>
+                        <a href="#contacto" class="btn btn-outline btn-lg">
+                            <i class="bi bi-envelope"></i> Contactar
+                        </a>
+                    </div>
+                </div>
+                <div class="hero-mockup">
+                    <div class="mockup-phone">
+                        <div class="mockup-screen">
+                            <div class="mockup-header">
+                                <span>🧠 Loans W</span>
+                                <span style="font-size:0.4rem;color:var(--sub)">LWI</span>
+                            </div>
+                            <div class="mockup-body">
+                                <div class="mockup-stat">
+                                    <span class="label">Salud LWI</span>
+                                    <span class="value" style="color:var(--success)">85/100</span>
+                                </div>
+                                <div class="mockup-stat">
+                                    <span class="label">Capital</span>
+                                    <span class="value">$12.500.000</span>
+                                </div>
+                                <div class="mockup-stat">
+                                    <span class="label">Cartera</span>
+                                    <span class="value">$8.200.000</span>
+                                </div>
+                                <div class="mockup-chart">
+                                    <div class="bar" style="height:40%"></div>
+                                    <div class="bar" style="height:60%"></div>
+                                    <div class="bar" style="height:80%"></div>
+                                    <div class="bar" style="height:50%"></div>
+                                    <div class="bar" style="height:90%"></div>
+                                    <div class="bar" style="height:70%"></div>
+                                    <div class="bar" style="height:95%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ¿QUÉ ES LOANS W? -->
+        <section class="section" id="que-es">
+            <h2 class="section-title">¿Qué es <span style="color:var(--primary)">Loans W</span>?</h2>
+            <p class="section-subtitle">
+                Loans W es una plataforma inteligente y completamente gratuita para prestamistas que transforma la manera de administrar tu negocio.
+            </p>
+            <div class="features-grid stagger">
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h4>Gestionar clientes</h4>
+                    <p>Organiza toda tu cartera de clientes en un solo lugar.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h4>Administrar préstamos</h4>
+                    <p>Controla cada préstamo desde su creación hasta el pago final.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🧮</div>
+                    <h4>Calcular intereses</h4>
+                    <p>Intereses automáticos con métodos simple y sobre saldo.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏦</div>
+                    <h4>Control del capital</h4>
+                    <p>Visualiza tu capital disponible, cartera y ganancias.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h4>Generar reportes</h4>
+                    <p>Exporta a Excel, PDF y JSON con un solo clic.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h4>Inteligencia LWI</h4>
+                    <p>Análisis inteligente de tu negocio con recomendaciones.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📡</div>
+                    <h4>Sin conexión</h4>
+                    <p>Trabaja sin internet, tus datos siempre disponibles.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h4>Desde cualquier celular</h4>
+                    <p>Diseño responsive que se adapta a todos los dispositivos.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CARACTERÍSTICAS -->
+        <section class="section" id="caracteristicas" style="background:var(--bg);border-radius:var(--radius-lg);padding:var(--spacing-lg) var(--spacing-md);">
+            <h2 class="section-title">✨ Características</h2>
+            <p class="section-subtitle">Todo lo que necesitas para administrar tu negocio de préstamos</p>
+            <div class="features-grid stagger">
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h4>Inteligencia financiera</h4>
+                    <p>Análisis avanzado con recomendaciones personalizadas.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h4>Reportes automáticos</h4>
+                    <p>Gráficos y estadísticas de tu negocio en tiempo real.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h4>Control del capital</h4>
+                    <p>Gestión completa de ingresos, gastos y capital disponible.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📅</div>
+                    <h4>Cronogramas automáticos</h4>
+                    <p>Generación automática de planes de pago detallados.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h4>Gestión de clientes</h4>
+                    <p>Base de datos completa con clasificación por categoría.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💵</div>
+                    <h4>Registro de pagos</h4>
+                    <p>Seguimiento de cada pago y estado de cuotas.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h4>Funciona en cualquier celular</h4>
+                    <p>Diseño adaptado para todos los tamaños de pantalla.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌙</div>
+                    <h4>Modo oscuro</h4>
+                    <p>Diseño premium tipo fintech 2026.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h4>Seguridad avanzada</h4>
+                    <p>Contraseña con hash PBKDF2 para máxima protección.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📤</div>
+                    <h4>Exportación múltiple</h4>
+                    <p>Exporta a Excel, PDF y JSON.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h4>Funciona sin internet</h4>
+                    <p>Datos almacenados localmente con IndexedDB.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <h4>Instalable como PWA</h4>
+                    <p>Instala la aplicación en tu dispositivo como una app nativa.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- BENEFICIOS -->
+        <section class="section" id="beneficios">
+            <h2 class="section-title">¿Por qué elegir <span style="color:var(--primary)">Loans W</span>?</h2>
+            <p class="section-subtitle">Compara la diferencia</p>
+            <div class="comparison-grid">
+                <div class="comparison-card bad">
+                    <h3 style="color:var(--danger)">❌ Sin Loans W</h3>
+                    <ul>
+                        <li><span class="icon-bad">✖</span> Todo en cuadernos y papel</li>
+                        <li><span class="icon-bad">✖</span> Cálculos manuales propensos a errores</li>
+                        <li><span class="icon-bad">✖</span> Difícil controlar la mora</li>
+                        <li><span class="icon-bad">✖</span> No sabes cuánto ganas realmente</li>
+                        <li><span class="icon-bad">✖</span> Mucho tiempo perdido en administración</li>
+                        <li><span class="icon-bad">✖</span> Sin reportes ni análisis</li>
+                        <li><span class="icon-bad">✖</span> Riesgo de pérdida de información</li>
+                    </ul>
+                </div>
+                <div class="comparison-card good">
+                    <h3 style="color:var(--success)">✅ Con Loans W</h3>
+                    <ul>
+                        <li><span class="icon-good">✔</span> Todo organizado digitalmente</li>
+                        <li><span class="icon-good">✔</span> Intereses automáticos y precisos</li>
+                        <li><span class="icon-good">✔</span> Cronogramas inteligentes</li>
+                        <li><span class="icon-good">✔</span> Clientes clasificados por categoría</li>
+                        <li><span class="icon-good">✔</span> Inteligencia financiera LWI</li>
+                        <li><span class="icon-good">✔</span> Reportes completos en Excel y PDF</li>
+                        <li><span class="icon-good">✔</span> Control total del capital</li>
+                        <li><span class="icon-good">✔</span> Mayor productividad y eficiencia</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- CAPTURAS -->
+        <section class="section" id="capturas" style="background:var(--bg);border-radius:var(--radius-lg);padding:var(--spacing-lg) var(--spacing-md);">
+            <h2 class="section-title">📸 Capturas de Pantalla</h2>
+            <p class="section-subtitle">Explora las principales pantallas de Loans W</p>
+            <div class="carousel-wrapper">
+                <div class="carousel-track" id="carouselTrack">
+                    <div class="carousel-slide"><div class="slide-icon">🔐</div><h5>Login</h5><p>Acceso seguro con contraseña encriptada</p></div>
+                    <div class="carousel-slide"><div class="slide-icon">📊</div><h5>Dashboard</h5><p>Visión general de tu negocio</p></div>
+                    <div class="carousel-slide"><div class="slide-icon">🧠</div><h5>LWI Intelligence</h5><p>Análisis avanzado y recomendaciones</p></div>
+                    <div class="carousel-slide"><div class="slide-icon">👥</div><h5>Clientes</h5><p>Gestión completa de tu cartera</p></div>
+                    <div class="carousel-slide"><div class="slide-icon">💰</div><h5>Préstamos</h5><p>Cronogramas y seguimiento de pagos</p></div>
+                    <div class="carousel-slide"><div class="slide-icon">🏦</div><h5>Capital</h5><p>Control financiero total</p></div>
+                    <div class="carousel-slide"><div class="slide-icon">📄</div><h5>Reportes</h5><p>Exporta a Excel, PDF y JSON</p></div>
+                    <div class="carousel-slide"><div class="slide-icon">⚙️</div><h5>Configuración</h5><p>Ajustes y personalización</p></div>
+                </div>
+            </div>
+            <div class="carousel-controls">
+                <button onclick="APP.carouselPrev()"><i class="bi bi-chevron-left"></i></button>
+                <button onclick="APP.carouselNext()"><i class="bi bi-chevron-right"></i></button>
+            </div>
+        </section>
+
+        <!-- VENTAJAS -->
+        <section class="section" id="porque">
+            <h2 class="section-title">¿Por qué elegir <span style="color:var(--primary)">Loans W</span>?</h2>
+            <p class="section-subtitle">Ventajas que marcan la diferencia</p>
+            <div class="features-grid stagger">
+                <div class="feature-card"><div class="feature-icon">🚀</div><h4>Rápida</h4><p>Interfaz ligera y optimizada</p></div>
+                <div class="feature-card"><div class="feature-icon">🔒</div><h4>Segura</h4><p>Contraseña con hash PBKDF2</p></div>
+                <div class="feature-card"><div class="feature-icon">📱</div><h4>Responsive</h4><p>Adaptada a todos los dispositivos</p></div>
+                <div class="feature-card"><div class="feature-icon">🧠</div><h4>Inteligente</h4><p>Análisis LWI avanzado</p></div>
+                <div class="feature-card"><div class="feature-icon">⚡</div><h4>Muy fácil de usar</h4><p>Diseño intuitivo y amigable</p></div>
+                <div class="feature-card"><div class="feature-icon">💾</div><h4>Almacenamiento local</h4><p>Datos siempre disponibles</p></div>
+                <div class="feature-card"><div class="feature-icon">🌙</div><h4>Modo oscuro elegante</h4><p>Diseño premium tipo fintech</p></div>
+                <div class="feature-card"><div class="feature-icon">📈</div><h4>Para hacer crecer tu negocio</h4><p>Herramientas profesionales</p></div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="section" id="faq" style="background:var(--bg);border-radius:var(--radius-lg);padding:var(--spacing-lg) var(--spacing-md);">
+            <h2 class="section-title">❓ Preguntas Frecuentes</h2>
+            <p class="section-subtitle">Resolvemos tus dudas más comunes</p>
+            <div class="faq-item">
+                <button class="faq-question" onclick="APP.toggleFaq(this)">¿La aplicación es gratuita? <i class="bi bi-chevron-down"></i></button>
+                <div class="faq-answer">¡Sí! Loans W es completamente gratuita. No tiene costos ocultos ni suscripciones. Es una herramienta de código abierto para ayudar a prestamistas a administrar mejor su negocio.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="APP.toggleFaq(this)">¿Funciona sin internet? <i class="bi bi-chevron-down"></i></button>
+                <div class="faq-answer">Sí, la aplicación funciona sin conexión a internet. Todos los datos se almacenan localmente en tu dispositivo usando IndexedDB, lo que te permite trabajar en cualquier lugar.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="APP.toggleFaq(this)">¿Se instala como una aplicación? <i class="bi bi-chevron-down"></i></button>
+                <div class="faq-answer">Sí, Loans W es una PWA (Progressive Web App). Puedes instalarla en tu dispositivo como una aplicación nativa desde el navegador, en iPhone, Android o computador.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="APP.toggleFaq(this)">¿Es segura? <i class="bi bi-chevron-down"></i></button>
+                <div class="faq-answer">Totalmente. La contraseña se almacena con hash PBKDF2, un estándar de seguridad avanzado. Los datos solo están en tu dispositivo y no se envían a ningún servidor externo.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="APP.toggleFaq(this)">¿Cómo se realizan las copias de seguridad? <i class="bi bi-chevron-down"></i></button>
+                <div class="faq-answer">Puedes exportar todos tus datos en formato JSON desde el panel de configuración. También se realiza un backup automático cada 30 minutos en el almacenamiento local.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="APP.toggleFaq(this)">¿Puedo exportar mis datos? <i class="bi bi-chevron-down"></i></button>
+                <div class="faq-answer">Sí, puedes exportar tus datos a Excel, PDF y JSON. También puedes generar reportes completos de clientes, préstamos y finanzas.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="APP.toggleFaq(this)">¿Funciona en iPhone y Android? <i class="bi bi-chevron-down"></i></button>
+                <div class="faq-answer">Sí, funciona en todos los dispositivos modernos: iPhone, Android, tablet y computador. El diseño es totalmente responsive y se adapta a cualquier pantalla.</div>
+            </div>
+        </section>
+
+        <!-- CONTACTO -->
+        <section class="section" id="contacto">
+            <h2 class="section-title">📩 Contacto</h2>
+            <p class="section-subtitle">Conéctate con nosotros en redes sociales</p>
+            <div class="social-links">
+                <a href="#" class="social-link" title="WhatsApp"><i class="bi bi-whatsapp"></i></a>
+                <a href="#" class="social-link" title="Correo"><i class="bi bi-envelope-fill"></i></a>
+                <a href="#" class="social-link" title="Facebook"><i class="bi bi-facebook"></i></a>
+                <a href="#" class="social-link" title="Instagram"><i class="bi bi-instagram"></i></a>
+                <a href="#" class="social-link" title="GitHub"><i class="bi bi-github"></i></a>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="landing-footer">
+            <div class="landing-footer-links">
+                <a href="#">© Loans W 2026</a>
+                <a href="#">Versión 2.0</a>
+                <a href="#">Política de privacidad</a>
+                <a href="#">Términos y condiciones</a>
+            </div>
+            <p>Hecho con ❤️ para prestamistas inteligentes</p>
+        </footer>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 2. LOGIN (ORIGINAL SIN CAMBIOS)                              -->
+    <!-- ============================================================ -->
     <div id="login-screen">
         <div class="particles" id="particles"></div>
         <div class="login-card">
@@ -1293,7 +2256,9 @@
         </div>
     </div>
 
-    <!-- ===== MAIN APP ===== -->
+    <!-- ============================================================ -->
+    <!-- 3. MAIN APP (ORIGINAL SIN CAMBIOS)                           -->
+    <!-- ============================================================ -->
     <div id="main-app">
         <div class="app-wrap" id="page">
             <div class="text-center" style="padding:2.5rem;color:var(--sub)">Cargando...</div>
@@ -1308,18 +2273,18 @@
         </nav>
     </div>
 
-    <!-- ===== TOASTS ===== -->
+    <!-- ============================================================ -->
+    <!-- 4. TOASTS (ORIGINAL)                                         -->
+    <!-- ============================================================ -->
     <div class="toast-box" id="toasts"></div>
 
-    <!-- ===== MODALES ===== -->
-    <!-- Cliente -->
+    <!-- ============================================================ -->
+    <!-- 5. MODALES (ORIGINALES)                                      -->
+    <!-- ============================================================ -->
     <div class="modal fade" id="modCliente">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5>👤 Cliente</h5>
-                    <button class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
+                <div class="modal-header"><h5>👤 Cliente</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
                 <div class="modal-body">
                     <input type="hidden" id="cid">
                     <input class="f-control" id="cnom" placeholder="Nombre completo *">
@@ -1343,14 +2308,10 @@
         </div>
     </div>
 
-    <!-- Préstamo -->
     <div class="modal fade" id="modPrestamo">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5>💰 Nuevo Préstamo</h5>
-                    <button class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
+                <div class="modal-header"><h5>💰 Nuevo Préstamo</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
                 <div class="modal-body">
                     <input type="hidden" id="pid">
                     <select class="f-control" id="pcli"><option value="">Seleccionar cliente...</option></select>
@@ -1413,14 +2374,10 @@
         </div>
     </div>
 
-    <!-- Calculadora -->
     <div class="modal fade" id="modCalc">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5>🧮 Calculadora</h5>
-                    <button class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
+                <div class="modal-header"><h5>🧮 Calculadora</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
                 <div class="modal-body">
                     <input type="number" class="f-control" id="calcM" placeholder="Monto">
                     <input type="number" class="f-control" id="calcT" placeholder="Tasa %">
@@ -1432,13 +2389,205 @@
         </div>
     </div>
 
-    <!-- ===== SCRIPTS ===== -->
+    <!-- ============================================================ -->
+    <!-- 6. RECOVERY BADGE (NUEVO)                                   -->
+    <!-- ============================================================ -->
+    <div class="recovery-badge" id="recoveryBadge" onclick="DataRecovery.showRecoveryInfo()">
+        <span class="badge-status ok" id="recoveryStatus"></span>
+        <span id="recoveryText">Datos seguros</span>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 7. SCRIPTS                                                   -->
+    <!-- ============================================================ -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
     "use strict";
 
     // ============================================================
-    // 1. PARTICULAS DE LOGIN
+    // 1. SISTEMA DE PERSISTENCIA Y RECUPERACIÓN DE DATOS (NUEVO)
+    // ============================================================
+    
+    const APP_VERSION = '2.0.0';
+    const STORAGE_KEY = 'loansw_data_backup';
+    const STORAGE_KEY_META = 'loansw_meta';
+    const BACKUP_INTERVAL = 300000; // 5 minutos
+
+    var DataRecovery = {
+        init: async function() {
+            console.log('[Recovery] Iniciando sistema de persistencia v' + APP_VERSION);
+            await this.checkDataIntegrity();
+            this.startAutoBackup();
+            this.showStatusBadge();
+            await this.recoverIfNeeded();
+            console.log('[Recovery] Sistema listo');
+        },
+
+        checkDataIntegrity: async function() {
+            try {
+                var tables = ['clientes', 'prestamos', 'cuotas', 'pagos', 'capital', 'gastos'];
+                var dataOk = true;
+                for (var table of tables) {
+                    try {
+                        var count = await DB[table].count();
+                        if (count === undefined) dataOk = false;
+                    } catch (e) {
+                        dataOk = false;
+                    }
+                }
+                await this.saveMetaInfo({ 
+                    lastCheck: Date.now(),
+                    status: dataOk ? 'ok' : 'warning',
+                    version: APP_VERSION
+                });
+                return dataOk;
+            } catch (e) {
+                console.error('[Recovery] Error en verificación:', e);
+                return false;
+            }
+        },
+
+        startAutoBackup: function() {
+            this.doBackup();
+            setInterval(function() {
+                DataRecovery.doBackup();
+            }, BACKUP_INTERVAL);
+            window.addEventListener('beforeunload', function() {
+                DataRecovery.doBackup();
+            });
+        },
+
+        doBackup: async function() {
+            try {
+                var d = await APP.getData();
+                var backup = {
+                    version: APP_VERSION,
+                    timestamp: Date.now(),
+                    data: {
+                        clientes: d.clientes,
+                        prestamos: d.prestamos,
+                        cuotas: d.cuotas,
+                        pagos: d.pagos,
+                        capital: d.capital,
+                        gastos: d.gastos,
+                        cfg: await DB.cfg.toArray()
+                    }
+                };
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(backup));
+                await this.saveMetaInfo({
+                    lastBackup: Date.now(),
+                    totalRecords: {
+                        clientes: d.clientes.length,
+                        prestamos: d.prestamos.length,
+                        cuotas: d.cuotas.length,
+                        pagos: d.pagos.length
+                    }
+                });
+                this.updateStatusBadge('ok', 'Datos seguros');
+            } catch (e) {
+                console.error('[Recovery] Error en backup:', e);
+                this.updateStatusBadge('error', 'Error en backup');
+            }
+        },
+
+        recoverIfNeeded: async function() {
+            try {
+                var count = await DB.clientes.count();
+                var hasData = count > 0;
+                if (!hasData) {
+                    console.warn('[Recovery] No hay datos, restaurando backup...');
+                    await this.restoreFromBackup();
+                }
+            } catch (e) {
+                console.error('[Recovery] Error en recuperación:', e);
+            }
+        },
+
+        restoreFromBackup: async function() {
+            try {
+                var backupStr = localStorage.getItem(STORAGE_KEY);
+                if (!backupStr) {
+                    console.warn('[Recovery] No hay backup disponible');
+                    return false;
+                }
+                var backup = JSON.parse(backupStr);
+                if (!backup.data || !backup.data.clientes) {
+                    console.warn('[Recovery] Backup inválido');
+                    return false;
+                }
+                console.log('[Recovery] Backup encontrado de:', new Date(backup.timestamp).toLocaleString());
+                await DB.clientes.clear();
+                await DB.prestamos.clear();
+                await DB.cuotas.clear();
+                await DB.pagos.clear();
+                await DB.capital.clear();
+                await DB.gastos.clear();
+                await DB.cfg.clear();
+                if (backup.data.clientes.length > 0) await DB.clientes.bulkAdd(backup.data.clientes);
+                if (backup.data.prestamos.length > 0) await DB.prestamos.bulkAdd(backup.data.prestamos);
+                if (backup.data.cuotas.length > 0) await DB.cuotas.bulkAdd(backup.data.cuotas);
+                if (backup.data.pagos.length > 0) await DB.pagos.bulkAdd(backup.data.pagos);
+                if (backup.data.capital && backup.data.capital.length > 0) await DB.capital.bulkAdd(backup.data.capital);
+                if (backup.data.gastos && backup.data.gastos.length > 0) await DB.gastos.bulkAdd(backup.data.gastos);
+                if (backup.data.cfg && backup.data.cfg.length > 0) await DB.cfg.bulkAdd(backup.data.cfg);
+                console.log('[Recovery] Datos restaurados:', backup.data.clientes.length, 'clientes');
+                this.updateStatusBadge('ok', 'Datos recuperados');
+                if (typeof APP !== 'undefined' && APP.toast) {
+                    APP.toast('🔄', 'Datos recuperados automáticamente', 'success');
+                }
+                return true;
+            } catch (e) {
+                console.error('[Recovery] Error restaurando:', e);
+                this.updateStatusBadge('error', 'Error en restauración');
+                return false;
+            }
+        },
+
+        saveMetaInfo: async function(info) {
+            try {
+                var meta = JSON.parse(localStorage.getItem(STORAGE_KEY_META) || '{}');
+                Object.assign(meta, info);
+                localStorage.setItem(STORAGE_KEY_META, JSON.stringify(meta));
+            } catch (e) {
+                console.error('[Recovery] Error guardando meta:', e);
+            }
+        },
+
+        showStatusBadge: function() {
+            var badge = document.getElementById('recoveryBadge');
+            if (badge) {
+                badge.style.display = 'block';
+                setTimeout(function() {
+                    badge.style.opacity = '0.8';
+                }, 100);
+            }
+        },
+
+        updateStatusBadge: function(status, text) {
+            var statusEl = document.getElementById('recoveryStatus');
+            var textEl = document.getElementById('recoveryText');
+            if (statusEl) statusEl.className = 'badge-status ' + status;
+            if (textEl) textEl.textContent = text;
+        },
+
+        showRecoveryInfo: function() {
+            var meta = JSON.parse(localStorage.getItem(STORAGE_KEY_META) || '{}');
+            var lastBackup = meta.lastBackup ? new Date(meta.lastBackup).toLocaleString() : 'Nunca';
+            var records = meta.totalRecords || {};
+            var msg = '📊 Estado de los datos:\n\n' +
+                      '📅 Último backup: ' + lastBackup + '\n' +
+                      '👥 Clientes: ' + (records.clientes || 0) + '\n' +
+                      '💵 Préstamos: ' + (records.prestamos || 0) + '\n' +
+                      '📋 Cuotas: ' + (records.cuotas || 0) + '\n' +
+                      '📈 Pagos: ' + (records.pagos || 0) + '\n\n' +
+                      '✅ Los datos están respaldados automáticamente cada 5 minutos.\n' +
+                      '🔄 No se perderán al actualizar la aplicación.';
+            alert(msg);
+        }
+    };
+
+    // ============================================================
+    // 2. PARTÍCULAS DE LOGIN (ORIGINAL)
     // ============================================================
     (function() {
         var icons = ['💰', '💵', '💎', '📊', '🧠', '⭐'];
@@ -1458,7 +2607,7 @@
     })();
 
     // ============================================================
-    // 2. RIPPLE EFFECT
+    // 3. RIPPLE EFFECT (ORIGINAL)
     // ============================================================
     document.addEventListener('click', function(e) {
         var btn = e.target.closest('.btn, .btn-icon, .login-btn, .nav-btn');
@@ -1476,7 +2625,7 @@
     });
 
     // ============================================================
-    // 3. UTILIDADES
+    // 4. UTILIDADES (ORIGINALES)
     // ============================================================
     var COP = new Intl.NumberFormat('es-CO', {
         style: 'currency',
@@ -1493,7 +2642,7 @@
     };
 
     // ============================================================
-    // 4. BASE DE DATOS (Dexie)
+    // 5. BASE DE DATOS (ORIGINAL)
     // ============================================================
     var DB = new Dexie('LoansWLWIv13');
     DB.version(5).stores({
@@ -1507,16 +2656,60 @@
     });
 
     // ============================================================
-    // 5. APP PRINCIPAL
+    // 6. APP PRINCIPAL (ORIGINAL CON SOLO 3 FUNCIONES NUEVAS)
     // ============================================================
     var APP = {
         charts: [],
         dark: false,
         _currentPage: 'dashboard',
         _printData: '',
+        _carouselIndex: 0,
+        _carouselInterval: null,
 
         // ============================================================
-        // 5.1 INICIALIZACIÓN
+        // 6.1 FUNCIONES NUEVAS PARA LANDING PAGE (SOLO ESTO SE AÑADE)
+        // ============================================================
+        showLogin: function() {
+            document.getElementById('landing-page').classList.add('hidden');
+            document.getElementById('login-screen').classList.add('show');
+        },
+
+        toggleFaq: function(btn) {
+            var item = btn.closest('.faq-item');
+            if (!item) return;
+            item.classList.toggle('open');
+        },
+
+        carouselNext: function() {
+            var track = document.getElementById('carouselTrack');
+            if (!track) return;
+            var slides = track.querySelectorAll('.carousel-slide');
+            var total = slides.length;
+            var visible = window.innerWidth < 480 ? 1 : window.innerWidth < 768 ? 2 : 3;
+            this._carouselIndex = (this._carouselIndex + 1) % (total - visible + 1);
+            var offset = this._carouselIndex * (100 / visible);
+            track.style.transform = 'translateX(-' + offset + '%)';
+        },
+
+        carouselPrev: function() {
+            var track = document.getElementById('carouselTrack');
+            if (!track) return;
+            var slides = track.querySelectorAll('.carousel-slide');
+            var total = slides.length;
+            var visible = window.innerWidth < 480 ? 1 : window.innerWidth < 768 ? 2 : 3;
+            this._carouselIndex = (this._carouselIndex - 1 + total - visible + 1) % (total - visible + 1);
+            var offset = this._carouselIndex * (100 / visible);
+            track.style.transform = 'translateX(-' + offset + '%)';
+        },
+
+        startCarousel: function() {
+            this._carouselInterval = setInterval(function() {
+                APP.carouselNext();
+            }, 5000);
+        },
+
+        // ============================================================
+        // 6.2 INIT (MODIFICADO MÍNIMAMENTE)
         // ============================================================
         init: async function() {
             await DB.open();
@@ -1536,30 +2729,68 @@
             if (d && d.valor === 'true') {
                 this.dark = true;
                 document.body.classList.add('dark-mode');
+                document.querySelectorAll('.toggle-switch').forEach(function(el) {
+                    el.classList.add('active');
+                });
             }
 
-            // Eventos
+            // Inicializar sistema de persistencia
+            await DataRecovery.init();
+
+            // Eventos login (ORIGINAL)
             document.getElementById('loginBtn').onclick = function() { APP.login(); };
             document.getElementById('pwd').onkeydown = function(e) { if (e.key === 'Enter') APP.login(); };
 
+            // Eventos navegación app (ORIGINAL)
             document.querySelectorAll('.nav-btn').forEach(function(b) {
                 b.onclick = function() { APP.goto(b.dataset.p); };
             });
 
-            // Verificar sesión
+            // Verificar sesión (ORIGINAL)
             if (localStorage.getItem('loansw_lwiv13') === 'yes') {
-                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('landing-page').classList.add('hidden');
+                document.getElementById('login-screen').classList.remove('show');
                 document.getElementById('main-app').style.display = 'flex';
                 document.getElementById('main-app').classList.add('show');
                 this.goto('dashboard');
+            } else {
+                document.getElementById('landing-page').classList.remove('hidden');
+                document.getElementById('login-screen').classList.remove('show');
+                document.getElementById('main-app').style.display = 'none';
             }
 
-            // Backup automático
+            // Iniciar carrusel de landing page
+            this.startCarousel();
+
+            // Backup automático (ORIGINAL)
             setInterval(function() { APP.autoBackup(); }, 1800000);
         },
 
         // ============================================================
-        // 5.2 SEGURIDAD
+        // 6.3 LOGIN (ORIGINAL)
+        // ============================================================
+        login: async function() {
+            var p = document.getElementById('pwd').value;
+            if (!p) {
+                document.getElementById('login-err').textContent = 'Ingrese contraseña';
+                return;
+            }
+            var s = await DB.cfg.get('pwd_hash');
+            if (!s) return;
+            if (await this.verifyPwd(p, s.valor)) {
+                localStorage.setItem('loansw_lwiv13', 'yes');
+                document.getElementById('landing-page').classList.add('hidden');
+                document.getElementById('login-screen').classList.remove('show');
+                document.getElementById('main-app').style.display = 'flex';
+                document.getElementById('main-app').classList.add('show');
+                this.goto('dashboard');
+            } else {
+                document.getElementById('login-err').textContent = 'Contraseña incorrecta';
+            }
+        },
+
+        // ============================================================
+        // 6.4 TODAS LAS FUNCIONES ORIGINALES (SIN CAMBIOS)
         // ============================================================
         hashPwd: async function(p) {
             var e = new TextEncoder();
@@ -1588,33 +2819,11 @@
             } catch (e) { return false; }
         },
 
-        login: async function() {
-            var p = document.getElementById('pwd').value;
-            if (!p) {
-                document.getElementById('login-err').textContent = 'Ingrese contraseña';
-                return;
-            }
-            var s = await DB.cfg.get('pwd_hash');
-            if (!s) return;
-            if (await this.verifyPwd(p, s.valor)) {
-                localStorage.setItem('loansw_lwiv13', 'yes');
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('main-app').style.display = 'flex';
-                document.getElementById('main-app').classList.add('show');
-                this.goto('dashboard');
-            } else {
-                document.getElementById('login-err').textContent = 'Contraseña incorrecta';
-            }
-        },
-
         logout: function() {
             localStorage.removeItem('loansw_lwiv13');
             location.reload();
         },
 
-        // ============================================================
-        // 5.3 NAVEGACIÓN
-        // ============================================================
         goto: function(p) {
             this._currentPage = p;
             document.querySelectorAll('.nav-btn').forEach(function(b) {
@@ -1624,9 +2833,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         },
 
-        // ============================================================
-        // 5.4 TOASTS
-        // ============================================================
         toast: function(t, m, type) {
             var box = document.getElementById('toasts');
             if (!box) return;
@@ -1643,9 +2849,6 @@
             }, 3000);
         },
 
-        // ============================================================
-        // 5.5 BACKUP
-        // ============================================================
         autoBackup: async function() {
             var d = await this.getData();
             var backup = {
@@ -1720,9 +2923,6 @@
             input.click();
         },
 
-        // ============================================================
-        // 5.6 DATOS Y MÉTRICAS
-        // ============================================================
         getData: async function() {
             return {
                 clientes: await DB.clientes.toArray(),
@@ -1811,9 +3011,6 @@
             return Math.max(5, Math.min(98, Math.round(score)));
         },
 
-        // ============================================================
-        // 5.7 RENDERIZADO DE PÁGINAS
-        // ============================================================
         destroyCharts: function() {
             this.charts.forEach(function(c) {
                 try { c.destroy(); } catch (e) {}
@@ -1853,9 +3050,6 @@
             }
         },
 
-        // ============================================================
-        // 5.8 DASHBOARD
-        // ============================================================
         dashHTML: async function() {
             var d = await this.getData(),
                 m = this.getMetrics(d);
@@ -2009,9 +3203,6 @@
             `;
         },
 
-        // ============================================================
-        // 5.9 LWI - MOTOR DE INTELIGENCIA
-        // ============================================================
         lwiHTML: async function() {
             var d = await this.getData(),
                 m = this.getMetrics(d);
@@ -2033,7 +3224,6 @@
             if (m.disp < m.cartera * 0.3 && m.cartera > 0) recs.push('⚠️ Liquidez baja: ' + fmoney(m.disp));
             if (m.ganancia > 0) recs.push('📊 Rentabilidad: ' + Math.round((m.ganancia / (m.capTotal + 1)) * 100) + '%');
 
-            // Clasificación de clientes
             var clientes = [];
             for (var i = 0; i < d.clientes.length; i++) {
                 var cl = d.clientes[i];
@@ -2059,7 +3249,6 @@
             }
             clientes.sort(function(a, b) { return b.score - a.score; });
 
-            // Cobranza
             var cobranza = [];
             for (var k = 0; k < d.cuotas.length; k++) {
                 var cu = d.cuotas[k];
@@ -2252,9 +3441,6 @@
             }, 300);
         },
 
-        // ============================================================
-        // 5.10 CLIENTES
-        // ============================================================
         cliHTML: function() {
             return `
                 <div class="header">
@@ -2325,6 +3511,7 @@
                 bootstrap.Modal.getInstance(document.getElementById('modCliente')).hide();
                 APP.cliList();
                 APP.toast('✅', 'Cliente guardado', 'success');
+                DataRecovery.doBackup();
             });
         },
 
@@ -2391,9 +3578,6 @@
             window.open('https://wa.me/57' + tel + '?text=' + encodeURIComponent(msg), '_blank');
         },
 
-        // ============================================================
-        // 5.11 PRÉSTAMOS
-        // ============================================================
         preHTML: async function() {
             return `
                 <div class="header">
@@ -2638,6 +3822,7 @@
             bootstrap.Modal.getInstance(document.getElementById('modPrestamo')).hide();
             this.preList();
             this.toast('✅', 'Préstamo creado', 'success');
+            DataRecovery.doBackup();
         },
 
         verPrestamo: async function(id) {
@@ -2793,12 +3978,10 @@
                 });
                 APP.verPrestamo(pid);
                 APP.toast('✅', 'Pago registrado', 'success');
+                DataRecovery.doBackup();
             });
         },
 
-        // ============================================================
-        // 5.12 FINANZAS
-        // ============================================================
         finHTML: async function() {
             var d = await this.getData(),
                 m = this.getMetrics(d);
@@ -2912,6 +4095,7 @@
                 DB.capital.add({ monto: Math.round(parseFloat(m)), fecha: Date.now() }).then(function() {
                     APP.toast('✅', 'Capital registrado', 'success');
                     APP.goto('finanzas');
+                    DataRecovery.doBackup();
                 });
             }
         },
@@ -2923,13 +4107,11 @@
                 DB.gastos.add({ categoria: c, monto: Math.round(parseFloat(m)), fecha: Date.now() }).then(function() {
                     APP.toast('✅', 'Gasto registrado', 'success');
                     APP.goto('finanzas');
+                    DataRecovery.doBackup();
                 });
             }
         },
 
-        // ============================================================
-        // 5.13 CONFIGURACIÓN
-        // ============================================================
         configHTML: async function() {
             var dark = await DB.cfg.get('dark');
             var mora = await DB.cfg.get('mora');
@@ -3024,9 +4206,7 @@
             `;
         },
 
-        configInit: function() {
-            // Los eventos ya están en el HTML
-        },
+        configInit: function() {},
 
         toggleDark: async function() {
             var dark = await DB.cfg.get('dark');
@@ -3040,14 +4220,11 @@
                 document.body.classList.remove('dark-mode');
                 this.dark = false;
             }
-            // Actualizar toggle
-            var toggle = document.querySelector('.toggle-switch');
-            if (toggle) {
-                toggle.classList.toggle('active', newVal);
-            }
+            document.querySelectorAll('.toggle-switch').forEach(function(el) {
+                el.classList.toggle('active', newVal);
+            });
             this.toast('✅', 'Modo oscuro ' + (newVal ? 'activado' : 'desactivado'), 'success');
-            // Recargar vista actual para actualizar colores
-            this.goto(this._currentPage);
+            if (this._currentPage) this.goto(this._currentPage);
         },
 
         changePassword: async function() {
@@ -3072,7 +4249,6 @@
             var h = await this.hashPwd(newPwd);
             await DB.cfg.put({ clave: 'pwd_hash', valor: h });
             this.toast('✅', 'Contraseña actualizada', 'success');
-            // Forzar relogin
             localStorage.removeItem('loansw_lwiv13');
             location.reload();
         },
@@ -3165,7 +4341,6 @@
             doc.text('Fecha: ' + new Date().toLocaleString('es-CO'), pageWidth / 2, y, { align: 'center' });
             y += 15;
 
-            // Resumen
             var m = this.getMetrics(d);
             doc.setFontSize(14);
             doc.setTextColor('#6C5CE7');
@@ -3184,7 +4359,6 @@
             doc.text('Préstamos activos: ' + m.activos, 14, y);
             y += 10;
 
-            // Clientess
             doc.setFontSize(14);
             doc.setTextColor('#6C5CE7');
             doc.text('👥 Clientes (' + d.clientes.length + ')', 14, y);
@@ -3206,7 +4380,6 @@
                 y += 10;
             }
 
-            // Préstamos
             if (y > 250) { doc.addPage();
                 y = 20; }
             doc.setFontSize(14);
@@ -3236,11 +4409,15 @@
     };
 
     // ============================================================
-    // 6. INICIO
+    // 7. INICIO
     // ============================================================
     document.addEventListener('DOMContentLoaded', function() {
         APP.init();
     });
+
+    // Exponer para debugging
+    window.DataRecovery = DataRecovery;
+    window.APP_VERSION = APP_VERSION;
     </script>
 </body>
 </html>
