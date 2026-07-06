@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Loans W">
+    <meta name="theme-color" content="#6c5ce7">
+    <meta name="description" content="Loans W - Gestión inteligente de préstamos">
+    <title>Loans W - Gestión de Préstamos</title>
+    <link rel="manifest" href="data:application/json,{}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/dexie@3.2.4/dist/dexie.min.js">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js">
+    </script>
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --primary-light: #a29bfe;
+            --primary-dark: #5a4bd1;
+            --success: #00b894;
+            --success-light: #55efc4;
+            --danger: #ff6b6b;
+            --danger-light: #ff8787;
+            --warning: #fdcb6e;
+            --warning-light: #ffeaa7;
+            --info: #74b9ff;
+            --info-light: #a3d1ff;
+            --bg: #f8f9ff;
+            --card-bg: #ffffff;
+            --text: #2d3436;
+            --text-secondary: #636e72;
+            --border: #e0e5ec;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+            --shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 48px rgba(0, 0, 0, 0.15);
+            --radius-sm: 10px;
+            --radius: 16px;
+            --radius-lg: 22px;
+            --radius-xl: 28px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .dark-mode {
+            --bg: #0f1119;
+            --card-bg: #1a1d2e;
+            --text: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --border: #2d3148;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
+            --shadow-xl: 0 20px 48px rgba(0, 0, 0, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden;
+            transition: background 0.5s ease, color 0.5s ease;
+        }
+
+        /* Animaciones */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                transform: scale(1.08);
+            }
+            70% {
+                transform: scale(0.95);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        @keyframes pulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+        @keyframes shimmer {
+            0% {
+                background-position: -200px 0;
+            }
+            100% {
+                background-position: 200px 0;
+            }
+        }
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        @keyframes rotateIn {
+            from {
+                opacity: 0;
+                transform: rotate(-180deg) scale(0);
+            }
+            to {
+                opacity: 1;
+                transform: rotate(0) scale(1);
+            }
+        }
+        @keyframes slideInUp {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        @keyframes glow {
+            0%,
+            100% {
+                box-shadow: 0 0 20px rgba(108, 92, 231, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(108, 92, 231, 0.8);
+            }
+        }
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        @keyframes numberCount {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s var(--bounce) forwards;
+        }
+        .animate-fade-in-down {
+            animation: fadeInDown 0.6s var(--bounce) forwards;
+        }
+        .animate-fade-in-left {
+            animation: fadeInLeft 0.6s var(--bounce) forwards;
+        }
+        .animate-fade-in-right {
+            animation: fadeInRight 0.6s var(--bounce) forwards;
+        }
+        .animate-scale-in {
+            animation: scaleIn 0.5s var(--bounce) forwards;
+        }
+        .animate-bounce-in {
+            animation: bounceIn 0.7s var(--bounce) forwards;
+        }
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        .animate-glow {
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        /* Stagger children */
+        .stagger>*:nth-child(1) {
+            animation-delay: 0.05s;
+        }
+        .stagger>*:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+        .stagger>*:nth-child(3) {
+            animation-delay: 0.15s;
+        }
+        .stagger>*:nth-child(4) {
+            animation-delay: 0.2s;
+        }
+        .stagger>*:nth-child(5) {
+            animation-delay: 0.25s;
+        }
+        .stagger>*:nth-child(6) {
+            animation-delay: 0.3s;
+        }
+        .stagger>* {
+            opacity: 0;
+            animation: fadeInUp 0.5s var(--bounce) forwards;
+        }
+
+        /* Login */
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe, #74b9ff, #6c5ce7);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        .login-container::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            top: -50px;
+            right: -50px;
+            animation: float 6s ease-in-out infinite;
+        }
+        .login-container::after {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            bottom: -30px;
+            left: -30px;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-xl);
+            padding: 40px 30px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: var(--shadow-xl);
+            animation: bounceIn 0.8s var(--bounce);
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .dark-mode .login-card {
+            background: rgba(26, 29, 46, 0.95);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+        .logo-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 36px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(108, 92, 231, 0.4);
+            animation: float 3s ease-in-out infinite;
+        }
+        .login-input {
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: 14px 18px;
+            font-size: 15px;
+            transition: var(--transition);
+            background: #f8f9ff;
+            width: 100%;
+        }
+        .dark-mode .login-input {
+            background: #242838;
+            color: #e2e8f0;
+            border-color: #3d4158;
+        }
+        .login-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.15);
+            outline: none;
+            transform: translateY(-2px);
+        }
+        .login-btn {
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            border: none;
+            border-radius: var(--radius);
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+            width: 100%;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 0.5px;
+        }
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(108, 92, 231, 0.5);
+        }
+        .login-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+        .login-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        .login-btn:active::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        /* App */
+        .app-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px;
+            padding-bottom: 100px;
+            transition: var(--transition);
+        }
+        @media(min-width:768px) {
+            .app-wrapper {
+                padding: 24px;
+                padding-bottom: 40px;
+            }
+        }
+
+        .app-header {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 16px 22px;
+            margin-bottom: 18px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid var(--border);
+            animation: fadeInDown 0.5s var(--bounce);
+            transition: var(--transition);
+            position: sticky;
+            top: 16px;
+            z-index: 40;
+            backdrop-filter: blur(10px);
+        }
+        .dark-mode .app-header {
+            backdrop-filter: blur(10px);
+            background: rgba(26, 29, 46, 0.9);
+        }
+        .brand-name {
+            font-size: 22px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+        .btn-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: none;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 18px;
+            position: relative;
+        }
+        .btn-icon:hover {
+            transform: translateY(-3px) rotate(5deg);
+            box-shadow: var(--shadow-lg);
+        }
+        .btn-icon:active {
+            transform: scale(0.9);
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+        @media(min-width:600px) {
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 18px 16px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-xl);
+        }
+        .stat-card:active {
+            transform: scale(0.96);
+        }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(108, 92, 231, 0.05) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+        .stat-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 12px;
+            transition: var(--transition);
+        }
+        .stat-card:hover .stat-icon {
+            transform: scale(1.1) rotate(-5deg);
+        }
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-weight: 600;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: 800;
+            margin-top: 4px;
+            letter-spacing: -1px;
+            animation: numberCount 0.6s var(--bounce);
+        }
+
+        /* Cards */
+        .content-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            margin-bottom: 14px;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+        .content-card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+        .card-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border);
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+        }
+        .card-body {
+            padding: 16px 20px;
+            transition: var(--transition);
+        }
+
+        /* List */
+        .list-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            gap: 14px;
+            transition: var(--transition);
+            position: relative;
+        }
+        .list-item:hover {
+            background: rgba(108, 92, 231, 0.04);
+            transform: translateX(4px);
+        }
+        .list-item:active {
+            transform: scale(0.98);
+        }
+        .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+        .list-item:hover .avatar {
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 8px 20px rgba(108, 92, 231, 0.3);
+        }
+
+        /* Badges */
+        .badge-status {
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            transition: var(--transition);
+        }
+        .badge-active {
+            background: #e8e5ff;
+            color: #5a4bd1;
+        }
+        .badge-late {
+            background: #ffe0e0;
+            color: #d63031;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        .badge-paid {
+            background: #d5f5e3;
+            color: #00855a;
+        }
+        .dark-mode .badge-active {
+            background: #2d2847;
+            color: #a29bfe;
+        }
+        .dark-mode .badge-late {
+            background: #3d1a1a;
+            color: #ff8787;
+        }
+        .dark-mode .badge-paid {
+            background: #1a3d2a;
+            color: #55efc4;
+        }
+
+        /* Buttons */
+        .btn-custom {
+            padding: 10px 22px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            letter-spacing: 0.3px;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-custom:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+        .btn-custom:active {
+            transform: scale(0.95);
+        }
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            color: white;
+        }
+        .btn-success-custom {
+            background: linear-gradient(135deg, #00b894, #55efc4);
+            color: white;
+        }
+        .btn-outline-custom {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+        }
+
+        /* Progress */
+        .progress {
+            height: 10px;
+            border-radius: 10px;
+            background: var(--border);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+        .progress-bar {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 1.5s var(--bounce);
+            position: relative;
+        }
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        /* Bottom nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 16px;
+            left: 16px;
+            right: 16px;
+            background: var(--card-bg);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 8px;
+            box-shadow: var(--shadow-xl);
+            z-index: 100;
+            border-radius: 50px;
+            border: 1px solid var(--border);
+            animation: slideInUp 0.6s var(--bounce);
+            backdrop-filter: blur(20px);
+        }
+        @media(min-width:768px) {
+            .bottom-nav {
+                display: none;
+            }
+        }
+        .nav-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 10px;
+            color: var(--text-secondary);
+            border: none;
+            background: none;
+            cursor: pointer;
+            padding: 8px 14px;
+            border-radius: 30px;
+            transition: var(--transition);
+            font-weight: 600;
+        }
+        .nav-btn.active {
+            color: var(--primary);
+            background: rgba(108, 92, 231, 0.1);
+            transform: translateY(-4px);
+        }
+        .nav-btn i {
+            font-size: 22px;
+            margin-bottom: 3px;
+            transition: var(--transition);
+        }
+        .nav-btn.active i {
+            transform: scale(1.2);
+        }
+
+        /* Modal */
+        .modal-content {
+            border-radius: var(--radius-xl);
+            border: none;
+            box-shadow: var(--shadow-xl);
+            animation: bounceIn 0.5s var(--bounce);
+            background: var(--card-bg);
+        }
+        .form-control,
+        .form-select {
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--border);
+            padding: 11px 15px;
+            transition: var(--transition);
+            font-size: 14px;
+            background: var(--card-bg);
+            color: var(--text);
+        }
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.1);
+            transform: translateY(-1px);
+        }
+
+        /* Toast */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+        .custom-toast {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 16px 20px;
+            box-shadow: var(--shadow-xl);
+            margin-bottom: 10px;
+            animation: fadeInRight 0.4s var(--bounce);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            border-left: 4px solid var(--primary);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Calculator */
+        .calc-box {
+            background: var(--bg);
+            border-radius: var(--radius);
+            padding: 18px;
+            animation: scaleIn 0.4s var(--bounce);
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- LOGIN -->
+        <div id="login-screen" class="login-container">
+            <div class="login-card text-center">
+                <div class="logo-icon animate-float">W</div>
+                <h3 class="fw-bold mb-1" style="color:#2d3436;">Loans W</h3>
+                <p class="text-muted mb-4">Gestión inteligente de préstamos</p>
+                <input type="password" id="login-password" class="login-input mb-3" placeholder="🔒 Contraseña" onkeydown="if(event.key==='Enter')app.login()">
+                <button class="login-btn" onclick="app.login()">Ingresar al sistema</button>
+                <div id="login-error" class="text-danger small mt-3 fw-bold"></div>
+                <p class="text-muted small mt-3">Contraseña: <strong>admin</strong></p>
+            </div>
+        </div>
+
+        <!-- MAIN APP -->
+        <div id="main-app" style="display:none;">
+            <div class="app-wrapper" id="page-content"></div>
+            <nav class="bottom-nav">
+                <button class="nav-btn active" data-page="dashboard"><i class="bi bi-speedometer2"></i>Inicio</button>
+                <button class="nav-btn" data-page="clientes"><i class="bi bi-people-fill"></i>Clientes</button>
+                <button class="nav-btn" data-page="prestamos"><i class="bi bi-cash-stack"></i>Préstamos</button>
+                <button class="nav-btn" data-page="mora"><i class="bi bi-exclamation-triangle-fill"></i>Mora</button>
+                <button class="nav-btn" data-page="reportes"><i class="bi bi-graph-up-arrow"></i>Reportes</button>
+            </nav>
+        </div>
+        <div class="toast-container" id="toast-container"></div>
+    </div>
+
+    <!-- MODALES -->
+    <div class="modal fade" id="modalCliente" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h5 class="fw-bold">👤 Cliente</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><input type="hidden" id="cliente-id"><input class="form-control mb-2" id="cliente-nombre" placeholder="Nombre completo *"><div class="row g-2 mb-2"><div class="col-6"><input class="form-control" id="cliente-telefono" placeholder="Teléfono"></div><div class="col-6"><input class="form-control" id="cliente-cedula" placeholder="Cédula"></div></div><input class="form-control mb-2" id="cliente-direccion" placeholder="Dirección"><input class="form-control mb-2" id="cliente-aval" placeholder="Aval"><select class="form-select mb-2" id="cliente-categoria"><option value="regular">⭐ Regular</option><option value="vip">👑 VIP</option><option value="riesgoso">⚠️ Riesgoso</option></select></div><div class="modal-footer"><button class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button class="btn-custom btn-primary-custom" onclick="app.guardarCliente()">💾 Guardar</button></div></div></div></div>
+
+    <div class="modal fade" id="modalPrestamo" tabindex="-1"><div class="modal-dialog modal-lg modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h5 class="fw-bold">💰 Nuevo Préstamo</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><input type="hidden" id="prestamo-id"><select class="form-select mb-2" id="prestamo-cliente"><option value="">Seleccionar cliente...</option></select><div class="row g-2 mb-2"><div class="col-6"><input type="number" class="form-control" id="prestamo-monto" placeholder="Monto $ *"></div><div class="col-6"><input type="number" class="form-control" id="prestamo-tasa" placeholder="Tasa % *"></div></div><select class="form-select mb-2" id="prestamo-tipo"><option value="simple">Interés Simple</option><option value="saldo">Interés sobre Saldo</option></select><div class="row g-2 mb-2"><div class="col-6"><input type="date" class="form-control" id="prestamo-fecha"></div><div class="col-6"><select class="form-select" id="prestamo-frecuencia"><option value="diaria">Diaria</option><option value="semanal">Semanal</option><option value="quincenal">Quincenal</option><option value="mensual">Mensual</option></select></div></div><input type="number" class="form-control mb-2" id="prestamo-cuotas" placeholder="N° de cuotas *"><select class="form-select mb-2" id="prestamo-metodo"><option value="efectivo">💵 Efectivo</option><option value="nequi">📱 Nequi</option><option value="transferencia">🏦 Transferencia</option></select><div id="vista-amortizacion" style="display:none;" class="calc-box"><h6>📋 Cronograma</h6><div style="max-height:200px;overflow:auto;"><table class="table table-sm"><thead><tr><th>#</th><th>Fecha</th><th>Cuota</th><th>Saldo</th></tr></thead><tbody id="tabla-amort"></tbody></table></div></div></div><div class="modal-footer"><button class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button class="btn-custom btn-primary-custom" onclick="app.guardarPrestamo()">✅ Crear Préstamo</button></div></div></div></div>
+
+    <div class="modal fade" id="modalPago" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h5 class="fw-bold">💵 Registrar Pago</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><input type="hidden" id="pago-prestamo-id"><select class="form-select mb-2" id="pago-cuota"></select><input type="number" class="form-control mb-2" id="pago-monto" placeholder="Monto a pagar *"><select class="form-select mb-2" id="pago-metodo"><option value="efectivo">💵 Efectivo</option><option value="nequi">📱 Nequi</option><option value="transferencia">🏦 Transferencia</option></select><input class="form-control mb-2" id="pago-nota" placeholder="Nota (opcional)"></div><div class="modal-footer"><button class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button class="btn-custom btn-success-custom" onclick="app.registrarPago()">✅ Registrar</button></div></div></div></div>
+
+    <div class="modal fade" id="modalConfig" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h5 class="fw-bold">⚙️ Configuración</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><input type="password" class="form-control mb-2" id="config-password" placeholder="🔒 Nueva contraseña"><input type="number" class="form-control mb-2" id="config-tasa-mora" placeholder="⚠️ Tasa de mora %"><div class="form-check mb-2"><input class="form-check-input" type="checkbox" id="config-dark"><label class="form-check-label">🌙 Modo oscuro</label></div><hr><button class="btn-custom btn-outline-custom w-100 mb-2" onclick="app.exportarBD()">📥 Exportar base de datos</button><button class="btn-custom btn-outline-custom w-100" onclick="document.getElementById('import-file').click()">📤 Importar base de datos</button><input type="file" id="import-file" accept=".json" hidden onchange="app.importarBD(event)"></div><div class="modal-footer"><button class="btn-custom btn-primary-custom" onclick="app.guardarConfig()">💾 Guardar</button></div></div></div></div>
+
+    <div class="modal fade" id="modalCalculadora" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h5 class="fw-bold">🧮 Calculadora</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><input type="number" class="form-control mb-2" id="calc-monto" placeholder="Monto del préstamo"><input type="number" class="form-control mb-2" id="calc-tasa" placeholder="Tasa de interés %"><input type="number" class="form-control mb-2" id="calc-plazo" placeholder="Número de cuotas"><select class="form-select mb-2" id="calc-frecuencia"><option value="mensual">Mensual</option><option value="quincenal">Quincenal</option><option value="semanal">Semanal</option></select><div id="calc-resultado" class="calc-box"></div><button class="btn-custom btn-primary-custom w-100" onclick="app.calcularSimulacion()">🔢 Calcular</button></div></div></div></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js">
+    </script>
+    <script>
+        const db = new Dexie('LoansWDB');
+        db.version(1).stores({
+            config: 'clave',
+            clientes: '++id,nombre,cedula,categoria',
+            prestamos: '++id,cliente_id,estado',
+            cuotas: '++id,prestamo_id,estado',
+            pagos: '++id,prestamo_id,cuota_id,fecha_pago,metodo',
+            notas: '++id,cliente_id,fecha'
+        });
+
+        const app = {
+            currentUser: null,
+            passwordHash: '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918',
+            chartInstance: null,
+            darkMode: false,
+
+            async init() {
+                await db.open();
+                await this.seedConfig();
+                this.checkAuth();
+                this.setupNav();
+            },
+            async seedConfig() {
+                if (!await db.config.get('password_hash')) {
+                    await db.config.put({ clave: 'password_hash', valor: this.passwordHash });
+                    await db.config.put({ clave: 'tasa_mora', valor: '5' });
+                    await db.config.put({ clave: 'dark_mode', valor: 'false' });
+                }
+                const dm = await db.config.get('dark_mode');
+                if (dm?.valor === 'true') { this.darkMode = true;
+                    document.body.classList.add('dark-mode'); }
+            },
+            checkAuth() {
+                if (localStorage.getItem('loansw_auth') === 'true') {
+                    this.currentUser = { id: 1, nombre: 'Admin' };
+                    this.showApp();
+                } else { document.getElementById('login-screen').style.display = 'flex';
+                    document.getElementById('main-app').style.display = 'none'; }
+            },
+            async sha256(m) { const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(m)); return Array
+                    .from(new Uint8Array(b)).map(x => x.toString(16).padStart(2, '0')).join(''); },
+            async login() {
+                const p = document.getElementById('login-password').value;
+                if (!p) { document.getElementById('login-error').textContent = 'Ingrese la contraseña'; return; }
+                if (await this.sha256(p) === (await db.config.get('password_hash')).valor) {
+                    localStorage.setItem('loansw_auth', 'true');
+                    this.currentUser = { id: 1, nombre: 'Admin' };
+                    this.showApp();
+                    this.toast('¡Bienvenido! 🎉', 'Sesión iniciada correctamente', 'success');
+                } else { document.getElementById('login-error').textContent = '❌ Contraseña incorrecta'; }
+            },
+            showApp() { document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('main-app').style.display = 'block';
+                this.navigateTo('dashboard'); },
+            setupNav() { document.querySelectorAll('.nav-btn').forEach(b => b.addEventListener('click', () => this
+                    .navigateTo(b.dataset.page))); },
+            navigateTo(p) { document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active')); const a =
+                    document.querySelector(`.nav-btn[data-page="${p}"]`); if (a) a.classList.add('active'); this
+                .renderPage(p); },
+            async renderPage(p) { const c = document.getElementById('page-content');
+                c.style.opacity = '0';
+                c.style.transform = 'translateY(20px)'; switch (p) { case 'dashboard':
+                    c.innerHTML = await this.dashHTML(); break; case 'clientes':
+                    c.innerHTML = this.clientesHTML(); break; case 'prestamos':
+                    c.innerHTML = await this.prestamosHTML(); break; case 'mora':
+                    c.innerHTML = await this.moraHTML(); break; case 'reportes':
+                    c.innerHTML = await this.reportesHTML(); break; } setTimeout(() => { c.style.transition =
+                        'all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+                    c.style.opacity = '1';
+                    c.style.transform = 'translateY(0)'; }, 60); await this.initPage(p); },
+            async initPage(p) { if (p === 'dashboard') await this.initDash(); if (p === 'clientes') await this
+                    .cargarClientes(); if (p === 'prestamos') await this.cargarPrestamos(); if (p === 'reportes') await this
+                    .initReportes(); },
+            toast(t, m, ty = 'info') { const co = document.getElementById('toast-container'); const d = document
+                    .createElement('div');
+                d.className = 'custom-toast';
+                d.style.borderLeftColor = ty === 'success' ? 'var(--success)' : ty === 'danger' ? 'var(--danger)' :
+                    'var(--primary)';
+                d.innerHTML = `<strong>${t}</strong><br><small>${m}</small>`;
+                co.appendChild(d);
+                setTimeout(() => { d.style.opacity = '0';
+                    d.style.transform = 'translateX(100px)';
+                    d.style.transition = 'all 0.4s ease-in';
+                    setTimeout(() => d.remove(), 400); }, 3000); },
+            async dashHTML() { const act = await db.prestamos.where({ estado: 'activo' }).toArray(); let car = 0,
+                    pen = 0; for (let p of act) { car += p.monto; const cu = await db.cuotas.where({ prestamo_id: p
+                            .id }).and(c => c.estado !== 'pagada').toArray(); for (let c of cu) pen += c
+                    .monto_total; } const ini = new Date(new Date().getFullYear(), new Date().getMonth(), 1); const pag =
+                    await db.pagos.where('fecha_pago').between(ini.getTime(), Date.now()).toArray(); const cob = pag
+                    .reduce((s, p) => s + p.monto_pagado, 0); const atr = await db.cuotas.where({ estado: 'atrasada' })
+                    .toArray(); const cm = new Set(); for (let c of atr) { const pr = await db.prestamos.get(c
+                        .prestamo_id); if (pr) cm.add(pr.cliente_id); } const morosidad = act.length > 0 ? ((cm.size / (
+                    await db.clientes.count())) * 100).toFixed(1) : 0; return `
+            <div class="app-header"><span class="brand-name">Loans W</span><div style="display:flex;gap:8px;"><button class="btn-icon" onclick="app.mostrarCalculadora()" title="Calculadora">🧮</button><button class="btn-icon" onclick="app.mostrarConfig()" title="Configuración">⚙️</button><button class="btn-icon" onclick="app.logout()" title="Salir">↩️</button></div></div>
+            <div class="stats-grid stagger">
+              <div class="stat-card" onclick="app.navigateTo('prestamos')"><div class="stat-icon" style="background:#e8e5ff;color:#6c5ce7;">💰</div><div class="stat-label">Cartera Activa</div><div class="stat-value">$${car.toLocaleString()}</div></div>
+              <div class="stat-card"><div class="stat-icon" style="background:#d5f5e3;color:#00b894;">📈</div><div class="stat-label">Cobrado del Mes</div><div class="stat-value" style="color:#00b894;">$${cob.toLocaleString()}</div></div>
+              <div class="stat-card"><div class="stat-icon" style="background:#fff9e6;color:#fdcb6e;">⏳</div><div class="stat-label">Pendiente</div><div class="stat-value" style="color:#f39c12;">$${pen.toLocaleString()}</div></div>
+              <div class="stat-card" onclick="app.navigateTo('mora')"><div class="stat-icon" style="background:#ffe0e0;color:#ff6b6b;">⚠️</div><div class="stat-label">En Mora</div><div class="stat-value" style="color:#ff6b6b;">${cm.size}</div><small style="color:var(--text-secondary);">Tasa: ${morosidad}%</small></div>
+            </div>
+            <div class="content-card"><div class="card-header">⏰ Pagos de Hoy <span class="badge-status badge-active" id="count-hoy">0</span></div><div class="card-body" id="pagos-hoy" style="max-height:200px;overflow-y:auto;"></div></div>
+            <div class="content-card"><div class="card-header">📈 Progreso de Préstamos Activos</div><div class="card-body" id="progreso-pagos" style="max-height:250px;overflow-y:auto;"></div></div>`; },
+            async initDash() { const hoy = new Date();
+                hoy.setHours(0, 0, 0, 0); const pag = await db.pagos.where('fecha_pago').between(hoy.getTime(), hoy
+                    .getTime() + 86400000).toArray();
+                document.getElementById('count-hoy').textContent = pag.length; let h = ''; for (let p of pag) { const pr =
+                        await db.prestamos.get(p.prestamo_id); if (!pr) continue; const cl = await db.clientes.get(pr
+                        .cliente_id);
+                    h +=
+                    `<div class="d-flex justify-content-between align-items-center py-2 border-bottom"><div><strong>${cl?.nombre||'?'}</strong><br><small>${p.metodo||'efectivo'} · ${new Date(p.fecha_pago).toLocaleTimeString()}</small></div><strong style="color:#00b894;">+$${p.monto_pagado.toFixed(0)}</strong></div>`; }
+                document.getElementById('pagos-hoy').innerHTML = h ||
+                    '<p class="text-muted text-center">Sin pagos registrados hoy</p>'; const act = await db.prestamos.where(
+                    { estado: 'activo' }).toArray(); let hp = ''; for (let p of act) { const cl = await db.clientes.get(p
+                        .cliente_id); if (!cl) continue; const cu = await db.cuotas.where({ prestamo_id: p.id })
+                    .toArray(); const pagadas = cu.filter(c => c.estado === 'pagada').length; const porc = cu.length >
+                        0 ? Math.round((pagadas / cu.length) * 100) : 0; const color = porc >= 80 ? '#00b894' : porc >=
+                        40 ? '#fdcb6e' : '#ff6b6b';
+                    hp +=
+                    `<div class="mb-3" onclick="app.verPrestamo(${p.id})" style="cursor:pointer;"><div class="d-flex justify-content-between mb-1"><span><strong>${cl.nombre}</strong></span><span>${pagadas}/${cu.length} (${porc}%)</span></div><div class="progress"><div class="progress-bar" style="width:${porc}%;background:${color};"></div></div><small class="text-muted">$${p.monto.toLocaleString()} · ${p.frecuencia}</small></div>`; }
+                document.getElementById('progreso-pagos').innerHTML = hp ||
+                    '<p class="text-muted text-center">Sin préstamos activos</p>'; },
+            clientesHTML() { return `<div class="app-header"><span class="brand-name">Loans W</span><button class="btn-custom btn-primary-custom" onclick="app.mostrarFormCliente()">➕ Nuevo</button></div><input class="form-control mb-2" id="buscar-cliente" placeholder="🔍 Buscar cliente..." oninput="app.cargarClientes()"><div class="content-card"><div class="card-body p-0 stagger" id="lista-clientes"></div></div>`; },
+            async cargarClientes() { const t = document.getElementById('buscar-cliente')?.value?.toLowerCase() || ''; let
+                    cl = await db.clientes.toArray(); if (t) cl = cl.filter(c => c.nombre.toLowerCase().includes(t) || (c
+                        .cedula || '').includes(t));
+                cl.sort((a, b) => b.id - a.id);
+                document.getElementById('lista-clientes').innerHTML = cl.map(c => `
+            <div class="list-item" onclick="app.verCliente(${c.id})"><div class="avatar">${c.nombre[0].toUpperCase()}</div><div style="flex:1;"><strong>${c.nombre}</strong><br><small>${c.cedula||'Sin ID'} · ${c.categoria==='vip'?'👑 VIP':c.categoria==='riesgoso'?'⚠️ Riesgoso':'⭐ Regular'}</small></div><i class="bi bi-chevron-right"></i></div>`).join('') || '<p class="text-muted p-4 text-center">No hay clientes</p>'; },
+            async mostrarFormCliente(id = null) { const c = id ? await db.clientes.get(id) : {};
+                document.getElementById('cliente-id').value = id || '';
+                document.getElementById('cliente-nombre').value = c.nombre || '';
+                document.getElementById('cliente-telefono').value = c.telefono || '';
+                document.getElementById('cliente-cedula').value = c.cedula || '';
+                document.getElementById('cliente-direccion').value = c.direccion || '';
+                document.getElementById('cliente-aval').value = c.aval || '';
+                document.getElementById('cliente-categoria').value = c.categoria || 'regular'; new bootstrap.Modal(document
+                    .getElementById('modalCliente')).show(); },
+            async guardarCliente() { const id = document.getElementById('cliente-id').value; const d = { nombre: document
+                        .getElementById('cliente-nombre').value.trim(), telefono: document.getElementById(
+                            'cliente-telefono').value.trim(), cedula: document.getElementById('cliente-cedula').value
+                        .trim(), direccion: document.getElementById('cliente-direccion').value.trim(), aval: document
+                        .getElementById('cliente-aval').value.trim(), categoria: document.getElementById(
+                            'cliente-categoria').value }; if (!d.nombre) return this.toast('Error',
+                    'Nombre obligatorio', 'danger'); if (id) await db.clientes.update(Number(id), d); else await db
+                    .clientes.add(d);
+                bootstrap.Modal.getInstance(document.getElementById('modalCliente')).hide();
+                this.cargarClientes();
+                this.toast('✅ Éxito', 'Cliente guardado', 'success'); },
+            async verCliente(id) { const c = await db.clientes.get(id); const ps = await db.prestamos.where({ cliente_id: id
+                    }).toArray(); const ns = await db.notas.where({ cliente_id: id }).toArray();
+                ns.sort((a, b) => b.fecha - a.fecha); let hp = ''; for (let p of ps) { const cu = await db.cuotas.where(
+                        { prestamo_id: p.id }).toArray(); const pag = cu.filter(x => x.estado === 'pagada').length;
+                    hp +=
+                    `<div class="list-item" onclick="app.verPrestamo(${p.id})"><div class="avatar">$</div><div style="flex:1;"><strong>$${p.monto.toLocaleString()}</strong><br><small>${pag}/${cu.length} pagadas</small></div><span class="badge-status ${p.estado==='activo'?'badge-active':'badge-paid'}">${p.estado}</span></div>`; }
+                document.getElementById('page-content').innerHTML = `
+            <div class="app-header"><span class="brand-name">${c.nombre}</span><button class="btn-icon" onclick="app.navigateTo('clientes')">←</button></div>
+            <div class="content-card"><div class="card-body"><p><strong>Cédula:</strong> ${c.cedula||'-'}</p><p><strong>Tel:</strong> ${c.telefono||'-'}</p><p><strong>Categoría:</strong> ${c.categoria==='vip'?'👑 VIP':c.categoria==='riesgoso'?'⚠️ Riesgoso':'⭐ Regular'}</p><button class="btn-custom btn-primary-custom me-2" onclick="app.mostrarFormCliente(${c.id})">✏️ Editar</button><button class="btn-custom btn-outline-custom" onclick="app.agregarNota(${c.id})">📝 Nota</button></div></div>
+            <h6 class="mt-3 fw-bold">📋 Préstamos</h6><div class="content-card"><div class="card-body p-0">${hp||'<p class="text-muted p-4 text-center">Sin préstamos</p>'}</div></div>
+            <h6 class="mt-3 fw-bold">📝 Notas</h6><div class="content-card"><div class="card-body">${ns.map(n=>`<div class="mb-2 p-2" style="background:var(--bg);border-radius:10px;"><small class="text-muted">${new Date(n.fecha).toLocaleString()}</small><p class="mb-0">${n.texto}</p></div>`).join('')||'<small class="text-muted">Sin notas</small>'}</div></div>`; },
+            async agregarNota(clienteId) { const texto = prompt('📝 Escribe la nota:'); if (texto) { await db.notas.add(
+                        { cliente_id: clienteId, texto, fecha: Date.now() });
+                    this.verCliente(clienteId);
+                    this.toast('✅', 'Nota guardada', 'success'); } },
+            async prestamosHTML() { return `<div class="app-header"><span class="brand-name">Loans W</span><button class="btn-custom btn-primary-custom" onclick="app.mostrarFormPrestamo()">➕ Nuevo</button></div><select class="form-select mb-2" id="filtro-prestamos" onchange="app.cargarPrestamos()"><option value="todos">Todos</option><option value="activo">Activos</option><option value="pagado">Pagados</option></select><div class="content-card"><div class="card-body p-0 stagger" id="lista-prestamos"></div></div>`; },
+            async cargarPrestamos() { const f = document.getElementById('filtro-prestamos')?.value || 'todos'; let ps =
+                    await db.prestamos.toArray(); if (f !== 'todos') ps = ps.filter(p => p.estado === f);
+                ps.sort((a, b) => b.id - a.id); let h = ''; for (let p of ps) { const cl = await db.clientes.get(p
+                        .cliente_id); const cu = await db.cuotas.where({ prestamo_id: p.id }).toArray(); const pag = cu
+                    .filter(c => c.estado === 'pagada').length; const porc = cu.length > 0 ? Math.round((pag / cu.length) *
+                        100) : 0;
+                    h +=
+                    `<div class="list-item" onclick="app.verPrestamo(${p.id})"><div class="avatar">${cl?.nombre?.[0]||'?'}</div><div style="flex:1;"><strong>${cl?.nombre||'?'}</strong><br><small>$${p.monto.toLocaleString()} · ${porc}%</small><div class="progress mt-1" style="height:6px;"><div class="progress-bar" style="width:${porc}%;background:${porc>70?'#00b894':porc>30?'#fdcb6e':'#ff6b6b'};"></div></div></div><span class="badge-status ${p.estado==='activo'?'badge-active':'badge-paid'}">${p.estado}</span></div>`; }
+                document.getElementById('lista-prestamos').innerHTML = h ||
+                    '<p class="text-muted p-4 text-center">No hay préstamos</p>'; },
+            async mostrarFormPrestamo(id = null) { const cls = await db.clientes.toArray();
+                document.getElementById('prestamo-cliente').innerHTML = '<option value="">Seleccionar...</option>' + cls
+                    .map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
+                document.getElementById('prestamo-id').value = id || '';
+                document.getElementById('vista-amortizacion').style.display = 'none'; if (id) { const p = await db.prestamos
+                        .get(id);
+                    document.getElementById('prestamo-cliente').value = p.cliente_id;
+                    document.getElementById('prestamo-monto').value = p.monto;
+                    document.getElementById('prestamo-tasa').value = p.tasa_interes;
+                    document.getElementById('prestamo-tipo').value = p.tipo_interes;
+                    document.getElementById('prestamo-fecha').value = new Date(p.fecha_inicio).toISOString().split(
+                    'T')[0];
+                    document.getElementById('prestamo-frecuencia').value = p.frecuencia;
+                    document.getElementById('prestamo-cuotas').value = p.plazo;
+                    document.getElementById('prestamo-metodo').value = p.metodo_pago || 'efectivo'; } else { document
+                        .getElementById('prestamo-monto').value = '';
+                    document.getElementById('prestamo-tasa').value = '';
+                    document.getElementById('prestamo-fecha').value = new Date().toISOString().split('T')[0];
+                    document.getElementById('prestamo-cuotas').value = ''; }['prestamo-tipo', 'prestamo-frecuencia',
+                        'prestamo-monto', 'prestamo-tasa', 'prestamo-cuotas'
+                    ].forEach(x => document.getElementById(x).onchange = () => app.genVista());['prestamo-monto',
+                        'prestamo-tasa', 'prestamo-cuotas'
+                    ].forEach(x => document.getElementById(x).oninput = () => app.genVista()); new bootstrap.Modal(document
+                    .getElementById('modalPrestamo')).show();
+                setTimeout(() => this.genVista(), 350); },
+            genVista() { const m = parseFloat(document.getElementById('prestamo-monto').value) || 0; const t = parseFloat(
+                    document.getElementById('prestamo-tasa').value) || 0; const pl = parseInt(document.getElementById(
+                    'prestamo-cuotas').value) || 0; if (!m || !t || !pl) return; const am = this.calcAmort(m, t, document
+                    .getElementById('prestamo-tipo').value, pl);
+                document.getElementById('vista-amortizacion').style.display = 'block';
+                document.getElementById('tabla-amort').innerHTML = am.map(c =>
+                    `<tr><td>${c.numero}</td><td>${c.fecha.toLocaleDateString()}</td><td><strong>$${c.monto_total.toFixed(2)}</strong></td><td>$${c.saldo_restante.toFixed(2)}</td></tr>`
+                    ).join(''); },
+            calcAmort(monto, tasa, tipo, plazo, fechaIni = null) { const fecha = fechaIni ? new Date(fechaIni) : new Date(
+                    document.getElementById('prestamo-fecha').value || new Date()); const frec = document.getElementById(
+                    'prestamo-frecuencia')?.value || 'mensual'; let saldo = monto; const td = tasa / 100; let cf = tipo ===
+                    'simple' ? (monto + monto * td) / plazo : monto * (td / (1 - Math.pow(1 + td, -plazo))); const r = []; for (
+                    let i = 1; i <= plazo; i++) { const inte = tipo === 'simple' ? (monto * td) / plazo : saldo * td; const
+                        cap = cf - inte;
+                    saldo -= cap; const fc = new Date(fecha); if (frec === 'diaria') fc.setDate(fc.getDate() + i - 1); if (
+                        frec === 'semanal') fc.setDate(fc.getDate() + (i - 1) * 7); if (frec === 'quincenal') fc.setDate(fc
+                        .getDate() + (i - 1) * 15); if (frec === 'mensual') fc.setMonth(fc.getMonth() + i - 1);
+                    r.push({ numero: i, fecha: fc, capital: cap, interes: inte, monto_total: cap + inte,
+                        saldo_restante: Math.max(0, saldo) }); } return r; },
+            async guardarPrestamo() { const clId = parseInt(document.getElementById('prestamo-cliente').value); if (!clId)
+                    return this.toast('Error', 'Seleccione cliente', 'danger'); const m = parseFloat(document
+                    .getElementById('prestamo-monto').value); if (!m) return this.toast('Error', 'Ingrese monto',
+                    'danger'); const ta = parseFloat(document.getElementById('prestamo-tasa').value); const ti = document
+                    .getElementById('prestamo-tipo').value; const fi = new Date(document.getElementById('prestamo-fecha')
+                    .value + 'T00:00:00'); const fr = document.getElementById('prestamo-frecuencia').value; const pl =
+                    parseInt(document.getElementById('prestamo-cuotas').value); const met = document.getElementById(
+                        'prestamo-metodo').value; const id = document.getElementById('prestamo-id').value; const pd = {
+                    cliente_id: clId, monto: m, tasa_interes: ta, tipo_interes: ti, fecha_inicio: fi.getTime(),
+                    plazo: pl, frecuencia: fr, estado: 'activo', metodo_pago: met }; let pid; if (id) { await db.prestamos
+                        .update(Number(id), pd); await db.cuotas.where({ prestamo_id: Number(id) }).delete();
+                    pid = Number(id); } else pid = await db.prestamos.add(pd); const am = this.calcAmort(m, ta, ti, pl,
+                    fi); for (let c of am) await db.cuotas.add({ prestamo_id: pid, numero_cuota: c.numero,
+                    fecha_vencimiento: c.fecha.getTime(), capital: c.capital, interes: c.interes, monto_total: c
+                        .monto_total, saldo_restante: c.saldo_restante, estado: 'pendiente' });
+                bootstrap.Modal.getInstance(document.getElementById('modalPrestamo')).hide();
+                this.cargarPrestamos();
+                this.toast('✅ Éxito', 'Préstamo creado correctamente', 'success'); },
+            async verPrestamo(id) { const p = await db.prestamos.get(id); const cl = await db.clientes.get(p.cliente_id); const
+                    cu = await db.cuotas.where({ prestamo_id: id }).toArray();
+                cu.sort((a, b) => a.numero_cuota - b.numero_cuota); const pag = cu.filter(c => c.estado === 'pagada')
+                    .length; const porc = Math.round((pag / cu.length) * 100);
+                document.getElementById('page-content').innerHTML = `
+            <div class="app-header"><span class="brand-name">Préstamo #${id}</span><button class="btn-icon" onclick="app.navigateTo('prestamos')">←</button></div>
+            <div class="content-card"><div class="card-body"><p><strong>Cliente:</strong> ${cl?.nombre}</p><p><strong>Monto:</strong> $${p.monto.toLocaleString()}</p><p><strong>Progreso:</strong> ${pag}/${cu.length} (${porc}%)</p><div class="progress mb-2" style="height:12px;"><div class="progress-bar" style="width:${porc}%;background:${porc>70?'#00b894':porc>30?'#fdcb6e':'#ff6b6b'};"></div></div><button class="btn-custom btn-outline-custom" onclick="app.generarRecibo(${id})">🧾 Generar Recibo</button></div></div>
+            <div class="content-card"><div class="table-responsive"><table class="table table-sm"><thead><tr><th>#</th><th>Fecha</th><th>Cuota</th><th>Saldo</th><th>Estado</th><th></th></tr></thead><tbody>${cu.map(c=>`<tr><td>${c.numero_cuota}</td><td>${new Date(c.fecha_vencimiento).toLocaleDateString()}</td><td><strong>$${c.monto_total.toFixed(2)}</strong></td><td>$${c.saldo_restante.toFixed(2)}</td><td><span class="badge-status ${c.estado==='pagada'?'badge-paid':c.estado==='atrasada'?'badge-late':'badge-active'}">${c.estado}</span></td><td>${c.estado!=='pagada'?`<button class="btn-custom btn-success-custom" style="padding:6px 12px;font-size:11px;" onclick="event.stopPropagation();app.mostrarFormPago(${id},${c.id})">💵 Pagar</button>`:''}</td></tr>`).join('')}</tbody></table></div></div>`; },
+            async mostrarFormPago(pid, cid = null) { document.getElementById('pago-prestamo-id').value = pid; const cu =
+                    await db.cuotas.where({ prestamo_id: pid }).and(c => c.estado !== 'pagada').toArray();
+                cu.sort((a, b) => a.numero_cuota - b.numero_cuota);
+                document.getElementById('pago-cuota').innerHTML = cu.map(c =>
+                    `<option value="${c.id}">Cuota #${c.numero_cuota} - $${c.monto_total.toFixed(2)}</option>`).join(
+                    ''); if (cid) document.getElementById('pago-cuota').value = cid; const sel = cu.find(c => c.id === (
+                    cid || parseInt(document.getElementById('pago-cuota').value)));
+                document.getElementById('pago-monto').value = sel?.monto_total || ''; new bootstrap.Modal(document
+                    .getElementById('modalPago')).show(); },
+            async registrarPago() { const pid = parseInt(document.getElementById('pago-prestamo-id').value); const cid =
+                    parseInt(document.getElementById('pago-cuota').value); const m = parseFloat(document.getElementById(
+                        'pago-monto').value); const met = document.getElementById('pago-metodo').value; const nota = document
+                    .getElementById('pago-nota').value; if (!m) return this.toast('Error', 'Ingrese monto', 'danger');
+                const cu = await db.cuotas.get(cid); await db.pagos.add({ prestamo_id: pid, cuota_id: cid,
+                    monto_pagado: m, tipo: m >= cu.monto_total ? 'total' : 'abono', fecha_pago: Date.now(),
+                    metodo: met, nota }); if (m >= cu.monto_total) await db.cuotas.update(cid, { estado: 'pagada',
+                    saldo_restante: 0 }); else await db.cuotas.update(cid, { saldo_restante: cu.saldo_restante -
+                    m }); const pend = await db.cuotas.where({ prestamo_id: pid }).and(c => c.estado !== 'pagada')
+                    .count(); if (pend === 0) await db.prestamos.update(pid, { estado: 'pagado' });
+                bootstrap.Modal.getInstance(document.getElementById('modalPago')).hide();
+                this.verPrestamo(pid);
+                this.toast('✅ Éxito', 'Pago registrado', 'success'); if (this.currentPage === 'dashboard') await this
+                    .initDash(); },
+            async generarRecibo(id) { const p = await db.prestamos.get(id); const cl = await db.clientes.get(p.cliente_id); const
+                    cu = await db.cuotas.where({ prestamo_id: id }).toArray(); const pag = cu.filter(c => c.estado ===
+                        'pagada').length; const { jsPDF } = window.jspdf; const doc = new jsPDF();
+                doc.setFontSize(20);
+                doc.setTextColor(108, 92, 231);
+                doc.text('Loans W', 14, 25);
+                doc.setFontSize(16);
+                doc.setTextColor(0);
+                doc.text('RECIBO DE PRÉSTAMO', 14, 38);
+                doc.setFontSize(11);
+                doc.text(`Cliente: ${cl?.nombre}`, 14, 52);
+                doc.text(`Monto: $${p.monto.toLocaleString()}`, 14, 62);
+                doc.text(`Progreso: ${pag}/${cu.length} cuotas pagadas`, 14, 72);
+                doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 14, 82);
+                doc.save(`LoansW_recibo_${id}.pdf`);
+                this.toast('✅', 'Recibo PDF generado', 'success'); },
+            async moraHTML() { const atr = await db.cuotas.where({ estado: 'atrasada' }).toArray();
+                atr.sort((a, b) => b.dias_atraso - a.dias_atraso); let h = ''; for (let c of atr) { const p = await db
+                        .prestamos.get(c.prestamo_id); if (!p) continue; const cl = await db.clientes.get(p.cliente_id);
+                    h +=
+                    `<div class="list-item" onclick="app.verPrestamo(${p.id})" style="border-left:4px solid #ff6b6b;"><div class="avatar" style="background:#ff6b6b;">!</div><div style="flex:1;"><strong>${cl?.nombre}</strong><br><small>${c.dias_atraso||0} días · Cuota #${c.numero_cuota}</small></div><strong style="color:#ff6b6b;">$${c.monto_total.toFixed(0)}</strong></div>`; } return `
+            <div class="app-header"><span class="brand-name">Loans W</span><span class="badge-status badge-late">${atr.length} atrasadas</span></div>
+            <div class="content-card"><div class="card-body p-0 stagger">${h||'<p class="text-muted p-4 text-center">🎉 ¡Sin cuotas atrasadas!</p>'}</div></div>`; },
+            async reportesHTML() { return `<div class="app-header"><span class="brand-name">Loans W</span></div><div class="content-card"><div class="card-body"><button class="btn-custom btn-primary-custom w-100 mb-2" onclick="app.exportarExcel()">📥 Exportar a Excel</button><button class="btn-custom btn-outline-custom w-100 mb-2" onclick="app.exportarPDF()">📄 Exportar a PDF</button></div></div><div class="content-card"><div class="card-header">📊 Resumen</div><div class="card-body" id="resumen-r"></div></div>`; },
+            async initReportes() { const a = await db.prestamos.where({ estado: 'activo' }).count(); const p = await db
+                    .prestamos.where({ estado: 'pagado' }).count(); const c = await db.clientes.count();
+                document.getElementById('resumen-r').innerHTML =
+                    `<p><strong>Préstamos activos:</strong> ${a}</p><p><strong>Préstamos pagados:</strong> ${p}</p><p><strong>Total clientes:</strong> ${c}</p>`; },
+            async exportarExcel() { const ps = await db.prestamos.toArray(); const d = []; for (let p of ps) { const cl =
+                        await db.clientes.get(p.cliente_id);
+                    d.push({ Cliente: cl?.nombre, Monto: p.monto, Estado: p.estado, Fecha: new Date(p.fecha_inicio)
+                            .toLocaleDateString() }); } const ws = XLSX.utils.json_to_sheet(d); const wb = XLSX.utils
+                    .book_new();
+                XLSX.utils.book_append_sheet(wb, ws, 'Préstamos');
+                XLSX.writeFile(wb, 'LoansW_Reporte.xlsx');
+                this.toast('✅', 'Excel exportado', 'success'); },
+            async exportarPDF() { const { jsPDF } = window.jspdf; const doc = new jsPDF();
+                doc.setFontSize(18);
+                doc.setTextColor(108, 92, 231);
+                doc.text('Loans W - Reporte', 14, 22); const ps = await db.prestamos.toArray(); const r = []; for (let p of
+                    ps) { const cl = await db.clientes.get(p.cliente_id);
+                    r.push([cl?.nombre || '', '$' + p.monto, p.estado]); } doc.autoTable({ startY: 32, head: [
+                        ['Cliente', 'Monto', 'Estado']
+                    ], body: r });
+                doc.save('LoansW_Reporte.pdf');
+                this.toast('✅', 'PDF exportado', 'success'); },
+            async mostrarConfig() { const tm = await db.config.get('tasa_mora');
+                document.getElementById('config-tasa-mora').value = tm?.valor || '5';
+                document.getElementById('config-dark').checked = this.darkMode; new bootstrap.Modal(document.getElementById(
+                    'modalConfig')).show(); },
+            async guardarConfig() { const np = document.getElementById('config-password').value; if (np) { await db.config
+                        .put({ clave: 'password_hash', valor: await this.sha256(np) });
+                    this.toast('✅', 'Contraseña actualizada', 'success'); } await db.config.put({ clave: 'tasa_mora',
+                    valor: document.getElementById('config-tasa-mora').value }); this.darkMode = document.getElementById(
+                    'config-dark').checked; await db.config.put({ clave: 'dark_mode', valor: String(this.darkMode) }); if (
+                    this.darkMode) document.body.classList.add('dark-mode'); else document.body.classList.remove(
+                    'dark-mode');
+                bootstrap.Modal.getInstance(document.getElementById('modalConfig')).hide();
+                this.toast('✅', 'Configuración guardada', 'success'); },
+            mostrarCalculadora() { new bootstrap.Modal(document.getElementById('modalCalculadora')).show(); },
+            calcularSimulacion() { const m = parseFloat(document.getElementById('calc-monto').value) || 0; const t =
+                    parseFloat(document.getElementById('calc-tasa').value) || 0; const p = parseInt(document
+                    .getElementById('calc-plazo').value) || 0; if (!m || !t || !p) return; const am = this.calcAmortSimple(
+                    m, t, p);
+                document.getElementById('calc-resultado').innerHTML =
+                    `<p><strong>💰 Cuota:</strong> $${am[0].monto_total.toFixed(2)}</p><p><strong>💵 Total a pagar:</strong> $${(am[0].monto_total*p).toFixed(2)}</p><p><strong>📈 Interés total:</strong> $${((am[0].monto_total*p)-m).toFixed(2)}</p>`;
+                document.getElementById('calc-resultado').style.animation = 'none';
+                setTimeout(() => document.getElementById('calc-resultado').style.animation = 'scaleIn 0.4s var(--bounce)',
+                    10); },
+            calcAmortSimple(monto, tasa, plazo) { const r = []; let saldo = monto; const cf = (monto + monto * (tasa / 100)) /
+                    plazo; for (let i = 1; i <= plazo; i++) { const inte = (monto * (tasa / 100)) / plazo;
+                    saldo -= (cf - inte);
+                    r.push({ monto_total: cf, saldo_restante: Math.max(0, saldo) }); } return r; },
+            async exportarBD() { const d = { clientes: await db.clientes.toArray(), prestamos: await db.prestamos.toArray(),
+                    cuotas: await db.cuotas.toArray(), pagos: await db.pagos.toArray(), notas: await db.notas
+                    .toArray() }; const b = new Blob([JSON.stringify(d, null, 2)], { type: 'application/json' }); const a =
+                    document.createElement('a');
+                a.href = URL.createObjectURL(b);
+                a.download = 'LoansW_Backup_' + new Date().toISOString().slice(0, 10) + '.json';
+                a.click();
+                this.toast('✅', 'Base de datos exportada', 'success'); },
+            async importarBD(e) { const f = e.target.files[0]; if (!f) return; const r = new FileReader();
+                r.onload = async (ev) => { try { const d = JSON.parse(ev.target.result); if (!d.clientes || !d
+                            .prestamos) throw new Error('Inválido'); await db.clientes.clear(); await db.prestamos
+                        .clear(); await db.cuotas.clear(); await db.pagos.clear(); await db.notas.clear(); if (d
+                        .clientes) await db.clientes.bulkAdd(d.clientes); if (d.prestamos) await db.prestamos
+                        .bulkAdd(d.prestamos); if (d.cuotas) await db.cuotas.bulkAdd(d.cuotas); if (d.pagos) await db
+                        .pagos.bulkAdd(d.pagos); if (d.notas) await db.notas.bulkAdd(d.notas);
+                    this.toast('✅', 'Base de datos restaurada', 'success');
+                    this.navigateTo('dashboard'); } catch (err) { this.toast('Error', 'Archivo inválido', 'danger'); } };
+                r.readAsText(f);
+                e.target.value = ''; },
+            logout() { localStorage.removeItem('loansw_auth');
+                location.reload(); }
+        };
+        document.addEventListener('DOMContentLoaded', () => app.init());
+
+        // Registrar Service Worker para PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register(
+                    'data:application/javascript,self.addEventListener("fetch",e=>{e.respondWith(fetch(e.request))})'
+                    ).catch(() => {});
+            });
+        }
+    </script>
+</body>
+</html>
