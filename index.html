@@ -15,25 +15,27 @@
     <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
     <style>
-        /* ===== ESTILOS DE LA APP ORIGINAL (TOTALMENTE SIN CAMBIOS) ===== */
+        /* ===== VARIABLES ===== */
         :root {
             --sat: env(safe-area-inset-top, 0px);
             --sab: env(safe-area-inset-bottom, 0px);
-            --bg: #f0f2ff;
-            --card: #ffffff;
+            --bg: #e6e9f0;
+            --card: #e6e9f0;
             --text: #1e1e2e;
             --sub: #5a5a7a;
-            --border: #e2e4f0;
+            --border: rgba(0,0,0,0.06);
             --primary: #6c5ce7;
             --primary-dark: #5a4fd4;
-            --primary-light: #8B5CF6;
+            --primary-light: #a29bfe;
             --success: #00b894;
             --danger: #ff6b6b;
             --warning: #f59e0b;
             --info: #3b82f6;
-            --shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+            --shadow: 6px 6px 12px rgba(0, 0, 0, 0.06), -6px -6px 12px rgba(255, 255, 255, 0.85);
+            --shadow-inset: inset 4px 4px 8px rgba(0, 0, 0, 0.05), inset -4px -4px 8px rgba(255, 255, 255, 0.85);
+            --shadow-hover: 8px 8px 16px rgba(0, 0, 0, 0.08), -8px -8px 16px rgba(255, 255, 255, 0.9);
             --radius: clamp(0.6rem, 2vw, 1rem);
-            --radius-lg: 22px;
+            --radius-lg: 28px;
             --font-xs: clamp(0.55rem, 1.4vw, 0.68rem);
             --font-sm: clamp(0.65rem, 1.6vw, 0.8rem);
             --font-md: clamp(0.75rem, 1.9vw, 0.9rem);
@@ -45,22 +47,25 @@
             --spacing-md: clamp(0.6rem, 1.5vw, 0.9rem);
             --spacing-lg: clamp(0.8rem, 2vw, 1.2rem);
             --ease-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --glass-bg: rgba(255, 255, 255, 0.92);
+            --glass-bg: rgba(230, 233, 240, 0.92);
             --glass-border: rgba(255, 255, 255, 0.4);
             --glass-blur: blur(30px);
-            --nav-bg: rgba(255, 255, 255, 0.95);
+            --nav-bg: rgba(230, 233, 240, 0.95);
         }
 
+        /* ===== MODO OSCURO NEUMORFISMO ===== */
         .dark-mode {
-            --bg: #09090F;
-            --card: #16192B;
-            --text: #FFFFFF;
-            --sub: #A7B0D4;
-            --border: rgba(255, 255, 255, 0.05);
-            --shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
-            --glass-bg: rgba(22, 25, 43, 0.92);
+            --bg: #1a1a2e;
+            --card: #1a1a2e;
+            --text: #e8eaf0;
+            --sub: #a7b0d4;
+            --border: rgba(255, 255, 255, 0.04);
+            --shadow: 8px 8px 16px rgba(0, 0, 0, 0.4), -8px -8px 16px rgba(255, 255, 255, 0.04);
+            --shadow-inset: inset 4px 4px 8px rgba(0, 0, 0, 0.3), inset -4px -4px 8px rgba(255, 255, 255, 0.04);
+            --shadow-hover: 10px 10px 20px rgba(0, 0, 0, 0.5), -10px -10px 20px rgba(255, 255, 255, 0.05);
+            --glass-bg: rgba(26, 26, 46, 0.92);
             --glass-border: rgba(255, 255, 255, 0.05);
-            --nav-bg: rgba(22, 25, 43, 0.92);
+            --nav-bg: rgba(26, 26, 46, 0.95);
             --primary: #8B5CF6;
             --primary-dark: #6C5CE7;
             --primary-light: #A78BFA;
@@ -70,6 +75,7 @@
             --warning: #FFB300;
         }
 
+        /* ===== RESET Y BASE ===== */
         * {
             margin: 0;
             padding: 0;
@@ -97,7 +103,7 @@
             transition: background 0.3s ease, color 0.3s ease;
         }
 
-        /* ===== ANIMACIONES ORIGINALES ===== */
+        /* ===== ANIMACIONES ===== */
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -171,7 +177,7 @@
         .stagger>*:nth-child(4) { animation-delay: 0.11s; }
         .stagger>*:nth-child(5) { animation-delay: 0.14s; }
 
-        /* ===== LOGIN (ORIGINAL SIN CAMBIOS) ===== */
+        /* ===== LOGIN ===== */
         #login-screen {
             position: fixed;
             top: 0;
@@ -181,21 +187,13 @@
             display: none;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #09090F 0%, #101224 25%, #171A33 50%, #1D1845 75%, #09090F 100%);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            background: var(--bg);
             z-index: 9999;
             padding: var(--spacing-sm);
             overflow: hidden;
         }
         #login-screen.show {
             display: flex;
-        }
-
-        .dark-mode #login-screen {
-            background: linear-gradient(135deg, #09090F 0%, #101224 25%, #171A33 50%, #1D1845 75%, #09090F 100%);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
         }
 
         .particles {
@@ -216,18 +214,17 @@
         }
 
         .login-card {
-            background: var(--glass-bg);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
+            background: var(--card);
             border-radius: var(--radius-lg);
             padding: 2.5rem 2rem;
             width: min(100%, 22rem);
             text-align: center;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(108, 92, 231, 0.15);
+            box-shadow: var(--shadow);
             animation: scaleIn 0.5s var(--ease-smooth);
             position: relative;
             z-index: 1;
-            border: 1px solid var(--glass-border);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
         }
 
         .login-logo {
@@ -243,7 +240,7 @@
             font-size: 2.4rem;
             color: #fff;
             margin-bottom: var(--spacing-sm);
-            box-shadow: 0 10px 40px rgba(108, 92, 231, 0.5);
+            box-shadow: var(--shadow);
             position: relative;
         }
 
@@ -274,27 +271,21 @@
         }
 
         .login-input {
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 0.9rem;
+            border: none;
+            border-radius: 50px;
             padding: 0.85rem 1rem;
             font-size: var(--font-md);
             width: 100%;
             margin-bottom: 0.6rem;
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--bg);
             color: var(--text);
             outline: none;
+            box-shadow: var(--shadow-inset);
             transition: all var(--ease-smooth);
         }
 
-        .dark-mode .login-input {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.1);
-            color: #fff;
-        }
-
         .login-input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.15), 0 0 20px rgba(108, 92, 231, 0.1);
+            box-shadow: inset 6px 6px 12px rgba(0, 0, 0, 0.08), inset -6px -6px 12px rgba(255, 255, 255, 0.9);
             transform: translateY(-2px);
         }
 
@@ -309,7 +300,7 @@
             animation: gradientShift 4s ease infinite;
             color: #fff;
             border: none;
-            border-radius: 0.9rem;
+            border-radius: 50px;
             padding: 0.85rem;
             font-size: var(--font-md);
             font-weight: 700;
@@ -317,18 +308,19 @@
             cursor: pointer;
             transition: all var(--ease-smooth);
             letter-spacing: 0.4px;
-            box-shadow: 0 6px 25px rgba(108, 92, 231, 0.4);
+            box-shadow: var(--shadow);
             position: relative;
             overflow: hidden;
         }
 
         .login-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 35px rgba(108, 92, 231, 0.6), 0 0 30px rgba(108, 92, 231, 0.2);
+            box-shadow: var(--shadow-hover);
         }
 
         .login-btn:active {
             transform: scale(0.97);
+            box-shadow: var(--shadow-inset);
         }
 
         .ripple-container {
@@ -345,7 +337,7 @@
             pointer-events: none;
         }
 
-        /* ===== MAIN APP (ORIGINAL SIN CAMBIOS) ===== */
+        /* ===== MAIN APP ===== */
         #main-app {
             display: none;
             flex: 1;
@@ -380,29 +372,15 @@
             position: sticky;
             top: calc(var(--sat) + var(--spacing-xs));
             z-index: 40;
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
             flex-wrap: wrap;
             gap: var(--spacing-xs);
             animation: fadeDown 0.35s var(--ease-smooth);
             transition: all 0.3s ease;
         }
 
-        .dark-mode .header {
-            background: var(--card);
-            border-color: var(--border);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-        }
-
         .header:hover {
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            border-color: rgba(108, 92, 231, 0.2);
-        }
-
-        .dark-mode .header:hover {
-            box-shadow: 0 4px 20px rgba(108, 92, 231, 0.1);
-            border-color: rgba(108, 92, 231, 0.3);
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
         }
 
         .brand {
@@ -433,24 +411,18 @@
             transition: all var(--ease-smooth);
             position: relative;
             overflow: hidden;
-        }
-
-        .dark-mode .btn-icon {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--sub);
+            box-shadow: var(--shadow);
         }
 
         .btn-icon:hover {
-            background: rgba(108, 92, 231, 0.15);
-            color: var(--primary);
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.2);
+            box-shadow: var(--shadow-hover);
+            color: var(--primary);
         }
 
-        .dark-mode .btn-icon:hover {
-            background: rgba(108, 92, 231, 0.2);
-            color: #fff;
-            box-shadow: 0 4px 20px rgba(108, 92, 231, 0.3);
+        .btn-icon:active {
+            transform: scale(0.95);
+            box-shadow: var(--shadow-inset);
         }
 
         /* ===== STATS GRID ===== */
@@ -480,23 +452,14 @@
             overflow: hidden;
         }
 
-        .dark-mode .stat-card {
-            background: var(--card);
-            border-color: var(--border);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-        }
-
         .stat-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
-            border-color: rgba(108, 92, 231, 0.2);
+            box-shadow: var(--shadow-hover);
         }
 
-        .dark-mode .stat-card:hover {
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
-            border-color: rgba(108, 92, 231, 0.3);
-            transform: translateY(-4px);
+        .stat-card:active {
+            transform: scale(0.97);
+            box-shadow: var(--shadow-inset);
         }
 
         .stat-icon {
@@ -509,11 +472,8 @@
             font-size: 1.2rem;
             margin-bottom: var(--spacing-xs);
             transition: all var(--ease-smooth);
-        }
-
-        .dark-mode .stat-icon {
-            background: rgba(108, 92, 231, 0.15) !important;
-            color: var(--primary) !important;
+            background: var(--bg);
+            box-shadow: var(--shadow-inset);
         }
 
         .stat-card:hover .stat-icon {
@@ -560,22 +520,9 @@
             transition: all var(--ease-smooth);
         }
 
-        .dark-mode .card {
-            background: var(--card);
-            border-color: var(--border);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
-        }
-
         .card:hover {
-            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
-            border-color: rgba(108, 92, 231, 0.15);
-        }
-
-        .dark-mode .card:hover {
-            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6);
-            border-color: rgba(108, 92, 231, 0.2);
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
         }
 
         .card-header {
@@ -586,6 +533,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background: var(--bg);
         }
 
         .card-body {
@@ -601,53 +549,19 @@
             white-space: nowrap;
             letter-spacing: 0.3px;
             transition: all var(--ease-smooth);
+            background: var(--bg);
+            box-shadow: var(--shadow-inset);
         }
 
-        .badge-a {
-            background: linear-gradient(135deg, rgba(108, 92, 231, 0.15), rgba(139, 92, 246, 0.15));
-            color: var(--primary);
-        }
-
-        .badge-l {
-            background: linear-gradient(135deg, rgba(255, 82, 82, 0.15), rgba(255, 82, 82, 0.15));
-            color: var(--danger);
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        .badge-p {
-            background: linear-gradient(135deg, rgba(0, 200, 83, 0.15), rgba(0, 200, 83, 0.15));
-            color: var(--success);
-        }
-
-        .badge-w {
-            background: linear-gradient(135deg, rgba(255, 179, 0, 0.15), rgba(255, 179, 0, 0.15));
-            color: var(--warning);
-        }
-
-        .dark-mode .badge-a {
-            background: linear-gradient(135deg, rgba(108, 92, 231, 0.2), rgba(139, 92, 246, 0.2));
-            color: #A78BFA;
-        }
-
-        .dark-mode .badge-l {
-            background: linear-gradient(135deg, rgba(255, 82, 82, 0.2), rgba(255, 82, 82, 0.2));
-            color: #FF8A8A;
-        }
-
-        .dark-mode .badge-p {
-            background: linear-gradient(135deg, rgba(0, 200, 83, 0.2), rgba(0, 200, 83, 0.2));
-            color: #69F0AE;
-        }
-
-        .dark-mode .badge-w {
-            background: linear-gradient(135deg, rgba(255, 179, 0, 0.2), rgba(255, 179, 0, 0.2));
-            color: #FFD54F;
-        }
+        .badge-a { color: var(--primary); }
+        .badge-l { color: var(--danger); animation: pulse 2s ease-in-out infinite; }
+        .badge-p { color: var(--success); }
+        .badge-w { color: var(--warning); }
 
         /* ===== BOTONES ===== */
         .btn {
             padding: 0.5rem 1.2rem;
-            border-radius: 3rem;
+            border-radius: 50px;
             font-weight: 700;
             font-size: var(--font-xs);
             cursor: pointer;
@@ -659,78 +573,80 @@
             transition: all var(--ease-smooth);
             position: relative;
             overflow: hidden;
+            background: var(--bg);
+            color: var(--text);
+            box-shadow: var(--shadow);
         }
 
         .btn:hover {
             transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
         }
 
         .btn:active {
             transform: scale(0.96);
+            box-shadow: var(--shadow-inset);
         }
 
         .btn-p {
             background: linear-gradient(135deg, #6C5CE7, #8B5CF6);
             color: #fff;
-            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+            box-shadow: 6px 6px 12px rgba(108, 92, 231, 0.3), -6px -6px 12px rgba(255, 255, 255, 0.8);
         }
 
         .btn-p:hover {
-            box-shadow: 0 8px 30px rgba(108, 92, 231, 0.5);
-            background: linear-gradient(135deg, #7C6CF7, #9B6CF6);
+            box-shadow: 8px 8px 16px rgba(108, 92, 231, 0.4), -8px -8px 16px rgba(255, 255, 255, 0.9);
+        }
+
+        .btn-p:active {
+            box-shadow: inset 4px 4px 8px rgba(108, 92, 231, 0.4), inset -4px -4px 8px rgba(255, 255, 255, 0.7);
         }
 
         .btn-s {
             background: linear-gradient(135deg, #00C853, #69F0AE);
             color: #fff;
-            box-shadow: 0 4px 15px rgba(0, 200, 83, 0.3);
+            box-shadow: 6px 6px 12px rgba(0, 200, 83, 0.3), -6px -6px 12px rgba(255, 255, 255, 0.8);
         }
 
         .btn-s:hover {
-            box-shadow: 0 8px 30px rgba(0, 200, 83, 0.5);
+            box-shadow: 8px 8px 16px rgba(0, 200, 83, 0.4), -8px -8px 16px rgba(255, 255, 255, 0.9);
         }
 
         .btn-d {
             background: linear-gradient(135deg, #FF5252, #FF8A8A);
             color: #fff;
-            box-shadow: 0 4px 15px rgba(255, 82, 82, 0.3);
+            box-shadow: 6px 6px 12px rgba(255, 82, 82, 0.3), -6px -6px 12px rgba(255, 255, 255, 0.8);
         }
 
         .btn-d:hover {
-            box-shadow: 0 8px 30px rgba(255, 82, 82, 0.5);
+            box-shadow: 8px 8px 16px rgba(255, 82, 82, 0.4), -8px -8px 16px rgba(255, 255, 255, 0.9);
         }
 
         .btn-o {
             border: 2px solid var(--primary);
             color: var(--primary);
             background: transparent;
+            box-shadow: none;
         }
 
         .btn-o:hover {
             background: var(--primary);
             color: #fff;
-            box-shadow: 0 6px 20px rgba(108, 92, 231, 0.3);
+            box-shadow: var(--shadow-hover);
         }
 
-        .btn-xs {
-            padding: 0.2rem 0.6rem;
-            font-size: 0.55rem;
-        }
+        .btn-xs { padding: 0.2rem 0.6rem; font-size: 0.55rem; }
+        .btn-sm { padding: 0.3rem 0.9rem; font-size: var(--font-xs); }
 
         .btn-wa {
             background: #25D366;
             color: #fff;
-            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+            box-shadow: 6px 6px 12px rgba(37, 211, 102, 0.3), -6px -6px 12px rgba(255, 255, 255, 0.8);
         }
 
         .btn-wa:hover {
-            box-shadow: 0 8px 30px rgba(37, 211, 102, 0.5);
+            box-shadow: 8px 8px 16px rgba(37, 211, 102, 0.4), -8px -8px 16px rgba(255, 255, 255, 0.9);
             background: #20BD5A;
-        }
-
-        .btn-sm {
-            padding: 0.3rem 0.9rem;
-            font-size: var(--font-xs);
         }
 
         /* ===== NAVEGACIÓN INFERIOR ===== */
@@ -743,7 +659,7 @@
             display: flex;
             justify-content: space-around;
             padding: var(--spacing-xs) var(--spacing-sm);
-            box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
             z-index: 100;
             border-radius: 30px;
             border: 1px solid var(--border);
@@ -756,13 +672,11 @@
         .dark-mode .nav {
             background: var(--nav-bg);
             border-color: var(--border);
-            box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.5);
+            box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.4), -8px -8px 16px rgba(255, 255, 255, 0.04);
         }
 
         @media(min-width: 48rem) {
-            .nav {
-                display: none;
-            }
+            .nav { display: none; }
         }
 
         .nav-btn {
@@ -792,9 +706,7 @@
             font-weight: 700;
         }
 
-        .nav-btn.active i {
-            transform: scale(1.1);
-        }
+        .nav-btn.active i { transform: scale(1.1); }
 
         .nav-btn.active::before {
             content: '';
@@ -809,23 +721,15 @@
             box-shadow: 0 0 20px rgba(108, 92, 231, 0.5);
         }
 
-        .dark-mode .nav-btn.active {
-            color: #A78BFA;
-        }
-
-        .dark-mode .nav-btn.active i {
-            color: #A78BFA;
-        }
+        .dark-mode .nav-btn.active { color: #A78BFA; }
+        .dark-mode .nav-btn.active i { color: #A78BFA; }
 
         /* ===== GRÁFICOS ===== */
         canvas {
             width: 100% !important;
             max-height: 14rem;
         }
-
-        .dark-mode canvas {
-            filter: brightness(0.95);
-        }
+        .dark-mode canvas { filter: brightness(0.95); }
 
         /* ===== LISTAS ===== */
         .list-item {
@@ -836,6 +740,10 @@
             gap: var(--spacing-sm);
             cursor: pointer;
             transition: all var(--ease-smooth);
+            background: var(--card);
+            border-radius: var(--radius);
+            margin-bottom: 4px;
+            box-shadow: var(--shadow);
         }
 
         .dark-mode .list-item {
@@ -843,21 +751,16 @@
         }
 
         .list-item:hover {
-            background: rgba(108, 92, 231, 0.04);
-            transform: translateX(3px);
-        }
-
-        .dark-mode .list-item:hover {
-            background: rgba(108, 92, 231, 0.08);
+            transform: translateX(4px);
+            box-shadow: var(--shadow-hover);
         }
 
         .list-item:active {
             transform: scale(0.98);
+            box-shadow: var(--shadow-inset);
         }
 
-        .list-item:last-child {
-            border-bottom: none;
-        }
+        .list-item:last-child { border-bottom: none; }
 
         .avatar-sm {
             width: 2.4rem;
@@ -872,16 +775,15 @@
             font-size: 0.8rem;
             flex-shrink: 0;
             transition: all var(--ease-smooth);
-            box-shadow: 0 3px 12px rgba(108, 92, 231, 0.2);
+            box-shadow: var(--shadow);
         }
 
         .dark-mode .avatar-sm {
-            box-shadow: 0 3px 15px rgba(108, 92, 231, 0.3);
+            box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.3), -8px -8px 16px rgba(255, 255, 255, 0.04);
         }
 
         .list-item:hover .avatar-sm {
             transform: scale(1.08) rotate(3deg);
-            box-shadow: 0 5px 20px rgba(108, 92, 231, 0.4);
         }
 
         /* ===== TOASTS ===== */
@@ -897,7 +799,7 @@
             background: var(--card);
             border-radius: var(--radius-lg);
             padding: var(--spacing-sm) var(--spacing-md);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            box-shadow: var(--shadow);
             margin-bottom: var(--spacing-xs);
             font-weight: 600;
             font-size: var(--font-xs);
@@ -908,7 +810,7 @@
         .dark-mode .toast {
             background: var(--card);
             border-color: var(--border);
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+            box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.4), -8px -8px 16px rgba(255, 255, 255, 0.04);
         }
 
         /* ===== UTILIDADES ===== */
@@ -929,75 +831,45 @@
         .p-2 { padding: 0.5rem; }
         .p-4 { padding: 1rem; }
 
-        .row {
-            display: flex;
-            flex-wrap: wrap;
-        }
-
-        .col-6 {
-            flex: 0 0 50%;
-            max-width: 50%;
-        }
-
+        .row { display: flex; flex-wrap: wrap; }
+        .col-6 { flex: 0 0 50%; max-width: 50%; }
         .g-2 { gap: 0.5rem; }
 
-        .table-responsive {
-            width: 100%;
-            overflow-x: auto;
-        }
-
+        .table-responsive { width: 100%; overflow-x: auto; }
         .table {
             font-size: var(--font-xs);
             min-width: 28rem;
             width: 100%;
             margin: 0;
         }
-
-        .dark-mode .table {
-            color: var(--text);
-        }
-
+        .dark-mode .table { color: var(--text); }
         .table th {
             font-weight: 600;
             padding: var(--spacing-xs) var(--spacing-sm);
             color: var(--sub);
         }
-
-        .dark-mode .table th {
-            color: var(--sub);
-        }
-
+        .dark-mode .table th { color: var(--sub); }
         .table td {
             padding: var(--spacing-xs) var(--spacing-sm);
             border-color: var(--border);
         }
 
         .f-control {
-            border: 2px solid var(--border);
-            border-radius: 0.8rem;
+            border: none;
+            border-radius: 50px;
             padding: 0.6rem 0.9rem;
             font-size: var(--font-sm);
-            background: var(--card);
+            background: var(--bg);
             color: var(--text);
             width: 100%;
             margin-bottom: var(--spacing-xs);
+            box-shadow: var(--shadow-inset);
             transition: all var(--ease-smooth);
-        }
-
-        .dark-mode .f-control {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.1);
-            color: #fff;
+            outline: none;
         }
 
         .f-control:focus {
-            border-color: var(--primary);
-            outline: none;
-            box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.1);
-        }
-
-        .dark-mode .f-control:focus {
-            box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.2);
+            box-shadow: inset 6px 6px 12px rgba(0, 0, 0, 0.08), inset -6px -6px 12px rgba(255, 255, 255, 0.9);
         }
 
         .modal-content {
@@ -1007,6 +879,8 @@
             max-height: 85vh;
             overflow-y: auto;
             animation: scaleIn 0.3s var(--ease-smooth);
+            background: var(--card);
+            box-shadow: var(--shadow);
         }
 
         .dark-mode .modal-content {
@@ -1014,13 +888,8 @@
             border: 1px solid var(--border);
         }
 
-        .dark-mode .modal-header {
-            border-color: var(--border);
-        }
-
-        .dark-mode .modal-footer {
-            border-color: var(--border);
-        }
+        .dark-mode .modal-header { border-color: var(--border); }
+        .dark-mode .modal-footer { border-color: var(--border); }
 
         .kpi-big {
             font-size: clamp(1.5rem, 5vw, 2.8rem);
@@ -1032,6 +901,7 @@
             border-radius: var(--radius);
             padding: var(--spacing-sm);
             margin-top: var(--spacing-sm);
+            box-shadow: var(--shadow-inset);
         }
 
         .dark-mode .summary-box {
@@ -1061,39 +931,21 @@
             display: flex;
             align-items: flex-start;
             gap: var(--spacing-sm);
+            background: var(--bg);
+            box-shadow: var(--shadow-inset);
         }
 
         .alert-info {
-            background: rgba(59, 130, 246, 0.1);
             color: var(--info);
             border-left: 4px solid var(--info);
         }
-
-        .dark-mode .alert-info {
-            background: rgba(59, 130, 246, 0.15);
-            color: #93C5FD;
-        }
-
         .alert-danger {
-            background: rgba(255, 82, 82, 0.1);
             color: var(--danger);
             border-left: 4px solid var(--danger);
         }
-
-        .dark-mode .alert-danger {
-            background: rgba(255, 82, 82, 0.15);
-            color: #FF8A8A;
-        }
-
         .alert-warning {
-            background: rgba(255, 179, 0, 0.1);
             color: var(--warning);
             border-left: 4px solid var(--warning);
-        }
-
-        .dark-mode .alert-warning {
-            background: rgba(255, 179, 0, 0.15);
-            color: #FFD54F;
         }
 
         .ranking-list {
@@ -1104,11 +956,9 @@
         .ranking-list::-webkit-scrollbar {
             width: 4px;
         }
-
         .ranking-list::-webkit-scrollbar-track {
             background: transparent;
         }
-
         .ranking-list::-webkit-scrollbar-thumb {
             background: var(--primary);
             border-radius: 4px;
@@ -1117,12 +967,9 @@
         .progress {
             height: 6px;
             border-radius: 6px;
-            background: var(--border);
+            background: var(--bg);
             overflow: hidden;
-        }
-
-        .dark-mode .progress {
-            background: rgba(255, 255, 255, 0.05);
+            box-shadow: var(--shadow-inset);
         }
 
         .progress-bar {
@@ -1145,23 +992,22 @@
             border-color: rgba(255, 255, 255, 0.05);
         }
 
-        .config-item:last-child {
-            border-bottom: none;
-        }
+        .config-item:last-child { border-bottom: none; }
 
         .toggle-switch {
             width: 48px;
             height: 28px;
-            background: var(--border);
+            background: var(--bg);
             border-radius: 14px;
             position: relative;
             cursor: pointer;
             transition: all var(--ease-smooth);
             flex-shrink: 0;
+            box-shadow: var(--shadow-inset);
         }
 
         .dark-mode .toggle-switch {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
         }
 
         .toggle-switch.active {
@@ -1190,39 +1036,23 @@
             width: 6px;
             height: 6px;
         }
-
         ::-webkit-scrollbar-track {
             background: transparent;
         }
-
         ::-webkit-scrollbar-thumb {
             background: var(--primary);
             border-radius: 6px;
         }
-
         .dark-mode ::-webkit-scrollbar-thumb {
             background: rgba(108, 92, 231, 0.5);
         }
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 480px) {
-            .login-card {
-                padding: 2rem 1.5rem;
-            }
-            
-            .stat-card {
-                padding: var(--spacing-sm);
-            }
-            
-            .stat-icon {
-                width: 2.2rem;
-                height: 2.2rem;
-                font-size: 1rem;
-            }
-            
-            .stat-value {
-                font-size: var(--font-lg);
-            }
+            .login-card { padding: 2rem 1.5rem; }
+            .stat-card { padding: var(--spacing-sm); }
+            .stat-icon { width: 2.2rem; height: 2.2rem; font-size: 1rem; }
+            .stat-value { font-size: var(--font-lg); }
         }
 
         @media (min-width: 768px) {
@@ -1232,7 +1062,6 @@
             }
         }
 
-        /* ===== SPINNER ===== */
         .spinner {
             display: inline-block;
             width: 1rem;
@@ -1243,7 +1072,7 @@
             animation: spin 0.6s linear infinite;
         }
 
-        /* ===== ESTILOS DE LA LANDING PAGE (NUEVA, AISLADA) ===== */
+        /* ===== ESTILOS DE LANDING PAGE ===== */
         #landing-page {
             display: block;
             min-height: 100vh;
@@ -1252,9 +1081,7 @@
             position: relative;
             z-index: 9998;
         }
-        #landing-page.hidden {
-            display: none !important;
-        }
+        #landing-page.hidden { display: none !important; }
 
         .landing-nav {
             position: fixed;
@@ -1268,6 +1095,7 @@
             -webkit-backdrop-filter: var(--glass-blur);
             border-bottom: 1px solid var(--border);
             transition: all 0.3s ease;
+            box-shadow: var(--shadow);
         }
 
         .landing-nav-inner {
@@ -1307,13 +1135,9 @@
             min-height: 100vh;
             display: flex;
             align-items: center;
-            background: linear-gradient(135deg, rgba(108, 92, 231, 0.05) 0%, rgba(139, 92, 246, 0.02) 100%);
+            background: var(--bg);
             position: relative;
             overflow: hidden;
-        }
-
-        .dark-mode .hero-section {
-            background: linear-gradient(135deg, rgba(108, 92, 231, 0.08) 0%, rgba(139, 92, 246, 0.03) 100%);
         }
 
         .hero-section::before {
@@ -1338,9 +1162,7 @@
             z-index: 1;
         }
 
-        .hero-text {
-            animation: fadeUp 0.8s var(--ease-smooth);
-        }
+        .hero-text { animation: fadeUp 0.8s var(--ease-smooth); }
 
         .hero-badge {
             display: inline-flex;
@@ -1348,11 +1170,12 @@
             gap: 0.5rem;
             padding: 0.3rem 0.8rem;
             border-radius: 2rem;
-            background: rgba(108, 92, 231, 0.1);
+            background: var(--bg);
             color: var(--primary);
             font-size: var(--font-xs);
             font-weight: 700;
             margin-bottom: var(--spacing-md);
+            box-shadow: var(--shadow-inset);
         }
 
         .hero-title {
@@ -1395,14 +1218,14 @@
             background: var(--card);
             border-radius: 40px;
             padding: 12px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 0 40px rgba(108, 92, 231, 0.1);
+            box-shadow: var(--shadow);
             border: 1px solid var(--border);
             position: relative;
             overflow: hidden;
         }
 
         .dark-mode .mockup-phone {
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(108, 92, 231, 0.15);
+            box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.4), -8px -8px 16px rgba(255, 255, 255, 0.04);
         }
 
         .mockup-phone::before {
@@ -1458,6 +1281,7 @@
             background: var(--card);
             border-radius: 10px;
             border: 1px solid var(--border);
+            box-shadow: var(--shadow);
         }
 
         .mockup-stat .label {
@@ -1481,6 +1305,7 @@
             align-items: flex-end;
             padding: 6px;
             gap: 4px;
+            box-shadow: var(--shadow);
         }
 
         .mockup-chart .bar {
@@ -1530,31 +1355,25 @@
 
         .feature-card:hover {
             transform: translateY(-6px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
-            border-color: rgba(108, 92, 231, 0.2);
-        }
-
-        .dark-mode .feature-card:hover {
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
-            border-color: rgba(108, 92, 231, 0.3);
+            box-shadow: var(--shadow-hover);
         }
 
         .feature-icon {
             width: 3.5rem;
             height: 3.5rem;
             border-radius: 1rem;
-            background: rgba(108, 92, 231, 0.1);
+            background: var(--bg);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.6rem;
             margin: 0 auto var(--spacing-sm);
             transition: all var(--ease-smooth);
+            box-shadow: var(--shadow-inset);
         }
 
         .feature-card:hover .feature-icon {
             transform: scale(1.1) rotate(-3deg);
-            background: rgba(108, 92, 231, 0.2);
         }
 
         .feature-card h4 {
@@ -1605,24 +1424,13 @@
             font-size: var(--font-sm);
         }
 
-        .comparison-card ul li:last-child {
-            border-bottom: none;
-        }
+        .comparison-card ul li:last-child { border-bottom: none; }
 
-        .comparison-card .icon-bad {
-            color: var(--danger);
-        }
-        .comparison-card .icon-good {
-            color: var(--success);
-        }
+        .comparison-card .icon-bad { color: var(--danger); }
+        .comparison-card .icon-good { color: var(--success); }
 
-        .comparison-card.bad {
-            border-color: rgba(255, 82, 82, 0.2);
-        }
-
-        .comparison-card.good {
-            border-color: rgba(0, 200, 83, 0.2);
-        }
+        .comparison-card.bad { border-color: rgba(255, 82, 82, 0.2); }
+        .comparison-card.good { border-color: rgba(0, 200, 83, 0.2); }
 
         .carousel-wrapper {
             position: relative;
@@ -1631,6 +1439,7 @@
             background: var(--card);
             border: 1px solid var(--border);
             padding: var(--spacing-md);
+            box-shadow: var(--shadow);
         }
 
         .carousel-track {
@@ -1646,6 +1455,7 @@
             padding: var(--spacing-md);
             text-align: center;
             border: 1px solid var(--border);
+            box-shadow: var(--shadow-inset);
         }
 
         .carousel-slide .slide-icon {
@@ -1682,12 +1492,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: var(--shadow);
         }
 
         .carousel-controls button:hover {
             background: var(--primary);
             color: #fff;
             border-color: var(--primary);
+            box-shadow: var(--shadow-hover);
         }
 
         .faq-item {
@@ -1697,6 +1509,7 @@
             margin-bottom: var(--spacing-sm);
             overflow: hidden;
             transition: all var(--ease-smooth);
+            box-shadow: var(--shadow);
         }
 
         .faq-question {
@@ -1715,7 +1528,7 @@
         }
 
         .faq-question:hover {
-            background: rgba(108, 92, 231, 0.03);
+            background: var(--bg);
         }
 
         .faq-answer {
@@ -1756,6 +1569,7 @@
             color: var(--text);
             text-decoration: none;
             transition: all var(--ease-smooth);
+            box-shadow: var(--shadow);
         }
 
         .social-link:hover {
@@ -1763,7 +1577,7 @@
             color: #fff;
             border-color: var(--primary);
             transform: translateY(-4px);
-            box-shadow: 0 8px 20px rgba(108, 92, 231, 0.3);
+            box-shadow: var(--shadow-hover);
         }
 
         .landing-footer {
@@ -1792,28 +1606,28 @@
             color: var(--primary);
         }
 
-        /* ===== BOTONES LANDING ===== */
         .btn-primary {
             background: linear-gradient(135deg, #6C5CE7, #8B5CF6);
             color: #fff;
-            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+            box-shadow: 6px 6px 12px rgba(108, 92, 231, 0.3), -6px -6px 12px rgba(255, 255, 255, 0.8);
         }
 
         .btn-primary:hover {
-            box-shadow: 0 8px 30px rgba(108, 92, 231, 0.5);
-            background: linear-gradient(135deg, #7C6CF7, #9B6CF6);
+            box-shadow: 8px 8px 16px rgba(108, 92, 231, 0.4), -8px -8px 16px rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
         }
 
         .btn-outline {
             border: 2px solid var(--primary);
             color: var(--primary);
             background: transparent;
+            box-shadow: none;
         }
 
         .btn-outline:hover {
             background: var(--primary);
             color: #fff;
-            box-shadow: 0 6px 20px rgba(108, 92, 231, 0.3);
+            box-shadow: var(--shadow-hover);
         }
 
         .btn-lg {
@@ -1821,60 +1635,72 @@
             font-size: var(--font-md);
         }
 
-        /* ===== RESPONSIVE LANDING ===== */
         @media (max-width: 768px) {
             .hero-content {
                 grid-template-columns: 1fr;
                 text-align: center;
             }
-
             .hero-subtitle {
                 margin-left: auto;
                 margin-right: auto;
             }
-
-            .hero-buttons {
-                justify-content: center;
-            }
-
-            .mockup-phone {
-                width: min(100%, 250px);
-            }
-
-            .comparison-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .carousel-slide {
-                min-width: calc(50% - var(--spacing-md));
-            }
-
-            .features-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+            .hero-buttons { justify-content: center; }
+            .mockup-phone { width: min(100%, 250px); }
+            .comparison-grid { grid-template-columns: 1fr; }
+            .carousel-slide { min-width: calc(50% - var(--spacing-md)); }
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
         @media (max-width: 480px) {
-            .hero-title {
-                font-size: 2rem;
-            }
-
+            .hero-title { font-size: 2rem; }
             .features-grid {
                 grid-template-columns: 1fr 1fr;
                 gap: var(--spacing-sm);
             }
+            .feature-card { padding: var(--spacing-sm); }
+            .carousel-slide { min-width: calc(100% - var(--spacing-md)); }
+            .landing-nav { padding: var(--spacing-xs) var(--spacing-sm); }
+        }
 
-            .feature-card {
-                padding: var(--spacing-sm);
-            }
+        /* ===== NUEVOS ESTILOS PARA MÚLTIPLES PRÉSTAMOS ===== */
+        .client-loans-section { margin-top: var(--spacing-md); }
 
-            .carousel-slide {
-                min-width: calc(100% - var(--spacing-md));
-            }
+        .client-loan-item {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: var(--spacing-sm);
+            margin-bottom: var(--spacing-xs);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: all var(--ease-smooth);
+        }
 
-            .landing-nav {
-                padding: var(--spacing-xs) var(--spacing-sm);
-            }
+        .client-loan-item:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateX(3px);
+        }
+
+        .loan-status-badge {
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.6rem;
+            font-weight: 700;
+        }
+
+        .loan-status-active {
+            background: rgba(0, 200, 83, 0.15);
+            color: var(--success);
+        }
+
+        .loan-status-pagado {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--info);
+        }
+
+        .loan-status-mora {
+            background: rgba(255, 82, 82, 0.15);
+            color: var(--danger);
+            animation: pulse 2s ease-in-out infinite;
         }
 
         /* ===== RECOVERY BADGE ===== */
@@ -1897,10 +1723,13 @@
             transition: all var(--ease-smooth);
             display: none;
         }
+
         .recovery-badge:hover {
             transform: scale(1.05);
             border-color: var(--primary);
+            box-shadow: var(--shadow-hover);
         }
+
         .recovery-badge .badge-status {
             display: inline-block;
             width: 8px;
@@ -1908,6 +1737,7 @@
             border-radius: 50%;
             margin-right: 0.4rem;
         }
+
         .recovery-badge .badge-status.ok { background: var(--success); }
         .recovery-badge .badge-status.warning { background: var(--warning); }
         .recovery-badge .badge-status.error { background: var(--danger); animation: pulse 1s infinite; }
@@ -1916,7 +1746,7 @@
 <body>
 
     <!-- ============================================================ -->
-    <!-- 1. LANDING PAGE (NUEVA, AISLADA)                             -->
+    <!-- 1. LANDING PAGE                                              -->
     <!-- ============================================================ -->
     <div id="landing-page">
         <nav class="landing-nav" id="landingNav">
@@ -1934,7 +1764,6 @@
             </div>
         </nav>
 
-        <!-- HERO -->
         <section class="hero-section" id="hero">
             <div class="hero-content">
                 <div class="hero-text">
@@ -1992,125 +1821,42 @@
             </div>
         </section>
 
-        <!-- ¿QUÉ ES LOANS W? -->
         <section class="section" id="que-es">
             <h2 class="section-title">¿Qué es <span style="color:var(--primary)">Loans W</span>?</h2>
             <p class="section-subtitle">
                 Loans W es una plataforma inteligente y completamente gratuita para prestamistas que transforma la manera de administrar tu negocio.
             </p>
             <div class="features-grid stagger">
-                <div class="feature-card">
-                    <div class="feature-icon">👥</div>
-                    <h4>Gestionar clientes</h4>
-                    <p>Organiza toda tu cartera de clientes en un solo lugar.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">💰</div>
-                    <h4>Administrar préstamos</h4>
-                    <p>Controla cada préstamo desde su creación hasta el pago final.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🧮</div>
-                    <h4>Calcular intereses</h4>
-                    <p>Intereses automáticos con métodos simple y sobre saldo.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🏦</div>
-                    <h4>Control del capital</h4>
-                    <p>Visualiza tu capital disponible, cartera y ganancias.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <h4>Generar reportes</h4>
-                    <p>Exporta a Excel, PDF y JSON con un solo clic.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🧠</div>
-                    <h4>Inteligencia LWI</h4>
-                    <p>Análisis inteligente de tu negocio con recomendaciones.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📡</div>
-                    <h4>Sin conexión</h4>
-                    <p>Trabaja sin internet, tus datos siempre disponibles.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📱</div>
-                    <h4>Desde cualquier celular</h4>
-                    <p>Diseño responsive que se adapta a todos los dispositivos.</p>
-                </div>
+                <div class="feature-card"><div class="feature-icon">👥</div><h4>Gestionar clientes</h4><p>Organiza toda tu cartera de clientes en un solo lugar.</p></div>
+                <div class="feature-card"><div class="feature-icon">💰</div><h4>Administrar préstamos</h4><p>Controla cada préstamo desde su creación hasta el pago final.</p></div>
+                <div class="feature-card"><div class="feature-icon">🧮</div><h4>Calcular intereses</h4><p>Intereses automáticos con métodos simple y sobre saldo.</p></div>
+                <div class="feature-card"><div class="feature-icon">🏦</div><h4>Control del capital</h4><p>Visualiza tu capital disponible, cartera y ganancias.</p></div>
+                <div class="feature-card"><div class="feature-icon">📊</div><h4>Generar reportes</h4><p>Exporta a Excel, PDF y JSON con un solo clic.</p></div>
+                <div class="feature-card"><div class="feature-icon">🧠</div><h4>Inteligencia LWI</h4><p>Análisis inteligente de tu negocio con recomendaciones.</p></div>
+                <div class="feature-card"><div class="feature-icon">📡</div><h4>Sin conexión</h4><p>Trabaja sin internet, tus datos siempre disponibles.</p></div>
+                <div class="feature-card"><div class="feature-icon">📱</div><h4>Desde cualquier celular</h4><p>Diseño responsive que se adapta a todos los dispositivos.</p></div>
             </div>
         </section>
 
-        <!-- CARACTERÍSTICAS -->
         <section class="section" id="caracteristicas" style="background:var(--bg);border-radius:var(--radius-lg);padding:var(--spacing-lg) var(--spacing-md);">
             <h2 class="section-title">✨ Características</h2>
             <p class="section-subtitle">Todo lo que necesitas para administrar tu negocio de préstamos</p>
             <div class="features-grid stagger">
-                <div class="feature-card">
-                    <div class="feature-icon">🧠</div>
-                    <h4>Inteligencia financiera</h4>
-                    <p>Análisis avanzado con recomendaciones personalizadas.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <h4>Reportes automáticos</h4>
-                    <p>Gráficos y estadísticas de tu negocio en tiempo real.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">💰</div>
-                    <h4>Control del capital</h4>
-                    <p>Gestión completa de ingresos, gastos y capital disponible.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📅</div>
-                    <h4>Cronogramas automáticos</h4>
-                    <p>Generación automática de planes de pago detallados.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">👥</div>
-                    <h4>Gestión de clientes</h4>
-                    <p>Base de datos completa con clasificación por categoría.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">💵</div>
-                    <h4>Registro de pagos</h4>
-                    <p>Seguimiento de cada pago y estado de cuotas.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📱</div>
-                    <h4>Funciona en cualquier celular</h4>
-                    <p>Diseño adaptado para todos los tamaños de pantalla.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🌙</div>
-                    <h4>Modo oscuro</h4>
-                    <p>Diseño premium tipo fintech 2026.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔒</div>
-                    <h4>Seguridad avanzada</h4>
-                    <p>Contraseña con hash PBKDF2 para máxima protección.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📤</div>
-                    <h4>Exportación múltiple</h4>
-                    <p>Exporta a Excel, PDF y JSON.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <h4>Funciona sin internet</h4>
-                    <p>Datos almacenados localmente con IndexedDB.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🚀</div>
-                    <h4>Instalable como PWA</h4>
-                    <p>Instala la aplicación en tu dispositivo como una app nativa.</p>
-                </div>
+                <div class="feature-card"><div class="feature-icon">🧠</div><h4>Inteligencia financiera</h4><p>Análisis avanzado con recomendaciones personalizadas.</p></div>
+                <div class="feature-card"><div class="feature-icon">📊</div><h4>Reportes automáticos</h4><p>Gráficos y estadísticas de tu negocio en tiempo real.</p></div>
+                <div class="feature-card"><div class="feature-icon">💰</div><h4>Control del capital</h4><p>Gestión completa de ingresos, gastos y capital disponible.</p></div>
+                <div class="feature-card"><div class="feature-icon">📅</div><h4>Cronogramas automáticos</h4><p>Generación automática de planes de pago detallados.</p></div>
+                <div class="feature-card"><div class="feature-icon">👥</div><h4>Gestión de clientes</h4><p>Base de datos completa con clasificación por categoría.</p></div>
+                <div class="feature-card"><div class="feature-icon">💵</div><h4>Registro de pagos</h4><p>Seguimiento de cada pago y estado de cuotas.</p></div>
+                <div class="feature-card"><div class="feature-icon">📱</div><h4>Funciona en cualquier celular</h4><p>Diseño adaptado para todos los tamaños de pantalla.</p></div>
+                <div class="feature-card"><div class="feature-icon">🌙</div><h4>Modo oscuro</h4><p>Diseño premium tipo fintech 2026.</p></div>
+                <div class="feature-card"><div class="feature-icon">🔒</div><h4>Seguridad avanzada</h4><p>Contraseña con hash PBKDF2 para máxima protección.</p></div>
+                <div class="feature-card"><div class="feature-icon">📤</div><h4>Exportación múltiple</h4><p>Exporta a Excel, PDF y JSON.</p></div>
+                <div class="feature-card"><div class="feature-icon">⚡</div><h4>Funciona sin internet</h4><p>Datos almacenados localmente con IndexedDB.</p></div>
+                <div class="feature-card"><div class="feature-icon">🚀</div><h4>Instalable como PWA</h4><p>Instala la aplicación en tu dispositivo como una app nativa.</p></div>
             </div>
         </section>
 
-        <!-- BENEFICIOS -->
         <section class="section" id="beneficios">
             <h2 class="section-title">¿Por qué elegir <span style="color:var(--primary)">Loans W</span>?</h2>
             <p class="section-subtitle">Compara la diferencia</p>
@@ -2143,7 +1889,6 @@
             </div>
         </section>
 
-        <!-- CAPTURAS -->
         <section class="section" id="capturas" style="background:var(--bg);border-radius:var(--radius-lg);padding:var(--spacing-lg) var(--spacing-md);">
             <h2 class="section-title">📸 Capturas de Pantalla</h2>
             <p class="section-subtitle">Explora las principales pantallas de Loans W</p>
@@ -2165,7 +1910,6 @@
             </div>
         </section>
 
-        <!-- VENTAJAS -->
         <section class="section" id="porque">
             <h2 class="section-title">¿Por qué elegir <span style="color:var(--primary)">Loans W</span>?</h2>
             <p class="section-subtitle">Ventajas que marcan la diferencia</p>
@@ -2181,7 +1925,6 @@
             </div>
         </section>
 
-        <!-- FAQ -->
         <section class="section" id="faq" style="background:var(--bg);border-radius:var(--radius-lg);padding:var(--spacing-lg) var(--spacing-md);">
             <h2 class="section-title">❓ Preguntas Frecuentes</h2>
             <p class="section-subtitle">Resolvemos tus dudas más comunes</p>
@@ -2215,7 +1958,6 @@
             </div>
         </section>
 
-        <!-- CONTACTO -->
         <section class="section" id="contacto">
             <h2 class="section-title">📩 Contacto</h2>
             <p class="section-subtitle">Conéctate con nosotros en redes sociales</p>
@@ -2228,11 +1970,10 @@
             </div>
         </section>
 
-        <!-- FOOTER -->
         <footer class="landing-footer">
             <div class="landing-footer-links">
                 <a href="#">© Loans W 2026</a>
-                <a href="#">Versión 2.0</a>
+                <a href="#">Versión 2.1</a>
                 <a href="#">Política de privacidad</a>
                 <a href="#">Términos y condiciones</a>
             </div>
@@ -2241,7 +1982,7 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- 2. LOGIN (ORIGINAL SIN CAMBIOS)                              -->
+    <!-- 2. LOGIN                                                    -->
     <!-- ============================================================ -->
     <div id="login-screen">
         <div class="particles" id="particles"></div>
@@ -2257,7 +1998,7 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- 3. MAIN APP (ORIGINAL SIN CAMBIOS)                           -->
+    <!-- 3. MAIN APP                                                 -->
     <!-- ============================================================ -->
     <div id="main-app">
         <div class="app-wrap" id="page">
@@ -2274,12 +2015,12 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- 4. TOASTS (ORIGINAL)                                         -->
+    <!-- 4. TOASTS                                                   -->
     <!-- ============================================================ -->
     <div class="toast-box" id="toasts"></div>
 
     <!-- ============================================================ -->
-    <!-- 5. MODALES (ORIGINALES)                                      -->
+    <!-- 5. MODALES                                                  -->
     <!-- ============================================================ -->
     <div class="modal fade" id="modCliente">
         <div class="modal-dialog modal-dialog-centered">
@@ -2314,6 +2055,7 @@
                 <div class="modal-header"><h5>💰 Nuevo Préstamo</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
                 <div class="modal-body">
                     <input type="hidden" id="pid">
+                    <input type="hidden" id="pclienteId">
                     <select class="f-control" id="pcli"><option value="">Seleccionar cliente...</option></select>
                     <div class="row g-2 mb-1">
                         <div class="col-6">
@@ -2389,8 +2131,20 @@
         </div>
     </div>
 
+    <div class="modal fade" id="modCapitalDetail">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="capitalDetailTitle">💰 Detalle de Capital</h5>
+                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="capitalDetailBody"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- ============================================================ -->
-    <!-- 6. RECOVERY BADGE (NUEVO)                                   -->
+    <!-- 6. RECOVERY BADGE                                           -->
     <!-- ============================================================ -->
     <div class="recovery-badge" id="recoveryBadge" onclick="DataRecovery.showRecoveryInfo()">
         <span class="badge-status ok" id="recoveryStatus"></span>
@@ -2398,20 +2152,19 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- 7. SCRIPTS                                                   -->
+    <!-- 7. SCRIPTS                                                  -->
     <!-- ============================================================ -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
     "use strict";
 
     // ============================================================
-    // 1. SISTEMA DE PERSISTENCIA Y RECUPERACIÓN DE DATOS (NUEVO)
+    // 1. SISTEMA DE PERSISTENCIA
     // ============================================================
-    
-    const APP_VERSION = '2.0.0';
+    const APP_VERSION = '2.1.0';
     const STORAGE_KEY = 'loansw_data_backup';
     const STORAGE_KEY_META = 'loansw_meta';
-    const BACKUP_INTERVAL = 300000; // 5 minutos
+    const BACKUP_INTERVAL = 300000;
 
     var DataRecovery = {
         init: async function() {
@@ -2587,7 +2340,7 @@
     };
 
     // ============================================================
-    // 2. PARTÍCULAS DE LOGIN (ORIGINAL)
+    // 2. PARTÍCULAS DE LOGIN
     // ============================================================
     (function() {
         var icons = ['💰', '💵', '💎', '📊', '🧠', '⭐'];
@@ -2607,7 +2360,7 @@
     })();
 
     // ============================================================
-    // 3. RIPPLE EFFECT (ORIGINAL)
+    // 3. RIPPLE EFFECT
     // ============================================================
     document.addEventListener('click', function(e) {
         var btn = e.target.closest('.btn, .btn-icon, .login-btn, .nav-btn');
@@ -2625,7 +2378,7 @@
     });
 
     // ============================================================
-    // 4. UTILIDADES (ORIGINALES)
+    // 4. UTILIDADES
     // ============================================================
     var COP = new Intl.NumberFormat('es-CO', {
         style: 'currency',
@@ -2642,7 +2395,7 @@
     };
 
     // ============================================================
-    // 5. BASE DE DATOS (ORIGINAL)
+    // 5. BASE DE DATOS
     // ============================================================
     var DB = new Dexie('LoansWLWIv13');
     DB.version(5).stores({
@@ -2656,7 +2409,7 @@
     });
 
     // ============================================================
-    // 6. APP PRINCIPAL (ORIGINAL CON SOLO 3 FUNCIONES NUEVAS)
+    // 6. APP PRINCIPAL (COMPLETA Y FUNCIONAL)
     // ============================================================
     var APP = {
         charts: [],
@@ -2665,9 +2418,10 @@
         _printData: '',
         _carouselIndex: 0,
         _carouselInterval: null,
+        _historial: null,
 
         // ============================================================
-        // 6.1 FUNCIONES NUEVAS PARA LANDING PAGE (SOLO ESTO SE AÑADE)
+        // 6.1 FUNCIONES DE LANDING PAGE
         // ============================================================
         showLogin: function() {
             document.getElementById('landing-page').classList.add('hidden');
@@ -2709,12 +2463,12 @@
         },
 
         // ============================================================
-        // 6.2 INIT (MODIFICADO MÍNIMAMENTE)
+        // 6.2 INIT
         // ============================================================
         init: async function() {
+            console.log('[APP] Iniciando aplicación...');
             await DB.open();
 
-            // Configuración inicial
             var ph = await DB.cfg.get('pwd_hash');
             if (!ph) {
                 var h = await this.hashPwd('admin');
@@ -2722,9 +2476,9 @@
                 await DB.cfg.put({ clave: 'mora', valor: '5' });
                 await DB.cfg.put({ clave: 'dark', valor: 'false' });
                 await DB.cfg.put({ clave: 'capital_inicial', valor: '0' });
+                await DB.cfg.put({ clave: 'historial', valor: JSON.stringify(this.getDefaultHistorial()) });
             }
 
-            // Cargar modo oscuro
             var d = await DB.cfg.get('dark');
             if (d && d.valor === 'true') {
                 this.dark = true;
@@ -2734,40 +2488,149 @@
                 });
             }
 
-            // Inicializar sistema de persistencia
             await DataRecovery.init();
 
-            // Eventos login (ORIGINAL)
             document.getElementById('loginBtn').onclick = function() { APP.login(); };
             document.getElementById('pwd').onkeydown = function(e) { if (e.key === 'Enter') APP.login(); };
 
-            // Eventos navegación app (ORIGINAL)
             document.querySelectorAll('.nav-btn').forEach(function(b) {
                 b.onclick = function() { APP.goto(b.dataset.p); };
             });
 
-            // Verificar sesión (ORIGINAL)
+            await this.loadHistorial();
+
             if (localStorage.getItem('loansw_lwiv13') === 'yes') {
+                console.log('[APP] Sesión activa, mostrando app');
                 document.getElementById('landing-page').classList.add('hidden');
                 document.getElementById('login-screen').classList.remove('show');
                 document.getElementById('main-app').style.display = 'flex';
                 document.getElementById('main-app').classList.add('show');
                 this.goto('dashboard');
             } else {
+                console.log('[APP] Sin sesión, mostrando landing');
                 document.getElementById('landing-page').classList.remove('hidden');
                 document.getElementById('login-screen').classList.remove('show');
                 document.getElementById('main-app').style.display = 'none';
             }
 
-            // Iniciar carrusel de landing page
             this.startCarousel();
-
-            // Backup automático (ORIGINAL)
             setInterval(function() { APP.autoBackup(); }, 1800000);
+            console.log('[APP] Inicialización completada');
         },
 
         // ============================================================
-        // 6.3 LOGIN (ORIGINAL)
+        // 6.3 GOTO
+        // ============================================================
+        goto: function(p) {
+            console.log('[APP] Navegando a:', p);
+            this._currentPage = p;
+            document.querySelectorAll('.nav-btn').forEach(function(b) {
+                b.classList.toggle('active', b.dataset.p === p);
+            });
+            this.render(p);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        },
+
+        // ============================================================
+        // 6.4 RENDER
+        // ============================================================
+        render: async function(p) {
+            console.log('[APP] Renderizando página:', p);
+            this.destroyCharts();
+            var c = document.getElementById('page');
+            if (!c) {
+                console.error('[APP] Contenedor #page no encontrado');
+                return;
+            }
+            c.innerHTML = '';
+
+            try {
+                if (p === 'dashboard') {
+                    c.innerHTML = await this.dashHTML();
+                    setTimeout(function() { APP.dashInit(); }, 300);
+                } else if (p === 'lwi') {
+                    c.innerHTML = '<div class="text-center p-4"><div class="spinner" style="width:2rem;height:2rem;border-width:3px;margin:0 auto 1rem"></div><p style="color:var(--sub)">Analizando...</p></div>';
+                    var self = this;
+                    await new Promise(function(r) { setTimeout(r, 150); });
+                    var html = await self.lwiHTML();
+                    c.innerHTML = html;
+                    setTimeout(function() { self.lwiInit(); }, 300);
+                } else if (p === 'clientes') {
+                    c.innerHTML = this.cliHTML();
+                    this.cliList();
+                } else if (p === 'prestamos') {
+                    c.innerHTML = await this.preHTML();
+                    this.preList();
+                } else if (p === 'finanzas') {
+                    c.innerHTML = await this.finHTML();
+                    setTimeout(function() { APP.finInit(); }, 400);
+                } else if (p === 'config') {
+                    c.innerHTML = await this.configHTML();
+                    this.configInit();
+                } else {
+                    c.innerHTML = '<div class="text-center p-4"><p style="color:var(--sub)">Página no encontrada</p></div>';
+                }
+                console.log('[APP] Renderizado completado para:', p);
+            } catch (e) {
+                console.error('[APP] Error en render:', e);
+                c.innerHTML = '<div class="text-center p-4"><p style="color:var(--danger)">Error al cargar la página</p></div>';
+            }
+        },
+
+        // ============================================================
+        // 6.5 HISTORIAL
+        // ============================================================
+        getDefaultHistorial: function() {
+            return {
+                capitalPrestado: 0,
+                capitalRecuperado: 0,
+                interesesCobrados: 0,
+                ganancias: 0,
+                prestamosRealizados: 0,
+                prestamosFinalizados: 0
+            };
+        },
+
+        loadHistorial: async function() {
+            var h = await DB.cfg.get('historial');
+            if (h) {
+                this._historial = JSON.parse(h.valor);
+            } else {
+                this._historial = this.getDefaultHistorial();
+                await DB.cfg.put({ clave: 'historial', valor: JSON.stringify(this._historial) });
+            }
+            return this._historial;
+        },
+
+        saveHistorial: async function() {
+            if (this._historial) {
+                await DB.cfg.put({ clave: 'historial', valor: JSON.stringify(this._historial) });
+            }
+        },
+
+        updateHistorial: function(data) {
+            if (!this._historial) return;
+            
+            if (data.monto) {
+                this._historial.capitalPrestado += data.monto;
+                this._historial.prestamosRealizados += 1;
+            }
+            
+            if (data.pago) {
+                this._historial.capitalRecuperado += data.pago.capital || 0;
+                this._historial.interesesCobrados += data.pago.interes || 0;
+                this._historial.ganancias += (data.pago.capital || 0) + (data.pago.interes || 0);
+            }
+            
+            if (data.finalizado) {
+                this._historial.prestamosFinalizados += 1;
+            }
+            
+            this.saveHistorial();
+        },
+
+        // ============================================================
+        // 6.6 LOGIN
         // ============================================================
         login: async function() {
             var p = document.getElementById('pwd').value;
@@ -2790,7 +2653,7 @@
         },
 
         // ============================================================
-        // 6.4 TODAS LAS FUNCIONES ORIGINALES (SIN CAMBIOS)
+        // 6.7 SEGURIDAD
         // ============================================================
         hashPwd: async function(p) {
             var e = new TextEncoder();
@@ -2824,15 +2687,9 @@
             location.reload();
         },
 
-        goto: function(p) {
-            this._currentPage = p;
-            document.querySelectorAll('.nav-btn').forEach(function(b) {
-                b.classList.toggle('active', b.dataset.p === p);
-            });
-            this.render(p);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        },
-
+        // ============================================================
+        // 6.8 TOASTS
+        // ============================================================
         toast: function(t, m, type) {
             var box = document.getElementById('toasts');
             if (!box) return;
@@ -2849,6 +2706,9 @@
             }, 3000);
         },
 
+        // ============================================================
+        // 6.9 BACKUP
+        // ============================================================
         autoBackup: async function() {
             var d = await this.getData();
             var backup = {
@@ -2872,6 +2732,7 @@
                 pagos: d.pagos,
                 capital: d.capital,
                 gastos: d.gastos,
+                historial: this._historial,
                 exportDate: new Date().toISOString()
             };
             var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -2912,6 +2773,10 @@
                         await DB.pagos.bulkAdd(data.pagos);
                         if (data.capital) await DB.capital.bulkAdd(data.capital);
                         if (data.gastos) await DB.gastos.bulkAdd(data.gastos);
+                        if (data.historial) {
+                            APP._historial = data.historial;
+                            await APP.saveHistorial();
+                        }
                         APP.toast('✅', 'Datos importados correctamente', 'success');
                         APP.goto(APP._currentPage);
                     } catch (err) {
@@ -2923,6 +2788,9 @@
             input.click();
         },
 
+        // ============================================================
+        // 6.10 DATOS Y MÉTRICAS
+        // ============================================================
         getData: async function() {
             return {
                 clientes: await DB.clientes.toArray(),
@@ -3018,38 +2886,9 @@
             this.charts = [];
         },
 
-        render: async function(p) {
-            this.destroyCharts();
-            var c = document.getElementById('page');
-            if (!c) return;
-            c.innerHTML = '';
-
-            if (p === 'dashboard') {
-                c.innerHTML = await this.dashHTML();
-                setTimeout(function() { APP.dashInit(); }, 300);
-            } else if (p === 'lwi') {
-                c.innerHTML =
-                    '<div class="text-center p-4"><div class="spinner" style="width:2rem;height:2rem;border-width:3px;margin:0 auto 1rem"></div><p style="color:var(--sub)">Analizando...</p></div>';
-                var self = this;
-                await new Promise(function(r) { setTimeout(r, 150); });
-                var html = await self.lwiHTML();
-                c.innerHTML = html;
-                setTimeout(function() { self.lwiInit(); }, 300);
-            } else if (p === 'clientes') {
-                c.innerHTML = this.cliHTML();
-                this.cliList();
-            } else if (p === 'prestamos') {
-                c.innerHTML = await this.preHTML();
-                this.preList();
-            } else if (p === 'finanzas') {
-                c.innerHTML = await this.finHTML();
-                setTimeout(function() { APP.finInit(); }, 400);
-            } else if (p === 'config') {
-                c.innerHTML = await this.configHTML();
-                this.configInit();
-            }
-        },
-
+        // ============================================================
+        // 6.11 DASHBOARD
+        // ============================================================
         dashHTML: async function() {
             var d = await this.getData(),
                 m = this.getMetrics(d);
@@ -3060,6 +2899,8 @@
                 trend = '-3%';
                 trendClass += ' down';
             }
+            var h = this._historial || await this.loadHistorial();
+
             return `
                 <div class="header">
                     <span class="brand">Loans W 🧠</span>
@@ -3106,6 +2947,37 @@
                             <div class="card-header">📆 Este Mes</div>
                             <div class="card-body text-center">
                                 <div class="kpi-big" style="color:var(--success)">${fmoney(m.proyMes)}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">📊 Historial Financiero</div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6 mb-2">
+                                <p style="font-size:var(--font-xs);color:var(--sub)">💰 Capital Prestado</p>
+                                <p class="fw-bold">${fmoney(h.capitalPrestado || 0)}</p>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <p style="font-size:var(--font-xs);color:var(--sub)">📥 Capital Recuperado</p>
+                                <p class="fw-bold" style="color:var(--success)">${fmoney(h.capitalRecuperado || 0)}</p>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <p style="font-size:var(--font-xs);color:var(--sub)">📈 Intereses Cobrados</p>
+                                <p class="fw-bold" style="color:var(--warning)">${fmoney(h.interesesCobrados || 0)}</p>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <p style="font-size:var(--font-xs);color:var(--sub)">💎 Ganancias Totales</p>
+                                <p class="fw-bold" style="color:var(--primary)">${fmoney(h.ganancias || 0)}</p>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <p style="font-size:var(--font-xs);color:var(--sub)">📋 Préstamos Realizados</p>
+                                <p class="fw-bold">${h.prestamosRealizados || 0}</p>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <p style="font-size:var(--font-xs);color:var(--sub)">✅ Préstamos Finalizados</p>
+                                <p class="fw-bold" style="color:var(--success)">${h.prestamosFinalizados || 0}</p>
                             </div>
                         </div>
                     </div>
@@ -3203,6 +3075,9 @@
             `;
         },
 
+        // ============================================================
+        // 6.12 LWI
+        // ============================================================
         lwiHTML: async function() {
             var d = await this.getData(),
                 m = this.getMetrics(d);
@@ -3441,6 +3316,9 @@
             }, 300);
         },
 
+        // ============================================================
+        // 6.13 CLIENTES
+        // ============================================================
         cliHTML: function() {
             return `
                 <div class="header">
@@ -3467,12 +3345,14 @@
             if (el) {
                 var h = '';
                 for (var i = 0; i < list.length; i++) {
+                    var prestamos = await DB.prestamos.where({ cliente_id: list[i].id }).toArray();
+                    var activos = prestamos.filter(function(p) { return p.estado === 'activo'; }).length;
                     h += `
                         <div class="list-item" onclick="APP.verCliente(${list[i].id})">
                             <div class="avatar-sm">${(list[i].nombre || '?')[0]}</div>
                             <div style="flex:1">
                                 <strong>${sanitize(list[i].nombre)}</strong>
-                                <br><small style="color:var(--sub)">${sanitize(list[i].cedula || 'Sin ID')}</small>
+                                <br><small style="color:var(--sub)">${sanitize(list[i].cedula || 'Sin ID')} · ${prestamos.length} préstamos (${activos} activos)</small>
                             </div>
                             <span class="badge ${list[i].categoria === 'vip' ? 'badge-p' : list[i].categoria === 'riesgoso' ? 'badge-l' : 'badge-a'}">${list[i].categoria || 'regular'}</span>
                         </div>`;
@@ -3519,23 +3399,39 @@
             var c = await DB.clientes.get(id);
             var ps = await DB.prestamos.where({ cliente_id: id }).toArray();
             var h = '';
-            for (var i = 0; i < ps.length; i++) {
-                var cu = await DB.cuotas.where({ prestamo_id: ps[i].id }).toArray();
-                var pa = cu.filter(function(x) { return x.estado === 'pagada'; }).length;
-                h += `
-                    <div class="list-item" onclick="APP.verPrestamo(${ps[i].id})">
-                        <div class="avatar-sm" style="background:linear-gradient(135deg,#3B82F6,#60A5FA)">$</div>
-                        <div style="flex:1">
-                            <strong>${fmoney(ps[i].monto || 0)}</strong>
-                            <br><small>${pa}/${cu.length} pagadas</small>
-                        </div>
-                        <span class="badge ${pa === cu.length ? 'badge-p' : 'badge-a'}">${pa === cu.length ? '✅ Pagado' : '🔄 Activo'}</span>
-                    </div>`;
+            
+            if (ps.length === 0) {
+                h = '<p class="text-muted text-center p-4">Sin préstamos</p>';
+            } else {
+                for (var i = 0; i < ps.length; i++) {
+                    var cu = await DB.cuotas.where({ prestamo_id: ps[i].id }).toArray();
+                    var pa = cu.filter(function(x) { return x.estado === 'pagada'; }).length;
+                    var status = ps[i].estado === 'activo' ? '🔄 Activo' : '✅ Pagado';
+                    var statusClass = ps[i].estado === 'activo' ? 'badge-a' : 'badge-p';
+                    var montoPendiente = cu.reduce(function(s, c) { 
+                        return c.estado !== 'pagada' ? s + (c.monto_total || 0) : s; 
+                    }, 0);
+                    h += `
+                        <div class="list-item" onclick="APP.verPrestamo(${ps[i].id})">
+                            <div class="avatar-sm" style="background:linear-gradient(135deg,#6C5CE7,#8B5CF6)">$</div>
+                            <div style="flex:1">
+                                <strong>${fmoney(ps[i].monto || 0)}</strong>
+                                <br><small>${pa}/${cu.length} pagadas · Pendiente: ${fmoney(montoPendiente)}</small>
+                            </div>
+                            <span class="badge ${statusClass}">${status}</span>
+                        </div>`;
+                }
             }
+
             document.getElementById('page').innerHTML = `
                 <div class="header">
                     <span class="brand">${sanitize(c.nombre)}</span>
-                    <button class="btn-icon" onclick="APP.goto('clientes')">←</button>
+                    <div class="header-actions">
+                        <button class="btn btn-p btn-sm" onclick="APP.showPrestamoParaCliente(${c.id})">
+                            <i class="bi bi-plus-circle"></i> Nuevo Préstamo
+                        </button>
+                        <button class="btn-icon" onclick="APP.goto('clientes')">←</button>
+                    </div>
                 </div>
                 <div class="card anim-scale">
                     <div class="card-body">
@@ -3549,9 +3445,49 @@
                         </div>
                     </div>
                 </div>
-                <h6 class="mt-2" style="color:var(--sub)">📊 Préstamos</h6>
-                <div class="card"><div class="card-body p-0">${h || '<p class="text-muted text-center p-4">Sin préstamos</p>'}</div></div>
+                <div class="client-loans-section">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--spacing-sm)">
+                        <h6 style="color:var(--sub);margin:0">📊 Préstamos (${ps.length})</h6>
+                        <button class="btn btn-p btn-xs" onclick="APP.showPrestamoParaCliente(${c.id})">
+                            <i class="bi bi-plus-circle"></i> Nuevo
+                        </button>
+                    </div>
+                    <div class="card"><div class="card-body p-0">${h}</div></div>
+                </div>
             `;
+        },
+
+        showPrestamoParaCliente: function(clienteId) {
+            var self = this;
+            var fn = async function() {
+                var cls = await DB.clientes.toArray();
+                document.getElementById('pcli').innerHTML = '<option value="">Seleccionar cliente...</option>' +
+                    cls.map(function(c) { return '<option value="' + c.id + '" ' + (c.id === clienteId ? 'selected' : '') + '>' + c.nombre + '</option>'; }).join('');
+                document.getElementById('pclienteId').value = clienteId || '';
+                document.getElementById('pid').value = '';
+                document.getElementById('loan-summary').style.display = 'none';
+                document.getElementById('amort-vista').style.display = 'none';
+                document.getElementById('loan-error').style.display = 'none';
+                document.getElementById('btnCreateLoan').disabled = true;
+                document.getElementById('pmonto').value = '';
+                document.getElementById('ptasa').value = '';
+                document.getElementById('pfecha').value = new Date().toISOString().split('T')[0];
+                document.getElementById('pcuotas').value = '';
+                document.getElementById('pfrec').value = 'semanal';
+                document.getElementById('ptipo').value = 'simple';
+
+                ['pmonto', 'ptasa', 'pcuotas', 'ptipo', 'pfrec', 'pfecha'].forEach(function(x) {
+                    var el = document.getElementById(x);
+                    if (el) {
+                        el.oninput = function() { self.updateLoanPreview(); };
+                        el.onchange = function() { self.updateLoanPreview(); };
+                    }
+                });
+
+                new bootstrap.Modal(document.getElementById('modPrestamo')).show();
+                setTimeout(function() { self.updateLoanPreview(); }, 300);
+            };
+            fn();
         },
 
         copyCliente: function(nombre, cedula, telefono) {
@@ -3578,6 +3514,9 @@
             window.open('https://wa.me/57' + tel + '?text=' + encodeURIComponent(msg), '_blank');
         },
 
+        // ============================================================
+        // 6.14 PRÉSTAMOS
+        // ============================================================
         preHTML: async function() {
             return `
                 <div class="header">
@@ -3585,11 +3524,11 @@
                     <button class="btn btn-p btn-sm" onclick="APP.showPrestamo()">+ Nuevo</button>
                 </div>
                 <div style="position:sticky;top:calc(var(--sat) + 3.5rem);z-index:10;background:var(--bg);padding:var(--spacing-xs) 0;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);margin-bottom:var(--spacing-sm)">
-                    <select class="f-control" id="preFilter" onchange="APP.preList()">
-                        <option value="todos">📋 Todos</option>
-                        <option value="activo">🔄 Activos</option>
-                        <option value="pagado">✅ Pagados</option>
-                    </select>
+                    <div style="display:flex;gap:var(--spacing-xs);flex-wrap:wrap;">
+                        <button class="btn btn-sm ${APP._currentFilter === 'todos' || !APP._currentFilter ? 'btn-p' : 'btn-o'}" onclick="APP.setFilter('todos')">📋 Todos</button>
+                        <button class="btn btn-sm ${APP._currentFilter === 'activo' ? 'btn-p' : 'btn-o'}" onclick="APP.setFilter('activo')">🔄 Activos</button>
+                        <button class="btn btn-sm ${APP._currentFilter === 'pagado' ? 'btn-p' : 'btn-o'}" onclick="APP.setFilter('pagado')">✅ Pagados</button>
+                    </div>
                 </div>
                 <div class="card">
                     <div class="card-body p-0" id="preList"></div>
@@ -3597,30 +3536,72 @@
             `;
         },
 
+        _currentFilter: 'todos',
+
+        setFilter: function(filter) {
+            this._currentFilter = filter;
+            this.preList();
+        },
+
         preList: async function() {
-            var f = document.getElementById('preFilter')?.value || 'todos';
+            var f = this._currentFilter || 'todos';
             var list = await DB.prestamos.toArray();
-            if (f !== 'todos') list = list.filter(function(p) { return p.estado === f; });
+            
+            if (f === 'activo') {
+                var activos = [];
+                for (var i = 0; i < list.length; i++) {
+                    var cuotas = await DB.cuotas.where({ prestamo_id: list[i].id }).toArray();
+                    var pendientes = cuotas.filter(function(c) { return c.estado !== 'pagada'; });
+                    if (pendientes.length > 0) {
+                        activos.push(list[i]);
+                    }
+                }
+                list = activos;
+            } else if (f === 'pagado') {
+                var pagados = [];
+                for (var i = 0; i < list.length; i++) {
+                    var cuotas = await DB.cuotas.where({ prestamo_id: list[i].id }).toArray();
+                    var pendientes = cuotas.filter(function(c) { return c.estado !== 'pagada'; });
+                    if (pendientes.length === 0 && cuotas.length > 0) {
+                        pagados.push(list[i]);
+                    }
+                }
+                list = pagados;
+            }
+            
             list.sort(function(a, b) { return b.id - a.id; });
+            
             var h = '';
             for (var i = 0; i < list.length; i++) {
                 var cl = await DB.clientes.get(list[i].cliente_id);
                 var cu = await DB.cuotas.where({ prestamo_id: list[i].id }).toArray();
                 var pa = cu.filter(function(c) { return c.estado === 'pagada'; }).length;
                 var pc = cu.length > 0 ? Math.round((pa / cu.length) * 100) : 0;
+                var montoPendiente = cu.reduce(function(s, c) { 
+                    return c.estado !== 'pagada' ? s + (c.monto_total || 0) : s; 
+                }, 0);
+                var estadoText = list[i].estado === 'pagado' ? '✅ Pagado' : '🔄 Activo';
+                var estadoBadge = list[i].estado === 'pagado' ? 'badge-p' : 'badge-a';
+                
+                var tienePendientes = cu.some(function(c) { return c.estado !== 'pagada'; });
+                if (tienePendientes && list[i].estado !== 'pagado') {
+                    estadoText = '🟡 En curso';
+                    estadoBadge = 'badge-w';
+                }
+                
                 h += `
                     <div class="list-item" onclick="APP.verPrestamo(${list[i].id})">
                         <div class="avatar-sm" style="background:linear-gradient(135deg,#6C5CE7,#8B5CF6)">${(cl?.nombre || '?')[0]}</div>
                         <div style="flex:1">
                             <strong>${sanitize(cl?.nombre)}</strong>
-                            <br><small>${fmoney(list[i].monto || 0)} · ${pc}%</small>
+                            <br><small>${fmoney(list[i].monto || 0)} · ${pc}% · Pendiente: ${fmoney(montoPendiente)}</small>
                         </div>
                         <div style="width:60px">
                             <div class="progress">
                                 <div class="progress-bar" style="width:${pc}%;background:${pc >= 80 ? '#00C853' : pc >= 40 ? '#FFB300' : '#FF5252'}"></div>
                             </div>
                         </div>
-                        <span class="badge ${list[i].estado === 'pagado' ? 'badge-p' : 'badge-a'}">${list[i].estado === 'pagado' ? '✅ Pagado' : '🔄 Activo'}</span>
+                        <span class="badge ${estadoBadge}">${estadoText}</span>
                     </div>`;
             }
             document.getElementById('preList').innerHTML = h || '<p class="text-muted text-center p-4">No hay préstamos</p>';
@@ -3673,6 +3654,7 @@
                 var cls = await DB.clientes.toArray();
                 document.getElementById('pcli').innerHTML = '<option value="">Seleccionar cliente...</option>' +
                     cls.map(function(c) { return '<option value="' + c.id + '">' + c.nombre + '</option>'; }).join('');
+                document.getElementById('pclienteId').value = '';
                 document.getElementById('pid').value = id || '';
                 document.getElementById('loan-summary').style.display = 'none';
                 document.getElementById('amort-vista').style.display = 'none';
@@ -3803,6 +3785,7 @@
                 pid = Number(id);
             } else {
                 pid = await DB.prestamos.add(pd);
+                this.updateHistorial({ monto: monto });
             }
 
             var cuotas = this.calcAmortizacion(monto, tasa, tipo, plazo, fecha, frecuencia);
@@ -3839,7 +3822,7 @@
             var printRows = '';
             for (var i = 0; i < cu.length; i++) {
                 var estadoBadge = cu[i].estado === 'pagada' ? 'badge-p' : cu[i].estado === 'atrasada' ? 'badge-l' :
-                'badge-a';
+                    'badge-a';
                 var estadoText = cu[i].estado === 'pagada' ? '✅ Pagado' : cu[i].estado === 'atrasada' ? '🔴 Mora' :
                     '🟡 Pendiente';
                 rows += `
@@ -3885,6 +3868,7 @@
                         <div class="d-flex gap-1 flex-wrap">
                             <button class="btn btn-o btn-xs" onclick="APP.printCronograma('${id}')">🖨️ Imprimir</button>
                             <button class="btn btn-o btn-xs" onclick="APP.exportExcel('${id}')">📊 Excel</button>
+                            <button class="btn btn-p btn-xs" onclick="APP.verCliente(${p.cliente_id})">👤 Ver Cliente</button>
                         </div>
                     </div>
                 </div>
@@ -3919,12 +3903,12 @@
                 <head>
                     <title>Loans W - Préstamo #${id}</title>
                     <style>
-                        body{font-family:'Inter',Arial,sans-serif;padding:30px;color:#1a1a2e;background:#f8f9ff}
+                        body{font-family:'Inter',Arial,sans-serif;padding:30px;color:#1a1a2e;background:#e6e9f0}
                         h2{color:#6C5CE7;text-align:center;font-weight:800;margin-bottom:20px}
                         table{width:100%;border-collapse:collapse;margin-top:15px;font-size:13px}
                         th{background:#6C5CE7;color:#fff;padding:10px 8px;text-align:left;font-weight:600}
-                        td{border:1px solid #e2e4f0;padding:8px}
-                        tr:nth-child(even){background:#f8f9ff}
+                        td{border:1px solid #d0d3e0;padding:8px}
+                        tr:nth-child(even){background:#f0f2ff}
                         .badge{display:inline-block;padding:3px 12px;border-radius:12px;font-size:11px;font-weight:700}
                         .badge-p{background:#d6f7ee;color:#007a55}
                         .badge-l{background:#ffe4e4;color:#d63031}
@@ -3967,6 +3951,7 @@
         },
 
         pagarCuota: function(pid, cid) {
+            var self = this;
             DB.cuotas.get(cid).then(function(cu) {
                 DB.cuotas.update(cid, { estado: 'pagada', saldo_restante: 0 });
                 DB.pagos.add({
@@ -3976,12 +3961,30 @@
                     fecha: Date.now(),
                     metodo: 'efectivo'
                 });
-                APP.verPrestamo(pid);
-                APP.toast('✅', 'Pago registrado', 'success');
-                DataRecovery.doBackup();
+                
+                self.updateHistorial({ 
+                    pago: { 
+                        capital: cu.capital || 0, 
+                        interes: cu.interes || 0 
+                    } 
+                });
+                
+                DB.cuotas.where({ prestamo_id: pid }).toArray().then(function(cuotas) {
+                    var pendientes = cuotas.filter(function(c) { return c.estado !== 'pagada'; });
+                    if (pendientes.length === 0) {
+                        DB.prestamos.update(pid, { estado: 'pagado' });
+                        self.updateHistorial({ finalizado: true });
+                    }
+                    APP.verPrestamo(pid);
+                    APP.toast('✅', 'Pago registrado', 'success');
+                    DataRecovery.doBackup();
+                });
             });
         },
 
+        // ============================================================
+        // 6.15 FINANZAS
+        // ============================================================
         finHTML: async function() {
             var d = await this.getData(),
                 m = this.getMetrics(d);
@@ -3994,15 +3997,17 @@
                     </div>
                 </div>
                 <div class="stats-grid">
-                    <div class="stat-card">
+                    <div class="stat-card" onclick="APP.showCapitalDetail('disponible')">
                         <div class="stat-icon" style="background:rgba(108,92,231,0.15);color:#6C5CE7">🏦</div>
-                        <div class="stat-label">Capital Disp.</div>
+                        <div class="stat-label">Capital Disponible</div>
                         <div class="stat-value">${fmoney(m.disp)}</div>
+                        <small style="color:var(--sub);font-size:var(--font-xs)">👆 Toca para ver detalles</small>
                     </div>
-                    <div class="stat-card">
+                    <div class="stat-card" onclick="APP.showCapitalDetail('prestado')">
                         <div class="stat-icon" style="background:rgba(59,130,246,0.15);color:#3B82F6">💵</div>
-                        <div class="stat-label">Prestado</div>
+                        <div class="stat-label">Capital Prestado</div>
                         <div class="stat-value">${fmoney(m.cartera)}</div>
+                        <small style="color:var(--sub);font-size:var(--font-xs)">👆 Toca para ver detalles</small>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon" style="background:rgba(0,200,83,0.15);color:#00C853">📈</div>
@@ -4089,29 +4094,131 @@
             }
         },
 
-        showCapital: function() {
-            var m = prompt('💰 Monto de capital:');
-            if (m && parseFloat(m) > 0) {
-                DB.capital.add({ monto: Math.round(parseFloat(m)), fecha: Date.now() }).then(function() {
-                    APP.toast('✅', 'Capital registrado', 'success');
-                    APP.goto('finanzas');
-                    DataRecovery.doBackup();
-                });
+        // ============================================================
+        // 6.16 CAPITAL DETAIL
+        // ============================================================
+        showCapitalDetail: async function(type) {
+            var d = await this.getData(),
+                m = this.getMetrics(d);
+            var title = document.getElementById('capitalDetailTitle');
+            var body = document.getElementById('capitalDetailBody');
+
+            if (type === 'disponible') {
+                title.textContent = '💰 Capital Disponible - Detalle';
+                var prestamosActivos = d.prestamos.filter(function(p) { return p.estado === 'activo'; });
+                var totalEnPrestamos = prestamosActivos.reduce(function(s, p) { return s + (p.monto || 0); }, 0);
+                var totalCuotasPendientes = 0;
+                for (var i = 0; i < prestamosActivos.length; i++) {
+                    var cuotas = await DB.cuotas.where({ prestamo_id: prestamosActivos[i].id }).toArray();
+                    totalCuotasPendientes += cuotas.reduce(function(s, c) { 
+                        return c.estado !== 'pagada' ? s + (c.monto_total || 0) : s; 
+                    }, 0);
+                }
+                body.innerHTML = `
+                    <div class="summary-box">
+                        <div class="row">
+                            <div class="col-12 mb-2">
+                                <p style="font-size:var(--font-xs);color:var(--sub)">💰 Capital Disponible</p>
+                                <p class="fw-bold" style="font-size:var(--font-xl)">${fmoney(m.disp)}</p>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <p style="font-size:var(--font-xs);color:var(--sub)">💵 Dinero en Caja</p>
+                                <p class="fw-bold">${fmoney(m.capTotal - totalEnPrestamos)}</p>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <p style="font-size:var(--font-xs);color:var(--sub)">📈 Dinero Libre para Prestar</p>
+                                <p class="fw-bold" style="color:var(--success)">${fmoney(m.disp)}</p>
+                            </div>
+                            <div class="col-12 mt-2">
+                                <div class="progress">
+                                    <div class="progress-bar" style="width:${m.cartera > 0 ? Math.min((m.cartera / (m.capTotal + 1)) * 100, 100) : 0}%;background:linear-gradient(135deg,#6C5CE7,#8B5CF6)"></div>
+                                </div>
+                                <p style="font-size:var(--font-xs);color:var(--sub);margin-top:4px">${Math.round((m.cartera / (m.capTotal + 1)) * 100)}% del capital está prestado</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (type === 'prestado') {
+                title.textContent = '💵 Capital Prestado - Detalle';
+                var prestamosActivos2 = d.prestamos.filter(function(p) { return p.estado === 'activo'; });
+                var clientesConDeuda = {};
+                var totalPendiente = 0;
+                var proximosPagos = [];
+
+                for (var j = 0; j < prestamosActivos2.length; j++) {
+                    var p = prestamosActivos2[j];
+                    var cl = d.clientes.find(function(c) { return c.id === p.cliente_id; });
+                    if (!cl) continue;
+                    var cuotas2 = await DB.cuotas.where({ prestamo_id: p.id }).toArray();
+                    var pendientes = cuotas2.filter(function(c) { return c.estado !== 'pagada'; });
+                    var totalDeuda = pendientes.reduce(function(s, c) { return s + (c.monto_total || 0); }, 0);
+                    if (totalDeuda > 0) {
+                        if (!clientesConDeuda[cl.id]) {
+                            clientesConDeuda[cl.id] = { nombre: cl.nombre, deuda: 0 };
+                        }
+                        clientesConDeuda[cl.id].deuda += totalDeuda;
+                        totalPendiente += totalDeuda;
+                    }
+                    var pendientesOrdenadas = pendientes.sort(function(a, b) { return a.fecha_vencimiento - b.fecha_vencimiento; });
+                    if (pendientesOrdenadas.length > 0) {
+                        proximosPagos.push({
+                            cliente: cl.nombre,
+                            fecha: new Date(pendientesOrdenadas[0].fecha_vencimiento),
+                            monto: pendientesOrdenadas[0].monto_total || 0
+                        });
+                    }
+                }
+
+                var clientesList = Object.values(clientesConDeuda).sort(function(a, b) { return b.deuda - a.deuda; });
+                var clientesHTML = clientesList.length > 0 ? 
+                    clientesList.map(function(c) {
+                        return `<div class="list-item" style="cursor:default">
+                            <div class="avatar-sm" style="background:linear-gradient(135deg,#6C5CE7,#8B5CF6)">${c.nombre[0]}</div>
+                            <div style="flex:1"><strong>${sanitize(c.nombre)}</strong></div>
+                            <span class="badge badge-a">${fmoney(c.deuda)}</span>
+                        </div>`;
+                    }).join('') :
+                    '<p class="text-muted text-center p-4">No hay deudas activas</p>';
+
+                var proximosHTML = proximosPagos.sort(function(a, b) { return a.fecha - b.fecha; }).slice(0, 5).map(function(p) {
+                    return `<div class="list-item" style="cursor:default">
+                        <div class="avatar-sm" style="background:linear-gradient(135deg,#00C853,#69F0AE)">📅</div>
+                        <div style="flex:1"><strong>${sanitize(p.cliente)}</strong><br><small>${p.fecha.toLocaleDateString('es-CO')}</small></div>
+                        <span class="badge badge-p">${fmoney(p.monto)}</span>
+                    </div>`;
+                }).join('');
+
+                body.innerHTML = `
+                    <div class="summary-box">
+                        <div class="row">
+                            <div class="col-12 mb-2">
+                                <p style="font-size:var(--font-xs);color:var(--sub)">💵 Total Prestado</p>
+                                <p class="fw-bold" style="font-size:var(--font-xl)">${fmoney(m.cartera)}</p>
+                            </div>
+                            <div class="col-12 mb-2">
+                                <p style="font-size:var(--font-xs);color:var(--sub)">📋 Total Pendiente por Cobrar</p>
+                                <p class="fw-bold" style="color:var(--warning)">${fmoney(totalPendiente)}</p>
+                            </div>
+                            <div class="col-12">
+                                <p style="font-size:var(--font-xs);color:var(--sub);font-weight:700">👥 Clientes con deuda activa (${clientesList.length})</p>
+                                <div style="max-height:150px;overflow-y:auto">${clientesHTML}</div>
+                            </div>
+                            ${proximosPagos.length > 0 ? `
+                            <div class="col-12 mt-2">
+                                <p style="font-size:var(--font-xs);color:var(--sub);font-weight:700">📅 Próximos pagos</p>
+                                <div style="max-height:150px;overflow-y:auto">${proximosHTML}</div>
+                            </div>` : ''}
+                        </div>
+                    </div>
+                `;
             }
+
+            new bootstrap.Modal(document.getElementById('modCapitalDetail')).show();
         },
 
-        showGasto: function() {
-            var m = prompt('🧾 Monto del gasto:');
-            if (m && parseFloat(m) > 0) {
-                var c = prompt('Categoría:') || 'otro';
-                DB.gastos.add({ categoria: c, monto: Math.round(parseFloat(m)), fecha: Date.now() }).then(function() {
-                    APP.toast('✅', 'Gasto registrado', 'success');
-                    APP.goto('finanzas');
-                    DataRecovery.doBackup();
-                });
-            }
-        },
-
+        // ============================================================
+        // 6.17 CONFIGURACIÓN
+        // ============================================================
         configHTML: async function() {
             var dark = await DB.cfg.get('dark');
             var mora = await DB.cfg.get('mora');
@@ -4131,7 +4238,7 @@
                         <div class="config-item">
                             <div>
                                 <strong>Modo Oscuro</strong>
-                                <p style="font-size:var(--font-xs);color:var(--sub)">Diseño premium tipo fintech</p>
+                                <p style="font-size:var(--font-xs);color:var(--sub)">Diseño Neumorfismo premium</p>
                             </div>
                             <div class="toggle-switch ${isDark ? 'active' : ''}" onclick="APP.toggleDark()"></div>
                         </div>
@@ -4201,7 +4308,7 @@
                     </div>
                 </div>
                 <div style="text-align:center;padding:var(--spacing-md);color:var(--sub);font-size:var(--font-xs)">
-                    Loans W v2.0 · LWI Intelligence
+                    Loans W v2.1 · LWI Intelligence
                 </div>
             `;
         },
@@ -4275,6 +4382,8 @@
             await DB.pagos.clear();
             await DB.capital.clear();
             await DB.gastos.clear();
+            this._historial = this.getDefaultHistorial();
+            await this.saveHistorial();
             this.toast('🗑️', 'Todos los datos han sido eliminados', 'danger');
             this.goto('dashboard');
         },
@@ -4359,6 +4468,28 @@
             doc.text('Préstamos activos: ' + m.activos, 14, y);
             y += 10;
 
+            if (this._historial) {
+                var h = this._historial;
+                doc.setFontSize(14);
+                doc.setTextColor('#6C5CE7');
+                doc.text('📈 Historial Financiero', 14, y);
+                y += 8;
+                doc.setFontSize(10);
+                doc.setTextColor('#333');
+                doc.text('Capital Prestado: ' + fmoney(h.capitalPrestado || 0), 14, y);
+                y += 6;
+                doc.text('Capital Recuperado: ' + fmoney(h.capitalRecuperado || 0), 14, y);
+                y += 6;
+                doc.text('Intereses Cobrados: ' + fmoney(h.interesesCobrados || 0), 14, y);
+                y += 6;
+                doc.text('Ganancias Totales: ' + fmoney(h.ganancias || 0), 14, y);
+                y += 6;
+                doc.text('Préstamos Realizados: ' + (h.prestamosRealizados || 0), 14, y);
+                y += 6;
+                doc.text('Préstamos Finalizados: ' + (h.prestamosFinalizados || 0), 14, y);
+                y += 10;
+            }
+
             doc.setFontSize(14);
             doc.setTextColor('#6C5CE7');
             doc.text('👥 Clientes (' + d.clientes.length + ')', 14, y);
@@ -4405,6 +4536,29 @@
 
             doc.save('loans_w_reporte_' + new Date().toISOString().slice(0, 10) + '.pdf');
             this.toast('✅', 'PDF generado correctamente', 'success');
+        },
+
+        showCapital: function() {
+            var m = prompt('💰 Monto de capital:');
+            if (m && parseFloat(m) > 0) {
+                DB.capital.add({ monto: Math.round(parseFloat(m)), fecha: Date.now() }).then(function() {
+                    APP.toast('✅', 'Capital registrado', 'success');
+                    APP.goto('finanzas');
+                    DataRecovery.doBackup();
+                });
+            }
+        },
+
+        showGasto: function() {
+            var m = prompt('🧾 Monto del gasto:');
+            if (m && parseFloat(m) > 0) {
+                var c = prompt('Categoría:') || 'otro';
+                DB.gastos.add({ categoria: c, monto: Math.round(parseFloat(m)), fecha: Date.now() }).then(function() {
+                    APP.toast('✅', 'Gasto registrado', 'success');
+                    APP.goto('finanzas');
+                    DataRecovery.doBackup();
+                });
+            }
         }
     };
 
