@@ -15,7 +15,7 @@
     <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
     <style>
-        /* ===== VARIABLES ===== */
+        /* ===== VARIABLES ORIGINALES ===== */
         :root {
             --sat: env(safe-area-inset-top, 0px);
             --sab: env(safe-area-inset-bottom, 0px);
@@ -53,7 +53,7 @@
             --nav-bg: rgba(230, 233, 240, 0.95);
         }
 
-        /* ===== MODO OSCURO NEUMORFISMO ===== */
+        /* ===== MODO OSCURO ===== */
         .dark-mode {
             --bg: #1a1a2e;
             --card: #1a1a2e;
@@ -177,165 +177,8 @@
         .stagger>*:nth-child(4) { animation-delay: 0.11s; }
         .stagger>*:nth-child(5) { animation-delay: 0.14s; }
 
-        /* ===== LOGIN ===== */
-        #login-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            background: var(--bg);
-            z-index: 9999;
-            padding: var(--spacing-sm);
-            overflow: hidden;
-        }
-        #login-screen.show {
-            display: flex;
-        }
-
-        .particles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        .particle {
-            position: absolute;
-            font-size: 1.4rem;
-            opacity: 0;
-            animation: floatParticle 7s ease-in-out infinite;
-        }
-
-        .login-card {
-            background: var(--card);
-            border-radius: var(--radius-lg);
-            padding: 2.5rem 2rem;
-            width: min(100%, 22rem);
-            text-align: center;
-            box-shadow: var(--shadow);
-            animation: scaleIn 0.5s var(--ease-smooth);
-            position: relative;
-            z-index: 1;
-            border: 1px solid var(--border);
-            transition: all 0.3s ease;
-        }
-
-        .login-logo {
-            width: 4.8rem;
-            height: 4.8rem;
-            background: linear-gradient(135deg, #6C5CE7, #8B5CF6, #A78BFA);
-            background-size: 200% 200%;
-            animation: gradientShift 4s ease infinite, glow 3s ease-in-out infinite, float 4s ease-in-out infinite;
-            border-radius: 1.4rem;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.4rem;
-            color: #fff;
-            margin-bottom: var(--spacing-sm);
-            box-shadow: var(--shadow);
-            position: relative;
-        }
-
-        .login-logo::after {
-            content: '';
-            position: absolute;
-            inset: -3px;
-            border-radius: 1.6rem;
-            background: linear-gradient(135deg, #6C5CE7, #8B5CF6);
-            opacity: 0.3;
-            filter: blur(15px);
-            z-index: -1;
-        }
-
-        .login-card h3 {
-            font-weight: 800;
-            margin-bottom: 0.2rem;
-            background: linear-gradient(135deg, #6C5CE7, #8B5CF6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-size: var(--font-xl);
-        }
-
-        .login-card p {
-            color: var(--sub);
-            margin-bottom: var(--spacing-sm);
-            font-size: var(--font-xs);
-        }
-
-        .login-input {
-            border: none;
-            border-radius: 50px;
-            padding: 0.85rem 1rem;
-            font-size: var(--font-md);
-            width: 100%;
-            margin-bottom: 0.6rem;
-            background: var(--bg);
-            color: var(--text);
-            outline: none;
-            box-shadow: var(--shadow-inset);
-            transition: all var(--ease-smooth);
-        }
-
-        .login-input:focus {
-            box-shadow: inset 6px 6px 12px rgba(0, 0, 0, 0.08), inset -6px -6px 12px rgba(255, 255, 255, 0.9);
-            transform: translateY(-2px);
-        }
-
-        .login-input::placeholder {
-            color: var(--sub);
-            opacity: 0.6;
-        }
-
-        .login-btn {
-            background: linear-gradient(135deg, #6C5CE7, #8B5CF6);
-            background-size: 200% 200%;
-            animation: gradientShift 4s ease infinite;
-            color: #fff;
-            border: none;
-            border-radius: 50px;
-            padding: 0.85rem;
-            font-size: var(--font-md);
-            font-weight: 700;
-            width: 100%;
-            cursor: pointer;
-            transition: all var(--ease-smooth);
-            letter-spacing: 0.4px;
-            box-shadow: var(--shadow);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .login-btn:active {
-            transform: scale(0.97);
-            box-shadow: var(--shadow-inset);
-        }
-
-        .ripple-container {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .ripple-effect-el {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.4);
-            transform: scale(0);
-            animation: ripple-effect 0.6s ease-out;
-            pointer-events: none;
-        }
+        /* ===== LOGIN ORIGINAL (ELIMINADO, AHORA USAMOS AUTH) ===== */
+        /* El login original fue reemplazado por auth-screen */
 
         /* ===== MAIN APP ===== */
         #main-app {
@@ -394,6 +237,32 @@
         .header-actions {
             display: flex;
             gap: var(--spacing-xs);
+            align-items: center;
+        }
+
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: var(--font-xs);
+            color: var(--sub);
+            background: var(--bg);
+            padding: 0.2rem 0.6rem 0.2rem 0.4rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow-inset);
+        }
+
+        .user-badge .avatar {
+            width: 1.8rem;
+            height: 1.8rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6C5CE7, #8B5CF6);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 700;
         }
 
         .btn-icon {
@@ -1662,7 +1531,7 @@
             .landing-nav { padding: var(--spacing-xs) var(--spacing-sm); }
         }
 
-        /* ===== NUEVOS ESTILOS PARA MÚLTIPLES PRÉSTAMOS ===== */
+        /* ===== ESTILOS CLIENTE - MÚLTIPLES PRÉSTAMOS ===== */
         .client-loans-section { margin-top: var(--spacing-md); }
 
         .client-loan-item {
@@ -1741,6 +1610,189 @@
         .recovery-badge .badge-status.ok { background: var(--success); }
         .recovery-badge .badge-status.warning { background: var(--warning); }
         .recovery-badge .badge-status.error { background: var(--danger); animation: pulse 1s infinite; }
+
+        /* ===== AUTH SCREEN (Independiente) ===== */
+        #auth-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            height: 100dvh;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg);
+            z-index: 99999;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        #auth-screen.show {
+            display: flex;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 400px;
+            animation: fadeUp 0.4s ease forwards;
+        }
+
+        .auth-card {
+            background: var(--card);
+            border-radius: var(--radius-lg, 28px);
+            padding: 2rem 1.8rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .auth-logo {
+            width: 4rem;
+            height: 4rem;
+            background: linear-gradient(135deg, #6C5CE7, #8B5CF6, #A78BFA);
+            background-size: 200% 200%;
+            animation: gradientShift 4s ease infinite, glow 3s ease-in-out infinite, float 4s ease-in-out infinite;
+            border-radius: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #fff;
+            margin: 0 auto 0.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .auth-title {
+            font-weight: 800;
+            margin-bottom: 0.2rem;
+            background: linear-gradient(135deg, #6C5CE7, #8B5CF6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: var(--font-xl, 1.4rem);
+            text-align: center;
+        }
+
+        .auth-subtitle {
+            text-align: center;
+            color: var(--sub);
+            font-size: var(--font-xs, 0.7rem);
+            margin-bottom: 1rem;
+        }
+
+        .auth-input {
+            border: none;
+            border-radius: 50px;
+            padding: 0.7rem 1rem;
+            font-size: var(--font-sm, 0.8rem);
+            width: 100%;
+            margin-bottom: 0.6rem;
+            background: var(--bg);
+            color: var(--text);
+            outline: none;
+            box-shadow: var(--shadow-inset);
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .auth-input:focus {
+            box-shadow: inset 6px 6px 12px rgba(0, 0, 0, 0.08), inset -6px -6px 12px rgba(255, 255, 255, 0.9);
+            transform: translateY(-1px);
+        }
+
+        .auth-input::placeholder {
+            color: var(--sub);
+            opacity: 0.6;
+        }
+
+        .auth-btn {
+            background: linear-gradient(135deg, #6C5CE7, #8B5CF6);
+            background-size: 200% 200%;
+            animation: gradientShift 4s ease infinite;
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            padding: 0.75rem;
+            font-size: var(--font-md, 0.9rem);
+            font-weight: 700;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            margin-top: 0.3rem;
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .auth-btn:active {
+            transform: scale(0.97);
+            box-shadow: var(--shadow-inset);
+        }
+
+        .auth-error {
+            color: var(--danger);
+            font-size: var(--font-xs, 0.7rem);
+            margin-top: 0.5rem;
+            text-align: center;
+            min-height: 1.2rem;
+        }
+
+        .auth-success {
+            color: var(--success);
+            font-size: var(--font-xs, 0.7rem);
+            margin-top: 0.5rem;
+            text-align: center;
+            min-height: 1.2rem;
+        }
+
+        .auth-link {
+            color: var(--primary);
+            cursor: pointer;
+            font-weight: 600;
+            background: none;
+            border: none;
+            font-size: 0.75rem;
+            padding: 0;
+            text-decoration: none;
+        }
+
+        .auth-link:hover {
+            text-decoration: underline;
+        }
+
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0.6rem 0;
+        }
+
+        .auth-divider hr {
+            flex: 1;
+            border: none;
+            border-top: 1px solid var(--border);
+        }
+
+        .auth-divider span {
+            font-size: var(--font-xs, 0.7rem);
+            color: var(--sub);
+        }
+
+        @media (max-width: 480px) {
+            .auth-card {
+                padding: 1.5rem 1.2rem;
+            }
+        }
+
+        .dark-mode #auth-screen {
+            background: var(--bg);
+        }
+
+        .dark-mode .auth-card {
+            background: var(--card);
+            border-color: var(--border);
+        }
     </style>
 </head>
 <body>
@@ -1973,7 +2025,7 @@
         <footer class="landing-footer">
             <div class="landing-footer-links">
                 <a href="#">© Loans W 2026</a>
-                <a href="#">Versión 2.1</a>
+                <a href="#">Versión 2.2</a>
                 <a href="#">Política de privacidad</a>
                 <a href="#">Términos y condiciones</a>
             </div>
@@ -1982,18 +2034,50 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- 2. LOGIN                                                    -->
+    <!-- 2. AUTH SCREEN (Login/Registro)                             -->
     <!-- ============================================================ -->
-    <div id="login-screen">
-        <div class="particles" id="particles"></div>
-        <div class="login-card">
-            <div class="login-logo">🧠</div>
-            <h3>Loans W</h3>
-            <p style="color:var(--sub);margin-bottom:var(--spacing-sm);font-size:var(--font-xs)">LWI Intelligence</p>
-            <input type="password" id="pwd" class="login-input" placeholder="🔒 Contraseña" autocomplete="off">
-            <button class="login-btn ripple-container" id="loginBtn">Ingresar</button>
-            <div id="login-err" style="color:var(--danger);font-weight:600;margin-top:0.5rem;font-size:0.7rem"></div>
-            <p style="color:var(--sub);font-size:0.6rem;margin-top:0.5rem">admin</p>
+    <div id="auth-screen">
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="auth-logo">🧠</div>
+                <h3 class="auth-title">Loans W</h3>
+                <p class="auth-subtitle">LWI Intelligence</p>
+                
+                <!-- Login Form -->
+                <div id="auth-login-form">
+                    <input class="auth-input" id="auth-identifier" placeholder="📱 Cédula o Celular">
+                    <input type="password" class="auth-input" id="auth-password" placeholder="🔒 Contraseña">
+                    <button class="auth-btn" id="auth-login-btn">Ingresar</button>
+                    <div id="auth-error" class="auth-error"></div>
+                    <div class="auth-divider">
+                        <hr><span>o</span><hr>
+                    </div>
+                    <div style="text-align:center;font-size:0.75rem;color:var(--sub);">
+                        ¿No tienes cuenta? 
+                        <button class="auth-link" id="auth-show-register">Regístrate aquí</button>
+                    </div>
+                </div>
+                
+                <!-- Register Form -->
+                <div id="auth-register-form" style="display:none;">
+                    <input class="auth-input" id="auth-reg-nombre" placeholder="👤 Nombre completo">
+                    <input class="auth-input" id="auth-reg-cedula" placeholder="🆔 Cédula (8-12 dígitos)" maxlength="12">
+                    <input class="auth-input" id="auth-reg-celular" placeholder="📱 Celular (10 dígitos)" maxlength="10">
+                    <input class="auth-input" id="auth-reg-email" placeholder="📧 Correo (opcional)">
+                    <input type="password" class="auth-input" id="auth-reg-password" placeholder="🔒 Contraseña">
+                    <input type="password" class="auth-input" id="auth-reg-confirm" placeholder="🔒 Confirmar contraseña">
+                    <button class="auth-btn" id="auth-register-btn">🚀 Crear Cuenta</button>
+                    <div id="auth-reg-error" class="auth-error"></div>
+                    <div id="auth-reg-success" class="auth-success"></div>
+                    <div class="auth-divider">
+                        <hr><span>o</span><hr>
+                    </div>
+                    <div style="text-align:center;font-size:0.75rem;color:var(--sub);">
+                        ¿Ya tienes cuenta? 
+                        <button class="auth-link" id="auth-show-login">Inicia sesión</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -2159,13 +2243,313 @@
     "use strict";
 
     // ============================================================
-    // 1. SISTEMA DE PERSISTENCIA
+    // 1. VERSIÓN Y CONFIGURACIÓN
     // ============================================================
-    const APP_VERSION = '2.1.0';
+    const APP_VERSION = '2.2.0';
     const STORAGE_KEY = 'loansw_data_backup';
     const STORAGE_KEY_META = 'loansw_meta';
     const BACKUP_INTERVAL = 300000;
 
+    // ============================================================
+    // 2. SISTEMA DE AUTENTICACIÓN (NUEVO - INDEPENDIENTE)
+    // ============================================================
+    var AuthSystem = {
+        _currentUser: null,
+
+        init: function() {
+            console.log('[Auth] Inicializando...');
+            this.setupEvents();
+            this.checkSession();
+        },
+
+        setupEvents: function() {
+            document.getElementById('auth-login-btn').onclick = function() {
+                AuthSystem.login();
+            };
+            document.getElementById('auth-password').onkeydown = function(e) {
+                if (e.key === 'Enter') AuthSystem.login();
+            };
+            document.getElementById('auth-identifier').onkeydown = function(e) {
+                if (e.key === 'Enter') AuthSystem.login();
+            };
+            document.getElementById('auth-show-register').onclick = function() {
+                AuthSystem.showRegister();
+            };
+            document.getElementById('auth-show-login').onclick = function() {
+                AuthSystem.showLogin();
+            };
+            document.getElementById('auth-register-btn').onclick = function() {
+                AuthSystem.register();
+            };
+            document.getElementById('auth-reg-password').onkeydown = function(e) {
+                if (e.key === 'Enter') AuthSystem.register();
+            };
+            document.getElementById('auth-reg-confirm').onkeydown = function(e) {
+                if (e.key === 'Enter') AuthSystem.register();
+            };
+        },
+
+        show: function() {
+            document.getElementById('auth-screen').classList.add('show');
+        },
+
+        hide: function() {
+            document.getElementById('auth-screen').classList.remove('show');
+        },
+
+        showLogin: function() {
+            document.getElementById('auth-login-form').style.display = 'block';
+            document.getElementById('auth-register-form').style.display = 'none';
+            document.getElementById('auth-error').textContent = '';
+            document.getElementById('auth-reg-error').textContent = '';
+            document.getElementById('auth-reg-success').textContent = '';
+            this.show();
+        },
+
+        showRegister: function() {
+            document.getElementById('auth-login-form').style.display = 'none';
+            document.getElementById('auth-register-form').style.display = 'block';
+            document.getElementById('auth-error').textContent = '';
+            document.getElementById('auth-reg-error').textContent = '';
+            document.getElementById('auth-reg-success').textContent = '';
+            this.show();
+        },
+
+        getCurrentUser: function() {
+            try {
+                var session = localStorage.getItem('loansw_session');
+                return session ? JSON.parse(session) : null;
+            } catch (e) {
+                return null;
+            }
+        },
+
+        setSession: function(user) {
+            localStorage.setItem('loansw_session', JSON.stringify({
+                userId: user.id,
+                nombre: user.nombre,
+                cedula: user.cedula,
+                loginTime: Date.now()
+            }));
+            this._currentUser = user;
+        },
+
+        clearSession: function() {
+            localStorage.removeItem('loansw_session');
+            localStorage.removeItem('loansw_lwiv13');
+            this._currentUser = null;
+        },
+
+        checkSession: function() {
+            var session = this.getCurrentUser();
+            if (session) {
+                DB.usuarios.get(session.userId).then(function(user) {
+                    if (user && user.activo) {
+                        AuthSystem._currentUser = user;
+                        AuthSystem.hide();
+                        document.getElementById('main-app').style.display = 'flex';
+                        document.getElementById('main-app').classList.add('show');
+                        if (APP && APP.goto) {
+                            APP.goto('dashboard');
+                        }
+                    } else {
+                        AuthSystem.clearSession();
+                        AuthSystem.showLogin();
+                    }
+                }).catch(function() {
+                    AuthSystem.showLogin();
+                });
+            } else {
+                AuthSystem.showLogin();
+            }
+        },
+
+        login: async function() {
+            var identifier = document.getElementById('auth-identifier').value.trim();
+            var password = document.getElementById('auth-password').value;
+            var errorEl = document.getElementById('auth-error');
+
+            if (!identifier || !password) {
+                errorEl.textContent = 'Ingresa todos los datos';
+                return;
+            }
+
+            try {
+                var user = await DB.usuarios.where('cedula').equals(identifier).first();
+                if (!user) {
+                    user = await DB.usuarios.where('celular').equals(identifier).first();
+                }
+                if (!user) {
+                    user = await DB.usuarios.where('email').equals(identifier).first();
+                }
+
+                if (!user) {
+                    errorEl.textContent = 'Usuario no encontrado';
+                    return;
+                }
+
+                if (!user.activo) {
+                    errorEl.textContent = 'Usuario desactivado';
+                    return;
+                }
+
+                var isValid = await APP.verifyPwd(password, user.password_hash);
+                if (!isValid) {
+                    errorEl.textContent = 'Contraseña incorrecta';
+                    return;
+                }
+
+                await DB.usuarios.update(user.id, { ultimo_acceso: Date.now() });
+
+                this.setSession(user);
+                this.hide();
+                errorEl.textContent = '';
+
+                document.getElementById('main-app').style.display = 'flex';
+                document.getElementById('main-app').classList.add('show');
+                if (APP && APP.goto) {
+                    APP.goto('dashboard');
+                }
+
+            } catch (e) {
+                console.error('[Auth] Error en login:', e);
+                errorEl.textContent = 'Error al iniciar sesión';
+            }
+        },
+
+        register: async function() {
+            var nombre = document.getElementById('auth-reg-nombre').value.trim();
+            var cedula = document.getElementById('auth-reg-cedula').value.trim();
+            var celular = document.getElementById('auth-reg-celular').value.trim();
+            var email = document.getElementById('auth-reg-email').value.trim();
+            var password = document.getElementById('auth-reg-password').value;
+            var confirm = document.getElementById('auth-reg-confirm').value;
+            var errorEl = document.getElementById('auth-reg-error');
+            var successEl = document.getElementById('auth-reg-success');
+
+            errorEl.textContent = '';
+            successEl.textContent = '';
+
+            if (!nombre || !cedula || !celular || !password || !confirm) {
+                errorEl.textContent = 'Todos los campos son obligatorios';
+                return;
+            }
+
+            if (!/^\d{8,12}$/.test(cedula)) {
+                errorEl.textContent = 'Cédula debe tener entre 8 y 12 dígitos';
+                return;
+            }
+
+            var celularLimpio = celular.replace(/[^0-9]/g, '');
+            if (!/^\d{10}$/.test(celularLimpio)) {
+                errorEl.textContent = 'Celular debe tener 10 dígitos';
+                return;
+            }
+
+            if (password.length < 8) {
+                errorEl.textContent = 'Contraseña mínima 8 caracteres';
+                return;
+            }
+
+            if (!/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/[0-9]/.test(password)) {
+                errorEl.textContent = 'Contraseña debe tener mayúscula, minúscula y número';
+                return;
+            }
+
+            if (password !== confirm) {
+                errorEl.textContent = 'Las contraseñas no coinciden';
+                return;
+            }
+
+            try {
+                var existing = await DB.usuarios.where('cedula').equals(cedula).first();
+                if (existing) {
+                    errorEl.textContent = 'Esta cédula ya está registrada';
+                    return;
+                }
+
+                existing = await DB.usuarios.where('celular').equals(celularLimpio).first();
+                if (existing) {
+                    errorEl.textContent = 'Este celular ya está registrado';
+                    return;
+                }
+
+                if (email) {
+                    existing = await DB.usuarios.where('email').equals(email).first();
+                    if (existing) {
+                        errorEl.textContent = 'Este correo ya está registrado';
+                        return;
+                    }
+                }
+
+                var passwordHash = await APP.hashPwd(password);
+
+                var userId = await DB.usuarios.add({
+                    nombre: nombre,
+                    cedula: cedula,
+                    celular: celularLimpio,
+                    email: email || '',
+                    password_hash: passwordHash,
+                    fecha_registro: Date.now(),
+                    ultimo_acceso: Date.now(),
+                    rol: 'usuario',
+                    activo: true
+                });
+
+                successEl.textContent = '✅ ¡Cuenta creada exitosamente!';
+                
+                document.getElementById('auth-reg-nombre').value = '';
+                document.getElementById('auth-reg-cedula').value = '';
+                document.getElementById('auth-reg-celular').value = '';
+                document.getElementById('auth-reg-email').value = '';
+                document.getElementById('auth-reg-password').value = '';
+                document.getElementById('auth-reg-confirm').value = '';
+
+                setTimeout(function() {
+                    AuthSystem.showLogin();
+                    document.getElementById('auth-identifier').value = cedula;
+                }, 1500);
+
+            } catch (e) {
+                console.error('[Auth] Error en registro:', e);
+                errorEl.textContent = 'Error al crear cuenta';
+            }
+        },
+
+        logout: function() {
+            this.clearSession();
+            document.getElementById('main-app').style.display = 'none';
+            document.getElementById('main-app').classList.remove('show');
+            this.showLogin();
+            location.reload();
+        },
+
+        getCurrentUserId: function() {
+            var user = this.getCurrentUser();
+            return user ? user.userId : null;
+        }
+    };
+
+    // ============================================================
+    // 3. UTILIDADES (ORIGINALES)
+    // ============================================================
+    var COP = new Intl.NumberFormat('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        maximumFractionDigits: 0,
+        minimumFractionDigits: 0
+    });
+    var fmoney = function(v) { return COP.format(Math.round(v || 0)); };
+    var sanitize = function(s) {
+        if (!s || typeof s !== 'string') return '';
+        var d = document.createElement('div');
+        d.textContent = s;
+        return d.innerHTML;
+    };
+
+    // ============================================================
+    // 4. SISTEMA DE PERSISTENCIA (ORIGINAL)
+    // ============================================================
     var DataRecovery = {
         init: async function() {
             console.log('[Recovery] Iniciando sistema de persistencia v' + APP_VERSION);
@@ -2178,7 +2562,7 @@
 
         checkDataIntegrity: async function() {
             try {
-                var tables = ['clientes', 'prestamos', 'cuotas', 'pagos', 'capital', 'gastos'];
+                var tables = ['clientes', 'prestamos', 'cuotas', 'pagos', 'capital', 'gastos', 'usuarios'];
                 var dataOk = true;
                 for (var table of tables) {
                     try {
@@ -2223,6 +2607,7 @@
                         pagos: d.pagos,
                         capital: d.capital,
                         gastos: d.gastos,
+                        usuarios: await DB.usuarios.toArray(),
                         cfg: await DB.cfg.toArray()
                     }
                 };
@@ -2276,12 +2661,15 @@
                 await DB.capital.clear();
                 await DB.gastos.clear();
                 await DB.cfg.clear();
+                if (backup.data.usuarios) await DB.usuarios.clear();
+                
                 if (backup.data.clientes.length > 0) await DB.clientes.bulkAdd(backup.data.clientes);
                 if (backup.data.prestamos.length > 0) await DB.prestamos.bulkAdd(backup.data.prestamos);
                 if (backup.data.cuotas.length > 0) await DB.cuotas.bulkAdd(backup.data.cuotas);
                 if (backup.data.pagos.length > 0) await DB.pagos.bulkAdd(backup.data.pagos);
                 if (backup.data.capital && backup.data.capital.length > 0) await DB.capital.bulkAdd(backup.data.capital);
                 if (backup.data.gastos && backup.data.gastos.length > 0) await DB.gastos.bulkAdd(backup.data.gastos);
+                if (backup.data.usuarios && backup.data.usuarios.length > 0) await DB.usuarios.bulkAdd(backup.data.usuarios);
                 if (backup.data.cfg && backup.data.cfg.length > 0) await DB.cfg.bulkAdd(backup.data.cfg);
                 console.log('[Recovery] Datos restaurados:', backup.data.clientes.length, 'clientes');
                 this.updateStatusBadge('ok', 'Datos recuperados');
@@ -2340,76 +2728,41 @@
     };
 
     // ============================================================
-    // 2. PARTÍCULAS DE LOGIN
+    // 5. BASE DE DATOS (ACTUALIZADA)
     // ============================================================
-    (function() {
-        var icons = ['💰', '💵', '💎', '📊', '🧠', '⭐'];
-        var c = document.getElementById('particles');
-        if (c) {
-            for (var i = 0; i < 18; i++) {
-                var p = document.createElement('span');
-                p.className = 'particle';
-                p.textContent = icons[Math.floor(Math.random() * icons.length)];
-                p.style.left = Math.random() * 100 + '%';
-                p.style.top = Math.random() * 100 + '%';
-                p.style.animationDelay = Math.random() * 7 + 's';
-                p.style.animationDuration = (5 + Math.random() * 7) + 's';
-                c.appendChild(p);
-            }
-        }
-    })();
-
-    // ============================================================
-    // 3. RIPPLE EFFECT
-    // ============================================================
-    document.addEventListener('click', function(e) {
-        var btn = e.target.closest('.btn, .btn-icon, .login-btn, .nav-btn');
-        if (btn) {
-            var ripple = document.createElement('span');
-            ripple.className = 'ripple-effect-el';
-            var rect = btn.getBoundingClientRect();
-            var size = Math.max(rect.width, rect.height);
-            ripple.style.width = ripple.style.height = size + 'px';
-            ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
-            ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
-            btn.appendChild(ripple);
-            setTimeout(function() { ripple.remove(); }, 600);
-        }
-    });
-
-    // ============================================================
-    // 4. UTILIDADES
-    // ============================================================
-    var COP = new Intl.NumberFormat('es-CO', {
-        style: 'currency',
-        currency: 'COP',
-        maximumFractionDigits: 0,
-        minimumFractionDigits: 0
-    });
-    var fmoney = function(v) { return COP.format(Math.round(v || 0)); };
-    var sanitize = function(s) {
-        if (!s || typeof s !== 'string') return '';
-        var d = document.createElement('div');
-        d.textContent = s;
-        return d.innerHTML;
-    };
-
-    // ============================================================
-    // 5. BASE DE DATOS
-    // ============================================================
-    var DB = new Dexie('LoansWLWIv13');
-    DB.version(5).stores({
+    var DB = new Dexie('LoansWLWIv15');
+    DB.version(7).stores({
         cfg: 'clave',
-        clientes: '++id',
-        prestamos: '++id,cliente_id,estado',
-        cuotas: '++id,prestamo_id,estado,fecha_vencimiento',
-        pagos: '++id,prestamo_id,cuota_id,fecha',
-        capital: '++id,fecha',
-        gastos: '++id,fecha'
+        usuarios: '++id,cedula,celular,email,nombre,password_hash,fecha_registro,ultimo_acceso,rol,activo',
+        clientes: '++id,usuario_id,nombre,telefono,cedula,direccion,aval,categoria',
+        prestamos: '++id,usuario_id,cliente_id,estado,monto,tasa,tipo,fecha,frecuencia,plazo',
+        cuotas: '++id,usuario_id,prestamo_id,estado,fecha_vencimiento,capital,interes,monto_total,saldo_restante,numero_cuota',
+        pagos: '++id,usuario_id,prestamo_id,cuota_id,monto,fecha,metodo',
+        capital: '++id,usuario_id,monto,fecha',
+        gastos: '++id,usuario_id,categoria,monto,fecha'
+    }).upgrade(async function(tx) {
+        console.log('[DB] Migrando a versión con usuarios...');
+        try {
+            var clientes = await tx.table('clientes').toArray();
+            for (var c of clientes) {
+                if (c.usuario_id === undefined) {
+                    await tx.table('clientes').update(c.id, { usuario_id: 0 });
+                }
+            }
+        } catch (e) {}
+        try {
+            var prestamos = await tx.table('prestamos').toArray();
+            for (var p of prestamos) {
+                if (p.usuario_id === undefined) {
+                    await tx.table('prestamos').update(p.id, { usuario_id: 0 });
+                }
+            }
+        } catch (e) {}
+        console.log('[DB] Migración completada');
     });
 
     // ============================================================
-    // 6. APP PRINCIPAL (COMPLETA Y FUNCIONAL)
+    // 6. APP PRINCIPAL (ORIGINAL CON MODIFICACIONES MÍNIMAS)
     // ============================================================
     var APP = {
         charts: [],
@@ -2421,11 +2774,11 @@
         _historial: null,
 
         // ============================================================
-        // 6.1 FUNCIONES DE LANDING PAGE
+        // 6.1 FUNCIONES DE LANDING PAGE (ORIGINALES)
         // ============================================================
         showLogin: function() {
             document.getElementById('landing-page').classList.add('hidden');
-            document.getElementById('login-screen').classList.add('show');
+            AuthSystem.showLogin();
         },
 
         toggleFaq: function(btn) {
@@ -2463,11 +2816,14 @@
         },
 
         // ============================================================
-        // 6.2 INIT
+        // 6.2 INIT (MODIFICADO)
         // ============================================================
         init: async function() {
             console.log('[APP] Iniciando aplicación...');
             await DB.open();
+
+            // Crear tabla de usuarios si no existe
+            await this.initUsersTable();
 
             var ph = await DB.cfg.get('pwd_hash');
             if (!ph) {
@@ -2490,36 +2846,47 @@
 
             await DataRecovery.init();
 
-            document.getElementById('loginBtn').onclick = function() { APP.login(); };
-            document.getElementById('pwd').onkeydown = function(e) { if (e.key === 'Enter') APP.login(); };
+            // Inicializar sistema de autenticación
+            AuthSystem.init();
 
+            // Eventos navegación app
             document.querySelectorAll('.nav-btn').forEach(function(b) {
                 b.onclick = function() { APP.goto(b.dataset.p); };
             });
 
             await this.loadHistorial();
-
-            if (localStorage.getItem('loansw_lwiv13') === 'yes') {
-                console.log('[APP] Sesión activa, mostrando app');
-                document.getElementById('landing-page').classList.add('hidden');
-                document.getElementById('login-screen').classList.remove('show');
-                document.getElementById('main-app').style.display = 'flex';
-                document.getElementById('main-app').classList.add('show');
-                this.goto('dashboard');
-            } else {
-                console.log('[APP] Sin sesión, mostrando landing');
-                document.getElementById('landing-page').classList.remove('hidden');
-                document.getElementById('login-screen').classList.remove('show');
-                document.getElementById('main-app').style.display = 'none';
-            }
-
             this.startCarousel();
             setInterval(function() { APP.autoBackup(); }, 1800000);
+
             console.log('[APP] Inicialización completada');
         },
 
+        initUsersTable: async function() {
+            try {
+                var count = await DB.usuarios.count();
+                if (count === 0) {
+                    var adminPwd = 'Admin2026!';
+                    var pwdHash = await this.hashPwd(adminPwd);
+                    await DB.usuarios.add({
+                        nombre: 'Administrador',
+                        cedula: '00000000',
+                        celular: '0000000000',
+                        email: 'admin@loansw.com',
+                        password_hash: pwdHash,
+                        fecha_registro: Date.now(),
+                        ultimo_acceso: Date.now(),
+                        rol: 'admin',
+                        activo: true
+                    });
+                    console.log('[APP] Usuario admin creado: admin@loansw.com / ' + adminPwd);
+                }
+            } catch (e) {
+                console.warn('[APP] Error creando tabla de usuarios:', e);
+            }
+        },
+
         // ============================================================
-        // 6.3 GOTO
+        // 6.3 GOTO (ORIGINAL)
         // ============================================================
         goto: function(p) {
             console.log('[APP] Navegando a:', p);
@@ -2532,7 +2899,7 @@
         },
 
         // ============================================================
-        // 6.4 RENDER
+        // 6.4 RENDER (ORIGINAL)
         // ============================================================
         render: async function(p) {
             console.log('[APP] Renderizando página:', p);
@@ -2578,7 +2945,7 @@
         },
 
         // ============================================================
-        // 6.5 HISTORIAL
+        // 6.5 HISTORIAL (MODIFICADO PARA USUARIO)
         // ============================================================
         getDefaultHistorial: function() {
             return {
@@ -2592,68 +2959,45 @@
         },
 
         loadHistorial: async function() {
-            var h = await DB.cfg.get('historial');
+            var userId = AuthSystem.getCurrentUserId();
+            var key = userId ? 'historial_' + userId : 'historial';
+            var h = await DB.cfg.get(key);
             if (h) {
                 this._historial = JSON.parse(h.valor);
             } else {
                 this._historial = this.getDefaultHistorial();
-                await DB.cfg.put({ clave: 'historial', valor: JSON.stringify(this._historial) });
+                await DB.cfg.put({ clave: key, valor: JSON.stringify(this._historial) });
             }
             return this._historial;
         },
 
         saveHistorial: async function() {
             if (this._historial) {
-                await DB.cfg.put({ clave: 'historial', valor: JSON.stringify(this._historial) });
+                var userId = AuthSystem.getCurrentUserId();
+                var key = userId ? 'historial_' + userId : 'historial';
+                await DB.cfg.put({ clave: key, valor: JSON.stringify(this._historial) });
             }
         },
 
         updateHistorial: function(data) {
             if (!this._historial) return;
-            
             if (data.monto) {
                 this._historial.capitalPrestado += data.monto;
                 this._historial.prestamosRealizados += 1;
             }
-            
             if (data.pago) {
                 this._historial.capitalRecuperado += data.pago.capital || 0;
                 this._historial.interesesCobrados += data.pago.interes || 0;
                 this._historial.ganancias += (data.pago.capital || 0) + (data.pago.interes || 0);
             }
-            
             if (data.finalizado) {
                 this._historial.prestamosFinalizados += 1;
             }
-            
             this.saveHistorial();
         },
 
         // ============================================================
-        // 6.6 LOGIN
-        // ============================================================
-        login: async function() {
-            var p = document.getElementById('pwd').value;
-            if (!p) {
-                document.getElementById('login-err').textContent = 'Ingrese contraseña';
-                return;
-            }
-            var s = await DB.cfg.get('pwd_hash');
-            if (!s) return;
-            if (await this.verifyPwd(p, s.valor)) {
-                localStorage.setItem('loansw_lwiv13', 'yes');
-                document.getElementById('landing-page').classList.add('hidden');
-                document.getElementById('login-screen').classList.remove('show');
-                document.getElementById('main-app').style.display = 'flex';
-                document.getElementById('main-app').classList.add('show');
-                this.goto('dashboard');
-            } else {
-                document.getElementById('login-err').textContent = 'Contraseña incorrecta';
-            }
-        },
-
-        // ============================================================
-        // 6.7 SEGURIDAD
+        // 6.6 SEGURIDAD (ORIGINAL)
         // ============================================================
         hashPwd: async function(p) {
             var e = new TextEncoder();
@@ -2682,13 +3026,8 @@
             } catch (e) { return false; }
         },
 
-        logout: function() {
-            localStorage.removeItem('loansw_lwiv13');
-            location.reload();
-        },
-
         // ============================================================
-        // 6.8 TOASTS
+        // 6.7 TOASTS (ORIGINAL)
         // ============================================================
         toast: function(t, m, type) {
             var box = document.getElementById('toasts');
@@ -2707,187 +3046,36 @@
         },
 
         // ============================================================
-        // 6.9 BACKUP
-        // ============================================================
-        autoBackup: async function() {
-            var d = await this.getData();
-            var backup = {
-                clientes: d.clientes,
-                prestamos: d.prestamos,
-                cuotas: d.cuotas,
-                pagos: d.pagos,
-                capital: d.capital,
-                gastos: d.gastos,
-                timestamp: Date.now()
-            };
-            localStorage.setItem('loansw_autobackup', JSON.stringify(backup));
-        },
-
-        exportData: async function() {
-            var d = await this.getData();
-            var data = {
-                clientes: d.clientes,
-                prestamos: d.prestamos,
-                cuotas: d.cuotas,
-                pagos: d.pagos,
-                capital: d.capital,
-                gastos: d.gastos,
-                historial: this._historial,
-                exportDate: new Date().toISOString()
-            };
-            var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            var url = URL.createObjectURL(blob);
-            var a = document.createElement('a');
-            a.href = url;
-            a.download = 'loans_w_backup_' + new Date().toISOString().slice(0, 10) + '.json';
-            a.click();
-            URL.revokeObjectURL(url);
-            this.toast('✅', 'Datos exportados correctamente', 'success');
-        },
-
-        importData: function() {
-            var input = document.createElement('input');
-            input.type = 'file';
-            input.accept = '.json';
-            input.onchange = async function(e) {
-                var file = e.target.files[0];
-                if (!file) return;
-                var reader = new FileReader();
-                reader.onload = async function(ev) {
-                    try {
-                        var data = JSON.parse(ev.target.result);
-                        if (!data.clientes || !data.prestamos) {
-                            APP.toast('❌', 'Archivo inválido', 'danger');
-                            return;
-                        }
-                        if (!confirm('⚠️ Esto reemplazará todos los datos actuales. ¿Continuar?')) return;
-                        await DB.clientes.clear();
-                        await DB.prestamos.clear();
-                        await DB.cuotas.clear();
-                        await DB.pagos.clear();
-                        await DB.capital.clear();
-                        await DB.gastos.clear();
-                        await DB.clientes.bulkAdd(data.clientes);
-                        await DB.prestamos.bulkAdd(data.prestamos);
-                        await DB.cuotas.bulkAdd(data.cuotas);
-                        await DB.pagos.bulkAdd(data.pagos);
-                        if (data.capital) await DB.capital.bulkAdd(data.capital);
-                        if (data.gastos) await DB.gastos.bulkAdd(data.gastos);
-                        if (data.historial) {
-                            APP._historial = data.historial;
-                            await APP.saveHistorial();
-                        }
-                        APP.toast('✅', 'Datos importados correctamente', 'success');
-                        APP.goto(APP._currentPage);
-                    } catch (err) {
-                        APP.toast('❌', 'Error al importar: ' + err.message, 'danger');
-                    }
-                };
-                reader.readAsText(file);
-            };
-            input.click();
-        },
-
-        // ============================================================
-        // 6.10 DATOS Y MÉTRICAS
+        // 6.8 DATOS (MODIFICADO PARA FILTRAR POR USUARIO)
         // ============================================================
         getData: async function() {
+            var userId = AuthSystem.getCurrentUserId();
+            if (!userId) {
+                return {
+                    clientes: [],
+                    prestamos: [],
+                    cuotas: [],
+                    pagos: [],
+                    capital: [],
+                    gastos: [],
+                    capInicial: 0,
+                    now: new Date()
+                };
+            }
             return {
-                clientes: await DB.clientes.toArray(),
-                prestamos: await DB.prestamos.toArray(),
-                cuotas: await DB.cuotas.toArray(),
-                pagos: await DB.pagos.toArray(),
-                capital: await DB.capital.toArray(),
-                gastos: await DB.gastos.toArray(),
-                capInicial: parseFloat((await DB.cfg.get('capital_inicial'))?.valor || '0'),
+                clientes: await DB.clientes.where('usuario_id').equals(userId).toArray(),
+                prestamos: await DB.prestamos.where('usuario_id').equals(userId).toArray(),
+                cuotas: await DB.cuotas.where('usuario_id').equals(userId).toArray(),
+                pagos: await DB.pagos.where('usuario_id').equals(userId).toArray(),
+                capital: await DB.capital.where('usuario_id').equals(userId).toArray(),
+                gastos: await DB.gastos.where('usuario_id').equals(userId).toArray(),
+                capInicial: parseFloat((await DB.cfg.get('capital_inicial_' + userId))?.valor || '0'),
                 now: new Date()
             };
         },
 
-        getMetrics: function(d) {
-            var capTotal = d.capital.reduce(function(s, c) { return s + (c.monto || 0); }, 0) + d.capInicial;
-            var gastosTotal = d.gastos.reduce(function(s, g) { return s + (g.monto || 0); }, 0);
-            var cartera = d.prestamos.filter(function(p) { return p.estado === 'activo'; }).reduce(function(s, p) { return s +
-                    (p.monto || 0); }, 0);
-            var cobradoHist = d.pagos.reduce(function(s, p) { return s + (p.monto || 0); }, 0);
-            var interesHist = 0;
-            for (var i = 0; i < d.pagos.length; i++) {
-                for (var j = 0; j < d.cuotas.length; j++) {
-                    if (d.cuotas[j].id === d.pagos[i].cuota_id) {
-                        interesHist += d.cuotas[j].interes || 0;
-                        break;
-                    }
-                }
-            }
-            var disp = capTotal + cobradoHist + interesHist - cartera - gastosTotal;
-            var ganancia = cobradoHist + interesHist - gastosTotal;
-            var moraMonto = 0,
-                moraSet = new Set();
-            for (var k = 0; k < d.cuotas.length; k++) {
-                if (d.cuotas[k].estado === 'atrasada') {
-                    moraMonto += d.cuotas[k].monto_total || 0;
-                    var p2 = d.prestamos.find(function(x) { return x.id === d.cuotas[k].prestamo_id; });
-                    if (p2) moraSet.add(p2.cliente_id);
-                }
-            }
-            var prestadoHist = d.prestamos.reduce(function(s, p) { return s + (p.monto || 0); }, 0);
-            var activos = d.prestamos.filter(function(p) { return p.estado === 'activo'; }).length;
-            var hoy = new Date(d.now.getFullYear(), d.now.getMonth(), d.now.getDate());
-            var semana = new Date(hoy.getTime() + 7 * 86400000);
-            var finMes = new Date(d.now.getFullYear(), d.now.getMonth() + 1, 0);
-            var proyHoy = 0,
-                proySemana = 0,
-                proyMes = 0;
-            for (var l = 0; l < d.cuotas.length; l++) {
-                var c2 = d.cuotas[l];
-                if (c2.estado === 'pagada') continue;
-                if (c2.fecha_vencimiento >= hoy.getTime() && c2.fecha_vencimiento < hoy.getTime() + 86400000)
-                    proyHoy += c2.monto_total || 0;
-                if (c2.fecha_vencimiento >= d.now.getTime() && c2.fecha_vencimiento <= semana.getTime() && c2.estado ===
-                    'pendiente')
-                    proySemana += c2.monto_total || 0;
-                if (c2.fecha_vencimiento >= d.now.getTime() && c2.fecha_vencimiento <= finMes.getTime() && c2.estado ===
-                    'pendiente')
-                    proyMes += c2.monto_total || 0;
-            }
-            return {
-                capTotal: capTotal,
-                gastos: gastosTotal,
-                cartera: cartera,
-                cobradoHist: cobradoHist,
-                interesHist: interesHist,
-                disp: disp,
-                ganancia: ganancia,
-                moraMonto: moraMonto,
-                moraClientes: moraSet.size,
-                activos: activos,
-                clientesTotal: d.clientes.length,
-                prestadoHist: prestadoHist,
-                proyHoy: proyHoy,
-                proySemana: proySemana,
-                proyMes: proyMes
-            };
-        },
-
-        calcSalud: function(m) {
-            var score = 0;
-            if (m.capTotal > 0) score += Math.min((m.disp / (m.capTotal + 1)) * 25, 20);
-            if (m.cartera > 0) score += Math.max(0, 20 - ((m.moraMonto / (m.cartera + 1)) * 20));
-            if (m.capTotal > 0) score += Math.min((m.ganancia / (m.capTotal + 1)) * 150, 18);
-            if (m.capTotal + m.cartera > 0) score += Math.min((m.cobradoHist / (m.capTotal + m.cartera + 1)) * 50, 14);
-            if (m.clientesTotal > 0) score += Math.min((m.activos / (m.clientesTotal + 1)) * 10, 10);
-            return Math.max(5, Math.min(98, Math.round(score)));
-        },
-
-        destroyCharts: function() {
-            this.charts.forEach(function(c) {
-                try { c.destroy(); } catch (e) {}
-            });
-            this.charts = [];
-        },
-
         // ============================================================
-        // 6.11 DASHBOARD
+        // 6.9 DASHBOARD (MODIFICADO CON BADGE DE USUARIO)
         // ============================================================
         dashHTML: async function() {
             var d = await this.getData(),
@@ -2900,14 +3088,19 @@
                 trendClass += ' down';
             }
             var h = this._historial || await this.loadHistorial();
+            var user = AuthSystem.getCurrentUser();
 
             return `
                 <div class="header">
                     <span class="brand">Loans W 🧠</span>
                     <div class="header-actions">
+                        <span class="user-badge">
+                            <span class="avatar">${(user?.nombre || '?')[0]}</span>
+                            ${sanitize(user?.nombre || 'Usuario')}
+                        </span>
                         <button class="btn-icon" onclick="APP.goto('lwi')" title="LWI">🧠</button>
                         <button class="btn-icon" onclick="APP.showCalc()" title="Calculadora">🧮</button>
-                        <button class="btn-icon" onclick="APP.logout()" title="Salir">↩️</button>
+                        <button class="btn-icon" onclick="AuthSystem.logout()" title="Salir">↩️</button>
                     </div>
                 </div>
                 <div class="stats-grid">
@@ -3007,12 +3200,16 @@
             `;
         },
 
+        // ============================================================
+        // 6.10 DASHINIT (ORIGINAL MODIFICADO)
+        // ============================================================
         dashInit: async function() {
             var c1 = document.getElementById('chart1');
             if (c1) {
                 var meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
                 var data = new Array(12).fill(0);
-                var pagos = await DB.pagos.toArray();
+                var userId = AuthSystem.getCurrentUserId();
+                var pagos = userId ? await DB.pagos.where('usuario_id').equals(userId).toArray() : [];
                 for (var i = 0; i < pagos.length; i++) {
                     var m = new Date(pagos[i].fecha).getMonth();
                     data[m] += pagos[i].monto || 0;
@@ -3076,7 +3273,7 @@
         },
 
         // ============================================================
-        // 6.12 LWI
+        // 6.11 LWI (ORIGINAL CON FILTRO POR USUARIO)
         // ============================================================
         lwiHTML: async function() {
             var d = await this.getData(),
@@ -3317,7 +3514,7 @@
         },
 
         // ============================================================
-        // 6.13 CLIENTES
+        // 6.12 CLIENTES (MODIFICADO PARA USAR USUARIO_ID)
         // ============================================================
         cliHTML: function() {
             return `
@@ -3337,15 +3534,18 @@
         },
 
         cliList: async function() {
+            var userId = AuthSystem.getCurrentUserId();
+            if (!userId) return;
+            
             var s = (document.getElementById('cliSearch')?.value || '').toLowerCase();
-            var list = await DB.clientes.toArray();
+            var list = await DB.clientes.where('usuario_id').equals(userId).toArray();
             if (s) list = list.filter(function(c) { return (c.nombre || '').toLowerCase().includes(s); });
             list.sort(function(a, b) { return b.id - a.id; });
             var el = document.getElementById('cliList');
             if (el) {
                 var h = '';
                 for (var i = 0; i < list.length; i++) {
-                    var prestamos = await DB.prestamos.where({ cliente_id: list[i].id }).toArray();
+                    var prestamos = await DB.prestamos.where('cliente_id').equals(list[i].id).toArray();
                     var activos = prestamos.filter(function(p) { return p.estado === 'activo'; }).length;
                     h += `
                         <div class="list-item" onclick="APP.verCliente(${list[i].id})">
@@ -3377,8 +3577,15 @@
         },
 
         saveCliente: function() {
+            var userId = AuthSystem.getCurrentUserId();
+            if (!userId) {
+                this.toast('❌', 'Debes iniciar sesión', 'danger');
+                return;
+            }
+
             var id = document.getElementById('cid').value;
             var d = {
+                usuario_id: userId,
                 nombre: document.getElementById('cnom').value.trim(),
                 telefono: document.getElementById('ctel').value.trim(),
                 cedula: document.getElementById('cced').value.trim(),
@@ -3386,7 +3593,9 @@
                 aval: document.getElementById('cava').value.trim(),
                 categoria: document.getElementById('ccat').value
             };
+
             if (!d.nombre) return this.toast('Error', 'Nombre requerido', 'danger');
+            
             (id ? DB.clientes.update(Number(id), d) : DB.clientes.add(d)).then(function() {
                 bootstrap.Modal.getInstance(document.getElementById('modCliente')).hide();
                 APP.cliList();
@@ -3397,14 +3606,16 @@
 
         verCliente: async function(id) {
             var c = await DB.clientes.get(id);
-            var ps = await DB.prestamos.where({ cliente_id: id }).toArray();
+            if (!c) return;
+            
+            var ps = await DB.prestamos.where('cliente_id').equals(id).toArray();
             var h = '';
             
             if (ps.length === 0) {
                 h = '<p class="text-muted text-center p-4">Sin préstamos</p>';
             } else {
                 for (var i = 0; i < ps.length; i++) {
-                    var cu = await DB.cuotas.where({ prestamo_id: ps[i].id }).toArray();
+                    var cu = await DB.cuotas.where('prestamo_id').equals(ps[i].id).toArray();
                     var pa = cu.filter(function(x) { return x.estado === 'pagada'; }).length;
                     var status = ps[i].estado === 'activo' ? '🔄 Activo' : '✅ Pagado';
                     var statusClass = ps[i].estado === 'activo' ? 'badge-a' : 'badge-p';
@@ -3460,7 +3671,13 @@
         showPrestamoParaCliente: function(clienteId) {
             var self = this;
             var fn = async function() {
-                var cls = await DB.clientes.toArray();
+                var userId = AuthSystem.getCurrentUserId();
+                if (!userId) {
+                    APP.toast('❌', 'Debes iniciar sesión', 'danger');
+                    return;
+                }
+                
+                var cls = await DB.clientes.where('usuario_id').equals(userId).toArray();
                 document.getElementById('pcli').innerHTML = '<option value="">Seleccionar cliente...</option>' +
                     cls.map(function(c) { return '<option value="' + c.id + '" ' + (c.id === clienteId ? 'selected' : '') + '>' + c.nombre + '</option>'; }).join('');
                 document.getElementById('pclienteId').value = clienteId || '';
@@ -3515,7 +3732,7 @@
         },
 
         // ============================================================
-        // 6.14 PRÉSTAMOS
+        // 6.13 PRÉSTAMOS (MODIFICADO PARA USAR USUARIO_ID)
         // ============================================================
         preHTML: async function() {
             return `
@@ -3544,13 +3761,16 @@
         },
 
         preList: async function() {
+            var userId = AuthSystem.getCurrentUserId();
+            if (!userId) return;
+            
             var f = this._currentFilter || 'todos';
-            var list = await DB.prestamos.toArray();
+            var list = await DB.prestamos.where('usuario_id').equals(userId).toArray();
             
             if (f === 'activo') {
                 var activos = [];
                 for (var i = 0; i < list.length; i++) {
-                    var cuotas = await DB.cuotas.where({ prestamo_id: list[i].id }).toArray();
+                    var cuotas = await DB.cuotas.where('prestamo_id').equals(list[i].id).toArray();
                     var pendientes = cuotas.filter(function(c) { return c.estado !== 'pagada'; });
                     if (pendientes.length > 0) {
                         activos.push(list[i]);
@@ -3560,7 +3780,7 @@
             } else if (f === 'pagado') {
                 var pagados = [];
                 for (var i = 0; i < list.length; i++) {
-                    var cuotas = await DB.cuotas.where({ prestamo_id: list[i].id }).toArray();
+                    var cuotas = await DB.cuotas.where('prestamo_id').equals(list[i].id).toArray();
                     var pendientes = cuotas.filter(function(c) { return c.estado !== 'pagada'; });
                     if (pendientes.length === 0 && cuotas.length > 0) {
                         pagados.push(list[i]);
@@ -3574,7 +3794,7 @@
             var h = '';
             for (var i = 0; i < list.length; i++) {
                 var cl = await DB.clientes.get(list[i].cliente_id);
-                var cu = await DB.cuotas.where({ prestamo_id: list[i].id }).toArray();
+                var cu = await DB.cuotas.where('prestamo_id').equals(list[i].id).toArray();
                 var pa = cu.filter(function(c) { return c.estado === 'pagada'; }).length;
                 var pc = cu.length > 0 ? Math.round((pa / cu.length) * 100) : 0;
                 var montoPendiente = cu.reduce(function(s, c) { 
@@ -3651,7 +3871,13 @@
         showPrestamo: function(id) {
             var self = this;
             var fn = async function() {
-                var cls = await DB.clientes.toArray();
+                var userId = AuthSystem.getCurrentUserId();
+                if (!userId) {
+                    APP.toast('❌', 'Debes iniciar sesión', 'danger');
+                    return;
+                }
+                
+                var cls = await DB.clientes.where('usuario_id').equals(userId).toArray();
                 document.getElementById('pcli').innerHTML = '<option value="">Seleccionar cliente...</option>' +
                     cls.map(function(c) { return '<option value="' + c.id + '">' + c.nombre + '</option>'; }).join('');
                 document.getElementById('pclienteId').value = '';
@@ -3756,6 +3982,12 @@
         },
 
         savePrestamo: async function() {
+            var userId = AuthSystem.getCurrentUserId();
+            if (!userId) {
+                this.toast('❌', 'Debes iniciar sesión', 'danger');
+                return;
+            }
+
             var clId = parseInt(document.getElementById('pcli').value);
             if (!clId) return this.toast('Error', 'Seleccione cliente', 'danger');
             var monto = parseFloat(document.getElementById('pmonto').value);
@@ -3768,6 +4000,7 @@
             var id = document.getElementById('pid').value;
 
             var pd = {
+                usuario_id: userId,
                 cliente_id: clId,
                 monto: monto,
                 tasa: tasa,
@@ -3781,7 +4014,7 @@
             var pid;
             if (id) {
                 await DB.prestamos.update(Number(id), pd);
-                await DB.cuotas.where({ prestamo_id: Number(id) }).delete();
+                await DB.cuotas.where('prestamo_id').equals(Number(id)).delete();
                 pid = Number(id);
             } else {
                 pid = await DB.prestamos.add(pd);
@@ -3791,6 +4024,7 @@
             var cuotas = this.calcAmortizacion(monto, tasa, tipo, plazo, fecha, frecuencia);
             for (var i = 0; i < cuotas.length; i++) {
                 await DB.cuotas.add({
+                    usuario_id: userId,
                     prestamo_id: pid,
                     numero_cuota: cuotas[i].numero,
                     fecha_vencimiento: cuotas[i].fecha.getTime(),
@@ -3812,7 +4046,7 @@
             var p = await DB.prestamos.get(id);
             if (!p) return;
             var cl = await DB.clientes.get(p.cliente_id);
-            var cu = await DB.cuotas.where({ prestamo_id: id }).toArray();
+            var cu = await DB.cuotas.where('prestamo_id').equals(id).toArray();
             cu.sort(function(a, b) { return a.numero_cuota - b.numero_cuota; });
             var pa = cu.filter(function(c) { return c.estado === 'pagada'; }).length;
             var pc = Math.round((pa / cu.length) * 100);
@@ -3930,7 +4164,7 @@
         },
 
         exportExcel: async function(id) {
-            var cu = await DB.cuotas.where({ prestamo_id: Number(id) }).toArray();
+            var cu = await DB.cuotas.where('prestamo_id').equals(Number(id)).toArray();
             cu.sort(function(a, b) { return a.numero_cuota - b.numero_cuota; });
             var data = cu.map(function(c) {
                 return {
@@ -3952,9 +4186,16 @@
 
         pagarCuota: function(pid, cid) {
             var self = this;
+            var userId = AuthSystem.getCurrentUserId();
+            if (!userId) {
+                this.toast('❌', 'Debes iniciar sesión', 'danger');
+                return;
+            }
+
             DB.cuotas.get(cid).then(function(cu) {
                 DB.cuotas.update(cid, { estado: 'pagada', saldo_restante: 0 });
                 DB.pagos.add({
+                    usuario_id: userId,
                     prestamo_id: pid,
                     cuota_id: cid,
                     monto: cu.monto_total,
@@ -3969,7 +4210,7 @@
                     } 
                 });
                 
-                DB.cuotas.where({ prestamo_id: pid }).toArray().then(function(cuotas) {
+                DB.cuotas.where('prestamo_id').equals(pid).toArray().then(function(cuotas) {
                     var pendientes = cuotas.filter(function(c) { return c.estado !== 'pagada'; });
                     if (pendientes.length === 0) {
                         DB.prestamos.update(pid, { estado: 'pagado' });
@@ -3983,7 +4224,7 @@
         },
 
         // ============================================================
-        // 6.15 FINANZAS
+        // 6.14 FINANZAS (MODIFICADO PARA USAR USUARIO_ID)
         // ============================================================
         finHTML: async function() {
             var d = await this.getData(),
@@ -4061,7 +4302,10 @@
         },
 
         finInit: async function() {
-            var pagos = await DB.pagos.toArray();
+            var userId = AuthSystem.getCurrentUserId();
+            if (!userId) return;
+            
+            var pagos = await DB.pagos.where('usuario_id').equals(userId).toArray();
             var metodos = { efectivo: 0, nequi: 0, transferencia: 0 };
             for (var i = 0; i < pagos.length; i++) {
                 var m = pagos[i].metodo || 'efectivo';
@@ -4094,9 +4338,6 @@
             }
         },
 
-        // ============================================================
-        // 6.16 CAPITAL DETAIL
-        // ============================================================
         showCapitalDetail: async function(type) {
             var d = await this.getData(),
                 m = this.getMetrics(d);
@@ -4109,7 +4350,7 @@
                 var totalEnPrestamos = prestamosActivos.reduce(function(s, p) { return s + (p.monto || 0); }, 0);
                 var totalCuotasPendientes = 0;
                 for (var i = 0; i < prestamosActivos.length; i++) {
-                    var cuotas = await DB.cuotas.where({ prestamo_id: prestamosActivos[i].id }).toArray();
+                    var cuotas = await DB.cuotas.where('prestamo_id').equals(prestamosActivos[i].id).toArray();
                     totalCuotasPendientes += cuotas.reduce(function(s, c) { 
                         return c.estado !== 'pagada' ? s + (c.monto_total || 0) : s; 
                     }, 0);
@@ -4149,7 +4390,7 @@
                     var p = prestamosActivos2[j];
                     var cl = d.clientes.find(function(c) { return c.id === p.cliente_id; });
                     if (!cl) continue;
-                    var cuotas2 = await DB.cuotas.where({ prestamo_id: p.id }).toArray();
+                    var cuotas2 = await DB.cuotas.where('prestamo_id').equals(p.id).toArray();
                     var pendientes = cuotas2.filter(function(c) { return c.estado !== 'pagada'; });
                     var totalDeuda = pendientes.reduce(function(s, c) { return s + (c.monto_total || 0); }, 0);
                     if (totalDeuda > 0) {
@@ -4217,20 +4458,83 @@
         },
 
         // ============================================================
-        // 6.17 CONFIGURACIÓN
+        // 6.15 OTRAS FUNCIONES (MODIFICADAS)
+        // ============================================================
+        showCapital: function() {
+            var userId = AuthSystem.getCurrentUserId();
+            if (!userId) {
+                this.toast('❌', 'Debes iniciar sesión', 'danger');
+                return;
+            }
+
+            var m = prompt('💰 Monto de capital:');
+            if (m && parseFloat(m) > 0) {
+                DB.capital.add({ 
+                    usuario_id: userId,
+                    monto: Math.round(parseFloat(m)), 
+                    fecha: Date.now() 
+                }).then(function() {
+                    APP.toast('✅', 'Capital registrado', 'success');
+                    APP.goto('finanzas');
+                    DataRecovery.doBackup();
+                });
+            }
+        },
+
+        showGasto: function() {
+            var userId = AuthSystem.getCurrentUserId();
+            if (!userId) {
+                this.toast('❌', 'Debes iniciar sesión', 'danger');
+                return;
+            }
+
+            var m = prompt('🧾 Monto del gasto:');
+            if (m && parseFloat(m) > 0) {
+                var c = prompt('Categoría:') || 'otro';
+                DB.gastos.add({ 
+                    usuario_id: userId,
+                    categoria: c, 
+                    monto: Math.round(parseFloat(m)), 
+                    fecha: Date.now() 
+                }).then(function() {
+                    APP.toast('✅', 'Gasto registrado', 'success');
+                    APP.goto('finanzas');
+                    DataRecovery.doBackup();
+                });
+            }
+        },
+
+        // ============================================================
+        // 6.16 CONFIGURACIÓN (MODIFICADO)
         // ============================================================
         configHTML: async function() {
+            var userId = AuthSystem.getCurrentUserId();
             var dark = await DB.cfg.get('dark');
-            var mora = await DB.cfg.get('mora');
-            var capitalInicial = await DB.cfg.get('capital_inicial');
+            var mora = await DB.cfg.get('mora_' + userId);
+            var capitalInicial = await DB.cfg.get('capital_inicial_' + userId);
             var isDark = dark && dark.valor === 'true';
             var moraVal = mora ? mora.valor : '5';
             var capIniVal = capitalInicial ? capitalInicial.valor : '0';
+            var user = AuthSystem.getCurrentUser();
 
             return `
                 <div class="header">
                     <span class="brand">⚙️ Ajustes</span>
-                    <button class="btn-icon" onclick="APP.goto('dashboard')">←</button>
+                    <div class="header-actions">
+                        <button class="btn-icon" onclick="APP.goto('dashboard')">←</button>
+                    </div>
+                </div>
+                <div class="card anim-scale">
+                    <div class="card-header">👤 Mi Perfil</div>
+                    <div class="card-body">
+                        <div class="config-item">
+                            <div>
+                                <strong>${sanitize(user?.nombre || 'Usuario')}</strong>
+                                <p style="font-size:var(--font-xs);color:var(--sub)">📱 ${user?.celular || ''} · 🆔 ${user?.cedula || ''}</p>
+                            </div>
+                            <button class="btn btn-o btn-xs" onclick="AuthSystem.logout()">🚪 Cerrar Sesión</button>
+                        </div>
+                    </div>
                 </div>
                 <div class="card anim-scale">
                     <div class="card-header">🎨 Apariencia</div>
@@ -4308,7 +4612,7 @@
                     </div>
                 </div>
                 <div style="text-align:center;padding:var(--spacing-md);color:var(--sub);font-size:var(--font-xs)">
-                    Loans W v2.1 · LWI Intelligence
+                    Loans W v${APP_VERSION} · LWI Intelligence
                 </div>
             `;
         },
@@ -4335,57 +4639,153 @@
         },
 
         changePassword: async function() {
-            var old = prompt('🔒 Contraseña actual:');
-            if (!old) return;
-            var s = await DB.cfg.get('pwd_hash');
-            if (!s) return;
-            if (!(await this.verifyPwd(old, s.valor))) {
-                this.toast('❌', 'Contraseña actual incorrecta', 'danger');
+            var user = AuthSystem.getCurrentUser();
+            if (!user) {
+                this.toast('❌', 'Debes iniciar sesión', 'danger');
                 return;
             }
-            var newPwd = prompt('🔑 Nueva contraseña:');
-            if (!newPwd || newPwd.length < 4) {
-                this.toast('❌', 'Mínimo 4 caracteres', 'danger');
+
+            var oldPwd = prompt('🔒 Contraseña actual:');
+            if (!oldPwd) return;
+
+            var newPwd = prompt('🔑 Nueva contraseña (mínimo 8 caracteres, mayúscula, minúscula, número):');
+            if (!newPwd) return;
+
+            if (newPwd.length < 8) {
+                this.toast('❌', 'Contraseña mínima 8 caracteres', 'danger');
                 return;
             }
+
+            if (!/[A-Z]/.test(newPwd) || !/[a-z]/.test(newPwd) || !/[0-9]/.test(newPwd)) {
+                this.toast('❌', 'Contraseña debe tener mayúscula, minúscula y número', 'danger');
+                return;
+            }
+
             var confirmPwd = prompt('🔑 Confirmar nueva contraseña:');
             if (newPwd !== confirmPwd) {
                 this.toast('❌', 'Las contraseñas no coinciden', 'danger');
                 return;
             }
-            var h = await this.hashPwd(newPwd);
-            await DB.cfg.put({ clave: 'pwd_hash', valor: h });
-            this.toast('✅', 'Contraseña actualizada', 'success');
-            localStorage.removeItem('loansw_lwiv13');
-            location.reload();
+
+            var dbUser = await DB.usuarios.get(user.userId);
+            if (!dbUser) {
+                this.toast('❌', 'Usuario no encontrado', 'danger');
+                return;
+            }
+
+            var isValid = await this.verifyPwd(oldPwd, dbUser.password_hash);
+            if (!isValid) {
+                this.toast('❌', 'Contraseña actual incorrecta', 'danger');
+                return;
+            }
+
+            var newHash = await this.hashPwd(newPwd);
+            await DB.usuarios.update(user.userId, { password_hash: newHash });
+            
+            this.toast('✅', 'Contraseña actualizada correctamente', 'success');
         },
 
         saveConfig: async function() {
+            var userId = AuthSystem.getCurrentUserId();
+            if (!userId) {
+                this.toast('❌', 'Debes iniciar sesión', 'danger');
+                return;
+            }
+
             var mora = document.getElementById('moraRate')?.value;
             var capital = document.getElementById('capitalInicial')?.value;
+            
             if (mora !== undefined && parseFloat(mora) >= 0) {
-                await DB.cfg.put({ clave: 'mora', valor: mora });
+                await DB.cfg.put({ clave: 'mora_' + userId, valor: mora });
             }
             if (capital !== undefined && parseFloat(capital) >= 0) {
-                await DB.cfg.put({ clave: 'capital_inicial', valor: capital });
+                await DB.cfg.put({ clave: 'capital_inicial_' + userId, valor: capital });
             }
             this.toast('✅', 'Configuración guardada', 'success');
             this.goto(this._currentPage);
         },
 
-        clearAllData: async function() {
-            if (!confirm('⚠️ ¿Estás seguro de borrar TODOS los datos? Esta acción es irreversible.')) return;
-            if (!confirm('⚠️ Última confirmación: ¿Borrar todos los datos?')) return;
-            await DB.clientes.clear();
-            await DB.prestamos.clear();
-            await DB.cuotas.clear();
-            await DB.pagos.clear();
-            await DB.capital.clear();
-            await DB.gastos.clear();
-            this._historial = this.getDefaultHistorial();
-            await this.saveHistorial();
-            this.toast('🗑️', 'Todos los datos han sido eliminados', 'danger');
-            this.goto('dashboard');
+        // ============================================================
+        // 6.17 EXPORTACIONES (MODIFICADAS)
+        // ============================================================
+        exportData: async function() {
+            var d = await this.getData();
+            var data = {
+                clientes: d.clientes,
+                prestamos: d.prestamos,
+                cuotas: d.cuotas,
+                pagos: d.pagos,
+                capital: d.capital,
+                gastos: d.gastos,
+                historial: this._historial,
+                exportDate: new Date().toISOString()
+            };
+            var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'loans_w_backup_' + new Date().toISOString().slice(0, 10) + '.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            this.toast('✅', 'Datos exportados correctamente', 'success');
+        },
+
+        importData: function() {
+            var input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = async function(e) {
+                var file = e.target.files[0];
+                if (!file) return;
+                var reader = new FileReader();
+                reader.onload = async function(ev) {
+                    try {
+                        var data = JSON.parse(ev.target.result);
+                        if (!data.clientes || !data.prestamos) {
+                            APP.toast('❌', 'Archivo inválido', 'danger');
+                            return;
+                        }
+                        if (!confirm('⚠️ Esto reemplazará todos los datos actuales. ¿Continuar?')) return;
+                        
+                        var userId = AuthSystem.getCurrentUserId();
+                        if (!userId) {
+                            APP.toast('❌', 'Debes iniciar sesión', 'danger');
+                            return;
+                        }
+                        
+                        await DB.clientes.where('usuario_id').equals(userId).delete();
+                        await DB.prestamos.where('usuario_id').equals(userId).delete();
+                        await DB.cuotas.where('usuario_id').equals(userId).delete();
+                        await DB.pagos.where('usuario_id').equals(userId).delete();
+                        await DB.capital.where('usuario_id').equals(userId).delete();
+                        await DB.gastos.where('usuario_id').equals(userId).delete();
+                        
+                        for (var c of data.clientes) { c.usuario_id = userId; }
+                        for (var p of data.prestamos) { p.usuario_id = userId; }
+                        for (var c of data.cuotas) { c.usuario_id = userId; }
+                        for (var p of data.pagos) { p.usuario_id = userId; }
+                        for (var c of data.capital) { c.usuario_id = userId; }
+                        for (var g of data.gastos) { g.usuario_id = userId; }
+                        
+                        await DB.clientes.bulkAdd(data.clientes);
+                        await DB.prestamos.bulkAdd(data.prestamos);
+                        await DB.cuotas.bulkAdd(data.cuotas);
+                        await DB.pagos.bulkAdd(data.pagos);
+                        if (data.capital) await DB.capital.bulkAdd(data.capital);
+                        if (data.gastos) await DB.gastos.bulkAdd(data.gastos);
+                        if (data.historial) {
+                            APP._historial = data.historial;
+                            await APP.saveHistorial();
+                        }
+                        APP.toast('✅', 'Datos importados correctamente', 'success');
+                        APP.goto(APP._currentPage);
+                    } catch (err) {
+                        APP.toast('❌', 'Error al importar: ' + err.message, 'danger');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            input.click();
         },
 
         exportAllExcel: async function() {
@@ -4538,27 +4938,117 @@
             this.toast('✅', 'PDF generado correctamente', 'success');
         },
 
-        showCapital: function() {
-            var m = prompt('💰 Monto de capital:');
-            if (m && parseFloat(m) > 0) {
-                DB.capital.add({ monto: Math.round(parseFloat(m)), fecha: Date.now() }).then(function() {
-                    APP.toast('✅', 'Capital registrado', 'success');
-                    APP.goto('finanzas');
-                    DataRecovery.doBackup();
-                });
+        clearAllData: async function() {
+            var userId = AuthSystem.getCurrentUserId();
+            if (!userId) {
+                this.toast('❌', 'Debes iniciar sesión', 'danger');
+                return;
             }
+
+            if (!confirm('⚠️ ¿Estás seguro de borrar TODOS tus datos? Esta acción es irreversible.')) return;
+            if (!confirm('⚠️ Última confirmación: ¿Borrar todos tus datos?')) return;
+            
+            await DB.clientes.where('usuario_id').equals(userId).delete();
+            await DB.prestamos.where('usuario_id').equals(userId).delete();
+            await DB.cuotas.where('usuario_id').equals(userId).delete();
+            await DB.pagos.where('usuario_id').equals(userId).delete();
+            await DB.capital.where('usuario_id').equals(userId).delete();
+            await DB.gastos.where('usuario_id').equals(userId).delete();
+            
+            this._historial = this.getDefaultHistorial();
+            await this.saveHistorial();
+            
+            this.toast('🗑️', 'Todos tus datos han sido eliminados', 'danger');
+            this.goto('dashboard');
         },
 
-        showGasto: function() {
-            var m = prompt('🧾 Monto del gasto:');
-            if (m && parseFloat(m) > 0) {
-                var c = prompt('Categoría:') || 'otro';
-                DB.gastos.add({ categoria: c, monto: Math.round(parseFloat(m)), fecha: Date.now() }).then(function() {
-                    APP.toast('✅', 'Gasto registrado', 'success');
-                    APP.goto('finanzas');
-                    DataRecovery.doBackup();
-                });
+        // ============================================================
+        // 6.18 MÉTRICAS (ORIGINAL)
+        // ============================================================
+        getMetrics: function(d) {
+            var capTotal = d.capital.reduce(function(s, c) { return s + (c.monto || 0); }, 0) + d.capInicial;
+            var gastosTotal = d.gastos.reduce(function(s, g) { return s + (g.monto || 0); }, 0);
+            var cartera = d.prestamos.filter(function(p) { return p.estado === 'activo'; }).reduce(function(s, p) { return s +
+                    (p.monto || 0); }, 0);
+            var cobradoHist = d.pagos.reduce(function(s, p) { return s + (p.monto || 0); }, 0);
+            var interesHist = 0;
+            for (var i = 0; i < d.pagos.length; i++) {
+                for (var j = 0; j < d.cuotas.length; j++) {
+                    if (d.cuotas[j].id === d.pagos[i].cuota_id) {
+                        interesHist += d.cuotas[j].interes || 0;
+                        break;
+                    }
+                }
             }
+            var disp = capTotal + cobradoHist + interesHist - cartera - gastosTotal;
+            var ganancia = cobradoHist + interesHist - gastosTotal;
+            var moraMonto = 0,
+                moraSet = new Set();
+            for (var k = 0; k < d.cuotas.length; k++) {
+                if (d.cuotas[k].estado === 'atrasada') {
+                    moraMonto += d.cuotas[k].monto_total || 0;
+                    var p2 = d.prestamos.find(function(x) { return x.id === d.cuotas[k].prestamo_id; });
+                    if (p2) moraSet.add(p2.cliente_id);
+                }
+            }
+            var prestadoHist = d.prestamos.reduce(function(s, p) { return s + (p.monto || 0); }, 0);
+            var activos = d.prestamos.filter(function(p) { return p.estado === 'activo'; }).length;
+            var hoy = new Date(d.now.getFullYear(), d.now.getMonth(), d.now.getDate());
+            var semana = new Date(hoy.getTime() + 7 * 86400000);
+            var finMes = new Date(d.now.getFullYear(), d.now.getMonth() + 1, 0);
+            var proyHoy = 0,
+                proySemana = 0,
+                proyMes = 0;
+            for (var l = 0; l < d.cuotas.length; l++) {
+                var c2 = d.cuotas[l];
+                if (c2.estado === 'pagada') continue;
+                if (c2.fecha_vencimiento >= hoy.getTime() && c2.fecha_vencimiento < hoy.getTime() + 86400000)
+                    proyHoy += c2.monto_total || 0;
+                if (c2.fecha_vencimiento >= d.now.getTime() && c2.fecha_vencimiento <= semana.getTime() && c2.estado ===
+                    'pendiente')
+                    proySemana += c2.monto_total || 0;
+                if (c2.fecha_vencimiento >= d.now.getTime() && c2.fecha_vencimiento <= finMes.getTime() && c2.estado ===
+                    'pendiente')
+                    proyMes += c2.monto_total || 0;
+            }
+            return {
+                capTotal: capTotal,
+                gastos: gastosTotal,
+                cartera: cartera,
+                cobradoHist: cobradoHist,
+                interesHist: interesHist,
+                disp: disp,
+                ganancia: ganancia,
+                moraMonto: moraMonto,
+                moraClientes: moraSet.size,
+                activos: activos,
+                clientesTotal: d.clientes.length,
+                prestadoHist: prestadoHist,
+                proyHoy: proyHoy,
+                proySemana: proySemana,
+                proyMes: proyMes
+            };
+        },
+
+        calcSalud: function(m) {
+            var score = 0;
+            if (m.capTotal > 0) score += Math.min((m.disp / (m.capTotal + 1)) * 25, 20);
+            if (m.cartera > 0) score += Math.max(0, 20 - ((m.moraMonto / (m.cartera + 1)) * 20));
+            if (m.capTotal > 0) score += Math.min((m.ganancia / (m.capTotal + 1)) * 150, 18);
+            if (m.capTotal + m.cartera > 0) score += Math.min((m.cobradoHist / (m.capTotal + m.cartera + 1)) * 50, 14);
+            if (m.clientesTotal > 0) score += Math.min((m.activos / (m.clientesTotal + 1)) * 10, 10);
+            return Math.max(5, Math.min(98, Math.round(score)));
+        },
+
+        destroyCharts: function() {
+            this.charts.forEach(function(c) {
+                try { c.destroy(); } catch (e) {}
+            });
+            this.charts = [];
+        },
+
+        autoBackup: function() {
+            // Ya implementado en DataRecovery
         }
     };
 
@@ -4571,6 +5061,7 @@
 
     // Exponer para debugging
     window.DataRecovery = DataRecovery;
+    window.AuthSystem = AuthSystem;
     window.APP_VERSION = APP_VERSION;
     </script>
 </body>
