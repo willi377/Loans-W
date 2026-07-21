@@ -157,6 +157,11 @@
             from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        @keyframes glow-pulse {
+            0% { box-shadow: 0 0 0 rgba(108, 92, 231, 0); }
+            50% { box-shadow: 0 0 30px rgba(108, 92, 231, 0.6); }
+            100% { box-shadow: 0 0 0 rgba(108, 92, 231, 0); }
+        }
 
         .anim-fade { animation: fadeIn 0.35s ease forwards; }
         .anim-up { animation: fadeUp 0.4s var(--ease-smooth) forwards; }
@@ -177,8 +182,10 @@
         .stagger>*:nth-child(4) { animation-delay: 0.11s; }
         .stagger>*:nth-child(5) { animation-delay: 0.14s; }
 
-        /* ===== LOGIN ORIGINAL (ELIMINADO, AHORA USAMOS AUTH) ===== */
-        /* El login original fue reemplazado por auth-screen */
+        /* ===== Efecto de brillo para préstamo actualizado ===== */
+        .loan-updated {
+            animation: glow-pulse 1.5s ease 2;
+        }
 
         /* ===== MAIN APP ===== */
         #main-app {
@@ -2177,6 +2184,8 @@
                         <label style="font-size:var(--font-xs);font-weight:600">Número de cuotas *</label>
                         <input type="number" class="f-control" id="pcuotas" placeholder="Ej: 12" min="1" max="120">
                     </div>
+                    <!-- Campo observaciones -->
+                    <textarea class="f-control" id="pobs" placeholder="📝 Observaciones adicionales" rows="2"></textarea>
                     <div id="loan-summary" class="summary-box" style="display:none">
                         <h6 style="font-weight:700;margin-bottom:0.5rem">📋 Resumen</h6>
                         <div id="summary-content"></div>
@@ -2728,41 +2737,32 @@
     };
 
     // ============================================================
-    // 5. BASE DE DATOS (ACTUALIZADA)
+    // 5. BASE DE DATOS (VERSIÓN 8 CON HISTORIAL Y OBSERVACIONES)
     // ============================================================
     var DB = new Dexie('LoansWLWIv15');
-    DB.version(7).stores({
+    DB.version(8).stores({
         cfg: 'clave',
         usuarios: '++id,cedula,celular,email,nombre,password_hash,fecha_registro,ultimo_acceso,rol,activo',
         clientes: '++id,usuario_id,nombre,telefono,cedula,direccion,aval,categoria',
-        prestamos: '++id,usuario_id,cliente_id,estado,monto,tasa,tipo,fecha,frecuencia,plazo',
+        prestamos: '++id,usuario_id,cliente_id,estado,monto,tasa,tipo,fecha,frecuencia,plazo,observaciones',
         cuotas: '++id,usuario_id,prestamo_id,estado,fecha_vencimiento,capital,interes,monto_total,saldo_restante,numero_cuota',
         pagos: '++id,usuario_id,prestamo_id,cuota_id,monto,fecha,metodo',
         capital: '++id,usuario_id,monto,fecha',
-        gastos: '++id,usuario_id,categoria,monto,fecha'
+        gastos: '++id,usuario_id,categoria,monto,fecha',
+        historial: '++id,usuario_id,prestamo_id,fecha,tipo,mensaje'
     }).upgrade(async function(tx) {
-        console.log('[DB] Migrando a versión con usuarios...');
-        try {
-            var clientes = await tx.table('clientes').toArray();
-            for (var c of clientes) {
-                if (c.usuario_id === undefined) {
-                    await tx.table('clientes').update(c.id, { usuario_id: 0 });
-                }
+        console.log('[DB] Migrando a versión 8: añadiendo observaciones e historial...');
+        const prestamos = await tx.table('prestamos').toArray();
+        for (let p of prestamos) {
+            if (p.observaciones === undefined) {
+                await tx.table('prestamos').update(p.id, { observaciones: '' });
             }
-        } catch (e) {}
-        try {
-            var prestamos = await tx.table('prestamos').toArray();
-            for (var p of prestamos) {
-                if (p.usuario_id === undefined) {
-                    await tx.table('prestamos').update(p.id, { usuario_id: 0 });
-                }
-            }
-        } catch (e) {}
+        }
         console.log('[DB] Migración completada');
     });
 
     // ============================================================
-    // 6. APP PRINCIPAL (ORIGINAL CON MODIFICACIONES MÍNIMAS)
+    // 6. APP PRINCIPAL CON EDICIÓN DE PRÉSTAMOS
     // ============================================================
     var APP = {
         charts: [],
@@ -2772,6 +2772,8 @@
         _carouselIndex: 0,
         _carouselInterval: null,
         _historial: null,
+        _originalLoanBackup: null,
+        _editBackup: null,
 
         // ============================================================
         // 6.1 FUNCIONES DE LANDING PAGE (ORIGINALES)
@@ -2816,13 +2818,12 @@
         },
 
         // ============================================================
-        // 6.2 INIT (MODIFICADO)
+        // 6.2 INIT
         // ============================================================
         init: async function() {
             console.log('[APP] Iniciando aplicación...');
             await DB.open();
 
-            // Crear tabla de usuarios si no existe
             await this.initUsersTable();
 
             var ph = await DB.cfg.get('pwd_hash');
@@ -2846,10 +2847,8 @@
 
             await DataRecovery.init();
 
-            // Inicializar sistema de autenticación
             AuthSystem.init();
 
-            // Eventos navegación app
             document.querySelectorAll('.nav-btn').forEach(function(b) {
                 b.onclick = function() { APP.goto(b.dataset.p); };
             });
@@ -2886,7 +2885,7 @@
         },
 
         // ============================================================
-        // 6.3 GOTO (ORIGINAL)
+        // 6.3 GOTO
         // ============================================================
         goto: function(p) {
             console.log('[APP] Navegando a:', p);
@@ -2899,7 +2898,7 @@
         },
 
         // ============================================================
-        // 6.4 RENDER (ORIGINAL)
+        // 6.4 RENDER (sin cambios)
         // ============================================================
         render: async function(p) {
             console.log('[APP] Renderizando página:', p);
@@ -3692,8 +3691,10 @@
                 document.getElementById('pcuotas').value = '';
                 document.getElementById('pfrec').value = 'semanal';
                 document.getElementById('ptipo').value = 'simple';
+                document.getElementById('pobs').value = '';
+                document.getElementById('btnCreateLoan').textContent = '✅ Crear Préstamo';
 
-                ['pmonto', 'ptasa', 'pcuotas', 'ptipo', 'pfrec', 'pfecha'].forEach(function(x) {
+                ['pmonto', 'ptasa', 'pcuotas', 'ptipo', 'pfrec', 'pfecha', 'pobs'].forEach(function(x) {
                     var el = document.getElementById(x);
                     if (el) {
                         el.oninput = function() { self.updateLoanPreview(); };
@@ -3732,7 +3733,7 @@
         },
 
         // ============================================================
-        // 6.13 PRÉSTAMOS (MODIFICADO PARA USAR USUARIO_ID)
+        // 6.13 PRÉSTAMOS (MODIFICADO PARA USAR USUARIO_ID Y EDICIÓN)
         // ============================================================
         preHTML: async function() {
             return `
@@ -3868,27 +3869,36 @@
             return cuotas;
         },
 
-        showPrestamo: function(id) {
+        // ============================================================
+        // NUEVA VERSIÓN DE showPrestamo CON SOPORTE PARA EDICIÓN
+        // ============================================================
+        showPrestamo: function(id, isEdit = false) {
             var self = this;
             var fn = async function() {
                 var userId = AuthSystem.getCurrentUserId();
-                if (!userId) {
-                    APP.toast('❌', 'Debes iniciar sesión', 'danger');
-                    return;
-                }
-                
+                if (!userId) { APP.toast('❌', 'Debes iniciar sesión', 'danger'); return; }
+
+                // Cargar clientes del usuario
                 var cls = await DB.clientes.where('usuario_id').equals(userId).toArray();
-                document.getElementById('pcli').innerHTML = '<option value="">Seleccionar cliente...</option>' +
-                    cls.map(function(c) { return '<option value="' + c.id + '">' + c.nombre + '</option>'; }).join('');
-                document.getElementById('pclienteId').value = '';
+                var select = document.getElementById('pcli');
+                select.innerHTML = '<option value="">Seleccionar cliente...</option>' +
+                    cls.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
+
+                // Limpiar campos
                 document.getElementById('pid').value = id || '';
+                document.getElementById('pclienteId').value = '';
                 document.getElementById('loan-summary').style.display = 'none';
                 document.getElementById('amort-vista').style.display = 'none';
                 document.getElementById('loan-error').style.display = 'none';
                 document.getElementById('btnCreateLoan').disabled = true;
+                document.getElementById('pobs').value = '';
+                document.getElementById('btnCreateLoan').textContent = isEdit ? '💾 Actualizar Préstamo' : '✅ Crear Préstamo';
 
-                if (id) {
+                // Si es edición, cargar datos del préstamo
+                if (id && isEdit) {
                     var p = await DB.prestamos.get(id);
+                    if (!p) { APP.toast('❌', 'Préstamo no encontrado', 'danger'); return; }
+
                     document.getElementById('pcli').value = p.cliente_id;
                     document.getElementById('pmonto').value = p.monto;
                     document.getElementById('ptasa').value = p.tasa;
@@ -3896,17 +3906,21 @@
                     document.getElementById('pfecha').value = new Date(p.fecha).toISOString().split('T')[0];
                     document.getElementById('pfrec').value = p.frecuencia;
                     document.getElementById('pcuotas').value = p.plazo;
-                    self.updateLoanPreview();
+                    document.getElementById('pobs').value = p.observaciones || '';
+                    document.getElementById('pclienteId').value = p.cliente_id;
+                    
+                    // Guardar copia de seguridad del préstamo original para posible restauración
+                    self._originalLoanBackup = JSON.stringify(p);
                 } else {
-                    document.getElementById('pmonto').value = '';
-                    document.getElementById('ptasa').value = '';
                     document.getElementById('pfecha').value = new Date().toISOString().split('T')[0];
-                    document.getElementById('pcuotas').value = '';
                     document.getElementById('pfrec').value = 'semanal';
                     document.getElementById('ptipo').value = 'simple';
+                    document.getElementById('pobs').value = '';
+                    self._originalLoanBackup = null;
                 }
 
-                ['pmonto', 'ptasa', 'pcuotas', 'ptipo', 'pfrec', 'pfecha'].forEach(function(x) {
+                // Configurar eventos para recálculo en tiempo real
+                ['pmonto', 'ptasa', 'pcuotas', 'ptipo', 'pfrec', 'pfecha', 'pobs'].forEach(function(x) {
                     var el = document.getElementById(x);
                     if (el) {
                         el.oninput = function() { self.updateLoanPreview(); };
@@ -3914,12 +3928,190 @@
                     }
                 });
 
-                new bootstrap.Modal(document.getElementById('modPrestamo')).show();
+                // Mostrar modal
+                var modal = new bootstrap.Modal(document.getElementById('modPrestamo'));
+                modal.show();
                 setTimeout(function() { self.updateLoanPreview(); }, 300);
             };
             fn();
         },
 
+        // ============================================================
+        // NUEVA VERSIÓN DE savePrestamo CON SOPORTE PARA EDICIÓN
+        // ============================================================
+        savePrestamo: async function() {
+            var userId = AuthSystem.getCurrentUserId();
+            if (!userId) { this.toast('❌', 'Debes iniciar sesión', 'danger'); return; }
+
+            var clId = parseInt(document.getElementById('pcli').value);
+            if (!clId) return this.toast('Error', 'Seleccione cliente', 'danger');
+            var monto = parseFloat(document.getElementById('pmonto').value);
+            if (!monto || monto < 1000) return this.toast('Error', 'Monto mínimo $1.000', 'danger');
+            var tasa = parseFloat(document.getElementById('ptasa').value);
+            if (!tasa || tasa <= 0) return this.toast('Error', 'Tasa inválida', 'danger');
+            var tipo = document.getElementById('ptipo').value;
+            var fecha = new Date(document.getElementById('pfecha').value + 'T00:00:00');
+            if (isNaN(fecha.getTime())) return this.toast('Error', 'Fecha inválida', 'danger');
+            var frecuencia = document.getElementById('pfrec').value;
+            var plazo = parseInt(document.getElementById('pcuotas').value);
+            if (!plazo || plazo < 1) return this.toast('Error', 'Cuotas mínimas 1', 'danger');
+            var observaciones = document.getElementById('pobs').value.trim();
+            var id = document.getElementById('pid').value;
+            var isEdit = !!id;
+
+            // Validar que el préstamo existe si es edición
+            if (isEdit) {
+                var existing = await DB.prestamos.get(Number(id));
+                if (!existing) return this.toast('❌', 'Préstamo no encontrado', 'danger');
+                if (existing.usuario_id !== userId) return this.toast('❌', 'No tienes permiso', 'danger');
+            }
+
+            // Construir objeto del préstamo
+            var loanData = {
+                usuario_id: userId,
+                cliente_id: clId,
+                monto: Math.round(monto),
+                tasa: tasa,
+                tipo: tipo,
+                fecha: fecha.getTime(),
+                frecuencia: frecuencia,
+                plazo: plazo,
+                observaciones: observaciones,
+                estado: 'activo'
+            };
+
+            try {
+                var pid;
+                if (isEdit) {
+                    pid = Number(id);
+                    // Guardar copia de seguridad para restauración
+                    var backup = await DB.prestamos.get(pid);
+                    this._editBackup = JSON.stringify(backup);
+                    
+                    // Actualizar datos del préstamo
+                    await DB.prestamos.update(pid, loanData);
+                    
+                    // Registrar en historial
+                    await this.registrarHistorial(userId, pid, 'edicion', 
+                        `Préstamo editado: monto ${fmoney(backup.monto)} → ${fmoney(monto)}, tasa ${backup.tasa}% → ${tasa}%, plazo ${backup.plazo} → ${plazo}`);
+                    
+                    // Recalcular cuotas pendientes (conservando las pagadas)
+                    await this.recalcularCuotasPendientes(pid, monto, tasa, tipo, plazo, fecha, frecuencia);
+                    
+                    this.toast('✅', 'Préstamo actualizado correctamente', 'success');
+                    // Efecto de brillo en la tarjeta del préstamo (opcional, se puede implementar con CSS)
+                } else {
+                    // Nuevo préstamo
+                    pid = await DB.prestamos.add(loanData);
+                    this.updateHistorial({ monto: monto });
+                    
+                    // Generar cuotas completas
+                    var cuotas = this.calcAmortizacion(monto, tasa, tipo, plazo, fecha, frecuencia);
+                    for (var i = 0; i < cuotas.length; i++) {
+                        await DB.cuotas.add({
+                            usuario_id: userId,
+                            prestamo_id: pid,
+                            numero_cuota: cuotas[i].numero,
+                            fecha_vencimiento: cuotas[i].fecha.getTime(),
+                            capital: Math.round(cuotas[i].capital),
+                            interes: Math.round(cuotas[i].interes),
+                            monto_total: Math.round(cuotas[i].monto_total),
+                            saldo_restante: Math.round(cuotas[i].saldo_restante),
+                            estado: 'pendiente'
+                        });
+                    }
+                    this.toast('✅', 'Préstamo creado', 'success');
+                }
+
+                bootstrap.Modal.getInstance(document.getElementById('modPrestamo')).hide();
+                this.goto('prestamos');
+                DataRecovery.doBackup();
+            } catch (error) {
+                console.error('[savePrestamo] Error:', error);
+                // Restaurar backup en caso de error
+                if (isEdit && this._editBackup) {
+                    try {
+                        var backupData = JSON.parse(this._editBackup);
+                        await DB.prestamos.update(pid, backupData);
+                        this.toast('⚠️', 'Error al guardar, se restauró la versión anterior', 'danger');
+                    } catch (e) {
+                        this.toast('❌', 'Error crítico, revisa la consola', 'danger');
+                    }
+                } else {
+                    this.toast('❌', 'Error al guardar: ' + error.message, 'danger');
+                }
+            }
+        },
+
+        // ============================================================
+        // NUEVA FUNCIÓN: registrarHistorial
+        // ============================================================
+        registrarHistorial: async function(userId, prestamoId, tipo, mensaje) {
+            try {
+                await DB.historial.add({
+                    usuario_id: userId,
+                    prestamo_id: prestamoId,
+                    fecha: Date.now(),
+                    tipo: tipo,
+                    mensaje: mensaje
+                });
+            } catch (e) {
+                console.warn('[Historial] Error al registrar:', e);
+            }
+        },
+
+        // ============================================================
+        // NUEVA FUNCIÓN: recalcularCuotasPendientes
+        // ============================================================
+        recalcularCuotasPendientes: async function(loanId, monto, tasa, tipo, plazo, fechaInicio, frecuencia) {
+            // Obtener cuotas actuales
+            var cuotas = await DB.cuotas.where('prestamo_id').equals(loanId).toArray();
+            cuotas.sort((a, b) => a.numero_cuota - b.numero_cuota);
+            
+            // Separar pagadas y pendientes
+            var pagadas = cuotas.filter(c => c.estado === 'pagada');
+            var pendientes = cuotas.filter(c => c.estado !== 'pagada');
+            
+            // Si no hay cuotas pendientes, no hacer nada
+            if (pendientes.length === 0) return;
+            
+            // Número de cuota desde donde empezar (la primera pendiente)
+            var startIndex = pendientes[0].numero_cuota;
+            
+            // Eliminar cuotas pendientes
+            for (var c of pendientes) {
+                await DB.cuotas.delete(c.id);
+            }
+            
+            // Recalcular amortización completa
+            var nuevasCuotas = this.calcAmortizacion(monto, tasa, tipo, plazo, fechaInicio, frecuencia);
+            
+            // Tomar solo las cuotas desde startIndex en adelante
+            var cuotasAInsertar = nuevasCuotas.filter(c => c.numero >= startIndex);
+            
+            // Insertar nuevas cuotas, conservando las pagadas
+            var loan = await DB.prestamos.get(loanId);
+            for (var nc of cuotasAInsertar) {
+                await DB.cuotas.add({
+                    usuario_id: loan.usuario_id,
+                    prestamo_id: loanId,
+                    numero_cuota: nc.numero,
+                    fecha_vencimiento: nc.fecha.getTime(),
+                    capital: Math.round(nc.capital),
+                    interes: Math.round(nc.interes),
+                    monto_total: Math.round(nc.monto_total),
+                    saldo_restante: Math.round(nc.saldo_restante),
+                    estado: 'pendiente' // todas las nuevas comienzan pendientes
+                });
+            }
+            
+            // Actualizar estado del préstamo a activo si tenía cuotas pendientes
+            await DB.prestamos.update(loanId, { estado: 'activo' });
+        },
+
+        // ============================================================
+        // NUEVA VERSIÓN DE updateLoanPreview CON COMPARATIVA
+        // ============================================================
         updateLoanPreview: function() {
             var monto = parseFloat(document.getElementById('pmonto').value) || 0;
             var tasa = parseFloat(document.getElementById('ptasa').value) || 0;
@@ -3953,10 +4145,41 @@
             btnEl.disabled = false;
 
             var cuotas = this.calcAmortizacion(monto, tasa, tipo, plazo, fecha, frecuencia);
-            var totalInteres = cuotas.reduce(function(s, c) { return s + c.interes; }, 0);
-            var totalPagar = cuotas.reduce(function(s, c) { return s + c.monto_total; }, 0);
+            var totalInteres = cuotas.reduce((s, c) => s + c.interes, 0);
+            var totalPagar = cuotas.reduce((s, c) => s + c.monto_total, 0);
             var cuotaValor = cuotas[0]?.monto_total || 0;
             var fechaFin = cuotas[cuotas.length - 1]?.fecha || new Date();
+
+            // Si es edición, mostrar comparativa con datos originales
+            var isEdit = !!document.getElementById('pid').value;
+            var comparativaHTML = '';
+            if (isEdit && this._originalLoanBackup) {
+                try {
+                    var original = JSON.parse(this._originalLoanBackup);
+                    var origCuotas = this.calcAmortizacion(original.monto, original.tasa, original.tipo, original.plazo, new Date(original.fecha), original.frecuencia);
+                    var origTotal = origCuotas.reduce((s, c) => s + c.monto_total, 0);
+                    var origInteres = origCuotas.reduce((s, c) => s + c.interes, 0);
+                    var diffTotal = totalPagar - origTotal;
+                    var diffInteres = totalInteres - origInteres;
+                    comparativaHTML = `
+                        <div style="background:var(--bg);border-radius:var(--radius);padding:var(--spacing-sm);margin-top:var(--spacing-sm)">
+                            <p style="font-weight:700;color:var(--primary)">📊 Comparativa con datos anteriores</p>
+                            <div class="row">
+                                <div class="col-6"><p style="font-size:var(--font-xs)">Total a pagar anterior:</p></div>
+                                <div class="col-6 text-end"><p style="font-size:var(--font-xs)">${fmoney(origTotal)}</p></div>
+                                <div class="col-6"><p style="font-size:var(--font-xs)">Nuevo total:</p></div>
+                                <div class="col-6 text-end"><p style="font-size:var(--font-xs)"><strong>${fmoney(totalPagar)}</strong></p></div>
+                                <div class="col-6"><p style="font-size:var(--font-xs)">Diferencia:</p></div>
+                                <div class="col-6 text-end"><p style="font-size:var(--font-xs);color:${diffTotal >= 0 ? 'var(--danger)' : 'var(--success)'}">${diffTotal >= 0 ? '+' : ''}${fmoney(diffTotal)}</p></div>
+                                <div class="col-6"><p style="font-size:var(--font-xs)">Interés anterior:</p></div>
+                                <div class="col-6 text-end"><p style="font-size:var(--font-xs)">${fmoney(origInteres)}</p></div>
+                                <div class="col-6"><p style="font-size:var(--font-xs)">Nuevo interés:</p></div>
+                                <div class="col-6 text-end"><p style="font-size:var(--font-xs);color:${diffInteres >= 0 ? 'var(--danger)' : 'var(--success)'}"><strong>${fmoney(totalInteres)}</strong></p></div>
+                            </div>
+                        </div>
+                    `;
+                } catch (e) {}
+            }
 
             summaryEl.style.display = 'block';
             document.getElementById('summary-content').innerHTML = `
@@ -3966,6 +4189,7 @@
                 <div class="row"><div class="col-6"><p>Cuotas:</p></div><div class="col-6 text-end"><p>${plazo} × ${fmoney(cuotaValor)}</p></div></div>
                 <div class="row"><div class="col-6"><p>Frecuencia:</p></div><div class="col-6 text-end"><p>${frecuencia.charAt(0).toUpperCase() + frecuencia.slice(1)}</p></div></div>
                 <div class="row"><div class="col-6"><p>Inicio → Fin:</p></div><div class="col-6 text-end"><p style="font-size:var(--font-xs)">${new Date(fecha + 'T00:00:00').toLocaleDateString('es-CO')} → ${fechaFin.toLocaleDateString('es-CO')}</p></div></div>
+                ${comparativaHTML}
             `;
 
             amortEl.style.display = 'block';
@@ -3981,67 +4205,9 @@
             }).join('');
         },
 
-        savePrestamo: async function() {
-            var userId = AuthSystem.getCurrentUserId();
-            if (!userId) {
-                this.toast('❌', 'Debes iniciar sesión', 'danger');
-                return;
-            }
-
-            var clId = parseInt(document.getElementById('pcli').value);
-            if (!clId) return this.toast('Error', 'Seleccione cliente', 'danger');
-            var monto = parseFloat(document.getElementById('pmonto').value);
-            if (!monto) return this.toast('Error', 'Ingrese monto', 'danger');
-            var tasa = parseFloat(document.getElementById('ptasa').value);
-            var tipo = document.getElementById('ptipo').value;
-            var fecha = new Date(document.getElementById('pfecha').value + 'T00:00:00');
-            var frecuencia = document.getElementById('pfrec').value;
-            var plazo = parseInt(document.getElementById('pcuotas').value);
-            var id = document.getElementById('pid').value;
-
-            var pd = {
-                usuario_id: userId,
-                cliente_id: clId,
-                monto: monto,
-                tasa: tasa,
-                tipo: tipo,
-                fecha: fecha.getTime(),
-                frecuencia: frecuencia,
-                plazo: plazo,
-                estado: 'activo'
-            };
-
-            var pid;
-            if (id) {
-                await DB.prestamos.update(Number(id), pd);
-                await DB.cuotas.where('prestamo_id').equals(Number(id)).delete();
-                pid = Number(id);
-            } else {
-                pid = await DB.prestamos.add(pd);
-                this.updateHistorial({ monto: monto });
-            }
-
-            var cuotas = this.calcAmortizacion(monto, tasa, tipo, plazo, fecha, frecuencia);
-            for (var i = 0; i < cuotas.length; i++) {
-                await DB.cuotas.add({
-                    usuario_id: userId,
-                    prestamo_id: pid,
-                    numero_cuota: cuotas[i].numero,
-                    fecha_vencimiento: cuotas[i].fecha.getTime(),
-                    capital: Math.round(cuotas[i].capital),
-                    interes: Math.round(cuotas[i].interes),
-                    monto_total: Math.round(cuotas[i].monto_total),
-                    saldo_restante: Math.round(cuotas[i].saldo_restante),
-                    estado: 'pendiente'
-                });
-            }
-
-            bootstrap.Modal.getInstance(document.getElementById('modPrestamo')).hide();
-            this.preList();
-            this.toast('✅', 'Préstamo creado', 'success');
-            DataRecovery.doBackup();
-        },
-
+        // ============================================================
+        // verPrestamo MODIFICADO para incluir botón Editar y Historial
+        // ============================================================
         verPrestamo: async function(id) {
             var p = await DB.prestamos.get(id);
             if (!p) return;
@@ -4084,6 +4250,29 @@
 
             this._printData = printRows;
 
+            // Obtener historial del préstamo
+            var historial = await DB.historial.where('prestamo_id').equals(id).toArray();
+            historial.sort((a, b) => b.fecha - a.fecha);
+            var histHTML = '';
+            if (historial.length > 0) {
+                histHTML = `
+                    <div class="card anim-scale">
+                        <div class="card-header">📜 Historial de cambios</div>
+                        <div class="card-body p-0">
+                            ${historial.map(h => `
+                                <div class="list-item" style="cursor:default">
+                                    <div class="avatar-sm" style="background:var(--info)">📝</div>
+                                    <div style="flex:1">
+                                        <strong>${sanitize(h.mensaje)}</strong>
+                                        <br><small style="color:var(--sub)">${new Date(h.fecha).toLocaleString('es-CO')}</small>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
             document.getElementById('page').innerHTML = `
                 <div class="header">
                     <span class="brand">Préstamo #${id}</span>
@@ -4091,15 +4280,17 @@
                         <button class="btn-icon" onclick="APP.goto('prestamos')" title="Volver">←</button>
                     </div>
                 </div>
-                <div class="card anim-scale">
+                <div class="card anim-scale" id="loanCard${id}">
                     <div class="card-body">
                         <p><strong>Cliente:</strong> ${sanitize(cl?.nombre)}</p>
                         <p><strong>Monto:</strong> ${fmoney(p.monto || 0)} | <strong>Tasa:</strong> ${p.tasa}% | <strong>Tipo:</strong> ${p.tipo}</p>
+                        ${p.observaciones ? `<p><strong>Observaciones:</strong> ${sanitize(p.observaciones)}</p>` : ''}
                         <div class="progress mb-2" style="height:8px">
                             <div class="progress-bar" style="width:${pc}%;background:${color};height:100%;border-radius:8px"></div>
                         </div>
                         <p style="font-size:var(--font-sm)">${pa}/${cu.length} cuotas (${pc}%)</p>
                         <div class="d-flex gap-1 flex-wrap">
+                            <button class="btn btn-p btn-xs" onclick="APP.showPrestamo(${id}, true)">✏️ Editar Préstamo</button>
                             <button class="btn btn-o btn-xs" onclick="APP.printCronograma('${id}')">🖨️ Imprimir</button>
                             <button class="btn btn-o btn-xs" onclick="APP.exportExcel('${id}')">📊 Excel</button>
                             <button class="btn btn-p btn-xs" onclick="APP.verCliente(${p.cliente_id})">👤 Ver Cliente</button>
@@ -4126,7 +4317,15 @@
                         </table>
                     </div>
                 </div>
+                ${histHTML}
             `;
+
+            // Aplicar efecto de brillo si se actualizó recientemente (opcional)
+            var updated = localStorage.getItem('loan_updated_' + id);
+            if (updated) {
+                document.getElementById('loanCard' + id)?.classList.add('loan-updated');
+                localStorage.removeItem('loan_updated_' + id);
+            }
         },
 
         printCronograma: function(id) {
@@ -4801,7 +5000,7 @@
             var prestamosWS = XLSX.utils.json_to_sheet(d.prestamos.map(function(p) {
                 return { ID: p.id, Cliente: p.cliente_id, Monto: p.monto, Tasa: p.tasa, Tipo: p.tipo, Fecha: new Date(
                         p.fecha).toLocaleDateString('es-CO'), Frecuencia: p.frecuencia, Plazo: p.plazo,
-                    Estado: p.estado };
+                    Estado: p.estado, Observaciones: p.observaciones || '' };
             }));
             XLSX.utils.book_append_sheet(wb, prestamosWS, 'Préstamos');
 
